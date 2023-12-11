@@ -6,3 +6,5 @@ urlpatterns = [
     path('cart/', cart, name="cart"),
     path('checkout/', checkout, name="checkout"),
 ]
+
+
