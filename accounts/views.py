@@ -11,3 +11,13 @@ def bill(request):
     if request.method == "GET":
         return render(request, "", context={})
     
+def staff(request):
+    if request.method == "GET":
+        return render(request, "", context={})
+    
+def manager(request):
+    if request.method == "GET":
+        return render(request, "", context={})
+    
+    
+    
