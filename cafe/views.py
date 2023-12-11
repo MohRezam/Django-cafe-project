@@ -23,7 +23,7 @@ def home(request):
 
 def product_detail(request, slug):
     if request.method == "GET":
-        product_detail = get_object_or_404(Product, slug=slug)
+        # product_detail = get_object_or_404(Product, slug=slug)
         return render(request, "", context={})
     
     
