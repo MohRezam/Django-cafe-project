@@ -1,11 +1,13 @@
 from django.db import models
 from accounts.models import Staff,Customer
 
-class Bill (models.Model):
-   
+class Bill(models.Model):
     total_cost=models.PositiveBigIntegerField()
     description=models.CharField(max_length=500)
     date_time=models.DateTimeField(auto_now_add=True)
+    
+    def __str__(self) -> str:
+        return f"total cost: {self.total_cost}"
 
 class Order(models.Model):
     # item_id=models.ForeignKey(Item)
@@ -16,6 +18,9 @@ class Order(models.Model):
     staff=models.OneToOneField(to=Staff,to_field="id" , on_delete=models.DO_NOTHING)
     bill=models.OneToOneField(to=Bill,to_field="id" ,on_delete=models.DO_NOTHING)
     customer=models.OneToOneField(to=Customer , to_field="id" , on_delete=models.CASCADE)
+    
+    def __str__(self) -> str:
+        return f"{self.description}"
 
 class Item(models.Model):
     item_name=models.CharField(max_length=50)
@@ -25,4 +30,7 @@ class Item(models.Model):
     staff=models.ForeignKey(Staff , on_delete=models.DO_NOTHING)
     order=models.ForeignKey(Order , on_delete= models.CASCADE )
 
+    
+    def __str__(self) -> str:
+        return f"Item: {self.item_name}"
 
