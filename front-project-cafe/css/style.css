@@ -1,0 +1,119 @@
+@font-face {
+  font-family: YekanBakh;
+  font-style: normal;
+  font-weight: 200;
+  src: url("../../fonts/YekanBakhThin.woff2");
+  src: url("../../fonts/YekanBakhThin.woff") format("woff");
+}
+
+@font-face {
+  font-family: YekanBakh;
+  font-style: normal;
+  font-weight: 300;
+  src: url("../../fonts/YekanBakhLight.woff2");
+  src: url("../../fonts/YekanBakhLight.woff") format("woff");
+}
+
+@font-face {
+  font-family: YekanBakh;
+  font-style: normal;
+  font-weight: 400;
+  src: url("../../fonts/YekanBakhRegular.woff2");
+  src: url("../../fonts/YekanBakhRegular.woff") format("woff");
+}
+
+@font-face {
+  font-family: YekanBakh;
+  font-style: normal;
+  font-weight: 500;
+  src: url("../../fonts/YekanBakhMedium.woff2");
+  src: url("../../fonts/YekanBakhMedium.woff") format("woff");
+}
+
+@font-face {
+  font-family: YekanBakh;
+  font-style: normal;
+  font-weight: 700;
+  src: url("../../fonts/YekanBakhBold.woff2");
+  src: url("../../fonts/YekanBakhBold.woff") format("woff");
+}
+
+@font-face {
+  font-family: YekanBakh;
+  font-style: normal;
+  font-weight: 800;
+  src: url("../../fonts/YekanBakhHeavy.woff2");
+  src: url("../../fonts/YekanBakhHeavy.woff") format("woff");
+}
+
+@font-face {
+  font-family: YekanBakhFat;
+  font-style: normal;
+  font-weight: bold;
+  src: url("fonts/YekanBakhFat.woff2");
+  src: url("../../fonts/YekanBakhFat.woff") format("woff");
+}
+body {
+  font-family: YekanBakh;
+  margin: 0;
+  direction: rtl;
+  background-image: url(https://bobofood.ir/wp-content/uploads/2022/12/2-3.jpg);
+  background-position: center center;
+  background-repeat: repeat;
+  background-size: auto;
+  background: #fff;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+svg {
+  vertical-align: middle;
+}
+
+a {
+  text-decoration: none;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+a:focus,
+a:active,
+a:visited {
+  outline: 0;
+}
+.sidenav {
+  height: 100%;
+  position: fixed;
+  z-index: 1;
+  overflow-x: hidden;
+  padding-top: 20px;
+}
+
+.sidenav a {
+  padding: 6px 8px 6px 16px;
+  text-decoration: none;
+  font-size: 25px;
+  color: #818181;
+  display: block;
+}
+
+.sidenav a:hover {
+  color: #f1f1f1;
+}
+
+.main {
+  float: left;
+  padding: 0px 50px;
+}
+
+@media screen and (max-height: 450px) {
+  .sidenav {
+    padding-top: 15px;
+  }
+  .sidenav a {
+    font-size: 18px;
+  }
+}
