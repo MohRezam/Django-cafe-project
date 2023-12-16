@@ -8,11 +8,12 @@ class Menu(models.Model):
 
 class Category(models.Model):
     # category_id = models.AutoField(primary_key=True)
-    category_name = models.CharField(max_length=255)
+    category_name = models.CharField(max_length=255, unique=True)
 
 class Item(models.Model):
     # item_id = models.AutoField(primary_key=True)
     item_name = models.CharField(max_length=255)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     description = models.TextField()
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    category = models.ForeignKey(Category, to_field="category_name", on_delete=models.CASCADE)
+
