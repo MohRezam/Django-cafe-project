@@ -1,36 +1,22 @@
 from django.db import models
-from accounts.models import Staff,Customer
+from cafe.models import Item
 
-class Bill(models.Model):
-    total_cost=models.PositiveBigIntegerField()
-    description=models.CharField(max_length=500)
-    date_time=models.DateTimeField(auto_now_add=True)
-    
-    def __str__(self) -> str:
-        return f"total cost: {self.total_cost}"
+class Customer(models.Model):
+    # customer_id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=255)
+    email = models.EmailField(max_length=255)
+    phone_number = models.CharField(max_length=20)
 
 class Order(models.Model):
     # item_id=models.ForeignKey(Item)
     description= models.CharField(max_length=500)
-    date= models.DateField(auto_now_add=True)
-    time= models.TimeField(auto_now_add=True)
-    quantity=models.IntegerField()
-    staff=models.OneToOneField(to=Staff,to_field="id" , on_delete=models.DO_NOTHING)
-    bill=models.OneToOneField(to=Bill,to_field="id" ,on_delete=models.DO_NOTHING)
-    customer=models.OneToOneField(to=Customer , to_field="id" , on_delete=models.CASCADE)
+    order_date = models.DateTimeField(auto_now_add=True ,null=True)
+    table_number = models.IntegerField(null = True)
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
     
-    def __str__(self) -> str:
-        return f"{self.description}"
 
-class Item(models.Model):
-    item_name=models.CharField(max_length=50)
-    quantity=models.IntegerField()
-    item_cost=models.IntegerField()
-    description=models.CharField(max_length=500)
-    staff=models.ForeignKey(Staff , on_delete=models.DO_NOTHING)
-    order=models.ForeignKey(Order , on_delete= models.CASCADE )
-
-    
-    def __str__(self) -> str:
-        return f"Item: {self.item_name}"
-
+class OrderItem(models.Model):
+    # order_item_id = models.AutoField(primary_key=True)
+    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    item = models.ForeignKey(Item, on_delete=models.CASCADE)
+    quantity = models.IntegerField()
