@@ -14,7 +14,7 @@ class Staff(models.Model):
 class Customer(models.Model):
     name = models.CharField(max_length=255)
     email = models.EmailField(max_length=255)
-    phone_number = models.CharField(max_length=20)
+    phone_number = models.CharField(max_length=11)
 
 
 # custom user
