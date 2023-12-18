@@ -1,0 +1,710 @@
+@font-face {
+  font-family: YekanBakh;
+  font-style: normal;
+  font-weight: 200;
+  src: url("../fonts/YekanBakhThin.woff2");
+  src: url("../fonts/YekanBakhThin.woff") format("woff");
+}
+
+@font-face {
+  font-family: YekanBakh;
+  font-style: normal;
+  font-weight: 300;
+  src: url("../fonts/YekanBakhLight.woff2");
+  src: url("../fonts/YekanBakhLight.woff") format("woff");
+}
+
+@font-face {
+  font-family: YekanBakh;
+  font-style: normal;
+  font-weight: 400;
+  src: url("../fonts/YekanBakhRegular.woff2");
+  src: url("../fonts/YekanBakhRegular.woff") format("woff");
+}
+
+@font-face {
+  font-family: YekanBakh;
+  font-style: normal;
+  font-weight: 500;
+  src: url("../fonts/YekanBakhMedium.woff2");
+  src: url("../fonts/YekanBakhMedium.woff") format("woff");
+}
+
+@font-face {
+  font-family: YekanBakh;
+  font-style: normal;
+  font-weight: 700;
+  src: url("../fonts/YekanBakhBold.woff2");
+  src: url("../fonts/YekanBakhBold.woff") format("woff");
+}
+
+@font-face {
+  font-family: YekanBakh;
+  font-style: normal;
+  font-weight: 800;
+  src: url("../fonts/YekanBakhHeavy.woff2");
+  src: url("../fonts/YekanBakhHeavy.woff") format("woff");
+}
+
+@font-face {
+  font-family: YekanBakhFat;
+  font-style: normal;
+  font-weight: bold;
+  src: url("../fonts/YekanBakhFat.woff2");
+  src: url("../fonts/YekanBakhFat.woff") format("woff");
+}
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+/* Define the thumb style */
+::-webkit-scrollbar-thumb {
+  background: #036666;
+  border-radius: 5px;
+}
+
+/* Define the track style */
+::-webkit-scrollbar-track {
+  background-color: #ddd;
+  border: 1px solid #ccc;
+}
+
+/* Define the button style */
+
+/* Define the button style when being hovered over */
+::-webkit-scrollbar-button:hover {
+  background-color: #999999;
+}
+body {
+  font-family: YekanBakh !important;
+  margin: 0;
+  direction: rtl;
+  background-image: url("../images/2-3.jpg");
+  background-position: center center;
+  background-repeat: repeat;
+  background-size: auto;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+svg {
+  vertical-align: middle;
+}
+
+a {
+  text-decoration: none !important;
+  color: #1a1919 !important;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+a:focus,
+a:active,
+a:visited {
+  outline: 0;
+}
+.sidenav {
+  height: 100%;
+  position: fixed;
+  z-index: 1;
+  overflow-x: hidden;
+  padding-top: 5px;
+}
+
+.main {
+  float: left;
+  padding: 0px 50px;
+}
+.logo {
+  width: 110px;
+}
+.name-resturan {
+  background-color: #036666;
+  display: flex;
+  align-items: center;
+  padding: 30px 5px;
+  border-radius: 0 15px 15px 0;
+  width: 60%;
+}
+.name-resturan p {
+  color: #fff;
+  font-weight: 700;
+  font-size: 16px;
+  margin: 0;
+}
+.online-ordianry {
+  background-color: #ffb901;
+  border-radius: 15px 0 0 15px;
+  padding: 5px 5px;
+  width: 40%;
+}
+.status-order-accept {
+  text-align: center;
+  color: #f4f4f4;
+  font-weight: 700;
+  font-size: 12px;
+}
+.address-online {
+  border-color: #e0e0e0;
+}
+.footer p {
+  margin: 10px 6px;
+  font-weight: 400;
+  font-size: 14px;
+  color: #000;
+  width: 70%;
+}
+.footer a {
+  font-weight: 500;
+  font-size: 10px;
+  opacity: 0.5;
+  width: 30%;
+  padding-right: 5px;
+}
+.list-footer {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+.list-group-footer {
+  padding: 0;
+}
+.list-group-item a {
+  font-weight: 500;
+  padding-top: 5px !important;
+  font-size: 12px;
+}
+.phone {
+  background-color: #036666;
+  color: #fff;
+  width: 135px;
+  height: 89px;
+  border-radius: 12px;
+  position: relative;
+}
+.phone p {
+  direction: ltr;
+  font-weight: 500;
+  font-size: 15px;
+  text-align: left;
+  position: absolute;
+  left: 12px;
+  bottom: 12px;
+  margin: 0;
+  color: #fff;
+}
+.phone svg.bg-line {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+.icon-social a {
+  font-size: 20px;
+  cursor: pointer;
+}
+.icon-social a i:hover {
+  color: #036666;
+}
+.icon-social a i {
+  color: #000;
+}
+.copyrigths {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-color: #e0e0e0;
+}
+.copyrights span {
+  font-weight: 300;
+  font-size: 10px;
+}
+.dropdown-content {
+  max-height: 0;
+  transition-duration: 0.5s;
+  opacity: 0;
+  visibility: hidden;
+}
+.side-nav-btn {
+  cursor: pointer;
+}
+.show-one {
+  max-height: 250px;
+  overflow-y: auto;
+  margin-top: 15px;
+  font-size: inherit;
+  opacity: 1;
+  visibility: visible;
+}
+.offcanva {
+  display: none;
+}
+.navbar {
+  position: fixed;
+  top: 0;
+  width: 100%;
+}
+
+.navbar ul {
+  background-color: transparent !important;
+  display: flex;
+  justify-content: start;
+  width: calc(100% + 32px);
+  padding-right: 0;
+  overflow-x: auto;
+  margin: 0 -16px;
+  padding-bottom: 14px;
+  padding-top: 14px;
+  list-style-type: none;
+}
+
+.navbar li:first-child {
+  margin-right: 16px;
+}
+
+.navbar li {
+  margin: 0;
+  position: relative;
+  list-style: none;
+}
+
+.navbar a {
+  text-decoration: none !important;
+  padding: 0 24px;
+  white-space: nowrap;
+  line-height: 50px;
+  color: #000;
+  font-weight: 400;
+  -webkit-transition: none;
+  transition: none;
+  font-size: 14px;
+  text-align: right;
+  display: block;
+  background: rgba(115, 115, 115, 0.05);
+  backdrop-filter: blur(8px);
+}
+.navbar li:first-child a {
+  border-radius: 0 12px 12px 0;
+}
+.navbar li:last-child a {
+  border-radius: 12px 0 0 12px;
+}
+
+.active::before {
+  content: "";
+  width: 14px;
+  height: 14px;
+  background-color: #036666;
+  position: absolute;
+  bottom: -7px;
+  border-radius: 30px;
+  right: 50%;
+  margin-right: -7px;
+}
+.active a {
+  color: #036666 !important;
+  font-weight: 700;
+}
+
+.food-tab-title {
+  text-align: center;
+  font-size: 18px;
+  font-weight: 500;
+  margin: 24px 0;
+  position: relative;
+}
+.food-tab-title span {
+  position: relative;
+  z-index: 2;
+  background-color: #fff;
+  padding: 0 16px;
+}
+.food-card {
+  width: 100%;
+  border-radius: 24px;
+  background-color: #fff;
+  padding: 10px;
+  border: 1px solid #f4f4f4;
+  height: 100%;
+}
+
+.food-tab-title::before {
+  content: "";
+  position: absolute;
+  height: 1px;
+  background-color: #f4f4f4;
+  margin: 0 auto;
+  display: block;
+  top: 11px;
+  left: 20%;
+  right: 20%;
+  z-index: 1;
+}
+.food-info-title {
+  font-size: 18px;
+  font-weight: bold;
+}
+.food-info-description {
+  margin: 0;
+  font-size: 14px;
+}
+.food-info-thumbnail img {
+  border-radius: 48px;
+  margin: 0;
+  display: block;
+  width: 100px;
+  height: auto !important;
+  max-width: none !important;
+  position: relative;
+  z-index: 2;
+}
+.food-price {
+  padding: 0 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.food-price p {
+  font-size: 18px;
+  margin: 0;
+}
+.food-actions-button {
+  width: 128px;
+  padding: 14px 0;
+  display: flex;
+  justify-content: end;
+}
+
+.food-button {
+  color: #fff;
+  background-color: #036666 !important;
+  border-color: #036666 !important;
+  border-radius: 12px !important;
+  font-size: 16px;
+  font-weight: bold;
+  color: #fff !important;
+  width: 128px;
+  height: 38px;
+  padding: 0 12px;
+}
+
+.button-not-sale {
+  filter: grayscale(1);
+}
+.grid-card-food {
+  grid-template-columns: 1fr 1fr;
+  row-gap: 10px;
+  column-gap: 15px;
+}
+.tab-fixed {
+  position: fixed !important;
+  top: 0;
+  z-index: 9;
+}
+.toolbar {
+  display: none;
+}
+.footer-buttom {
+  display: none;
+}
+.title-page {
+  font-size: 29px;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.quantity input {
+  -webkit-appearance: none;
+  border: none;
+  text-align: center;
+  width: 32px;
+  font-size: 16px;
+  color: #43484d;
+  font-weight: 300;
+}
+
+.quantity button {
+  width: 30px;
+  height: 30px;
+  background-color: #e1e8ee;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+}
+.minus-btn img {
+  margin-bottom: 3px;
+}
+.plus-btn img {
+  margin-top: 2px;
+}
+
+button:focus,
+input:focus {
+  outline: 0;
+}
+.food-cart-box {
+  border-right: 1px solid #79797a;
+  border-left: 1px solid #79797a;
+  border-bottom: 1px solid #79797a;
+  padding: 10px 15px;
+}
+
+.food-thumbnail img {
+  width: 70px;
+  height: 70px;
+  border-radius: 10px;
+}
+.food-remove {
+  background: rgb(158 158 158 / 32%);
+  width: 24px;
+  text-align: center;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.food-remove:hover {
+  background: rgba(255, 0, 0, 0.5);
+}
+.food-remove a {
+  font-size: 19px;
+  font-weight: 700;
+  color: rgb(255 255 255) !important;
+}
+.food-title p {
+  margin-bottom: 0;
+}
+.food-cart-price p {
+  margin-bottom: 0;
+}
+.food-amount p {
+  margin-bottom: 0;
+}
+.tab-food-cart {
+  display: flex;
+  justify-content: flex-start;
+  gap: 10px;
+}
+.tab-food-cart {
+  display: flex;
+  justify-content: flex-start;
+  gap: 10px;
+  border: 1px solid #79797a;
+  border-radius: 5px 5px 0 0;
+  padding: 10px 10px;
+}
+.tab-food-cart p {
+  margin-bottom: 0;
+}
+a.checkout-button {
+  text-align: center;
+  position: relative;
+  width: 25%;
+  display: block;
+  font-size: 14px;
+  font-weight: 500;
+  padding-top: 14px;
+  padding-bottom: 14px;
+  background-color: #40a944;
+  border-radius: 6px;
+}
+.checkout-button:hover {
+  background: transparent;
+  border: 1px solid #40a944;
+  color: #40a944 !important;
+}
+.update-cart {
+  outline: 0;
+  border: 0;
+  background: #9e9e9e;
+  color: rgb(255 255 255);
+  font-size: 14px;
+  font-weight: 500;
+  padding-top: 14px;
+  padding-bottom: 14px;
+  border-radius: 6px;
+  transition: all 0.3s;
+  width: 25%;
+}
+.update-cart:hover {
+  background: transparent;
+  border: 1px solid #9e9e9e;
+  color: #9e9e9e;
+  padding-bottom: 10px;
+}
+.navigation-card {
+  border-left: 1px solid #79797a;
+  border-right: 1px solid #79797a;
+  border-bottom: 1px solid #79797a;
+  border-radius: 0 0 5px 5px;
+}
+.field-checkout {
+  gap: 10px;
+}
+.field-checkout svg {
+  width: 5%;
+}
+.btn-cupon-checkout {
+  width: 20%;
+}
+.checkout-coupon {
+  border: 1px solid #79797a;
+  padding: 20px 5px;
+  border-radius: 5px;
+}
+.btn-cupon-checkout {
+  background-color: #036666;
+  border: none;
+  padding: 8px 24px;
+  color: #fff;
+  font-family: YekanBakh;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 8px;
+  height: 40px;
+}
+.input-coupon {
+  background-color: transparent;
+  outline: 0;
+  border: 0;
+  padding: 10px 0;
+}
+@media screen and (max-width: 768px) {
+  .container-responsive {
+    max-width: 100% !important;
+  }
+  .offcanva {
+    display: block;
+  }
+  .main {
+    padding: 0 30px;
+  }
+  .grid-card-food {
+    grid-template-columns: 1fr;
+    row-gap: 20px;
+    column-gap: 0;
+  }
+  .sidenav {
+    position: static;
+    overflow-x: unset;
+  }
+  footer.footer.d-flex.flex-column.justify-content-center.align-items-center.gap-2 {
+    display: none !important;
+  }
+  .drop-menu.bg-dark.rounded-4.w-75.py-2.px-3.d-flex {
+    width: 100% !important;
+    border-radius: 5px !important;
+    padding: 15px 10px !important;
+  }
+  .d-flex.justify-content-between.align-items-center.w-75 {
+    width: 100% !important;
+  }
+  .name-resturan.text-center {
+    border-radius: 0 10px 10px 0;
+    padding: 30px 10px;
+  }
+  .online-ordianry.d-flex.flex-column.align-items-center.justify-content-center.gap-1 {
+    border-radius: 10px 0 0 10px;
+  }
+  ul#myDropdown {
+    display: none;
+  }
+  .side-nav-btn {
+    display: none;
+  }
+  .main {
+    float: none;
+    padding: 0;
+  }
+  .toolbar {
+    display: block;
+  }
+  .ryn-toolbar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 4px 24px;
+    z-index: 69;
+  }
+  .ryn-toolbar a {
+    color: var(--reyhoon-black);
+    text-align: center;
+    z-index: 1;
+    flex-basis: 25%;
+  }
+
+  .ryn-toolbar span {
+    display: block;
+    font-weight: 500;
+    font-size: 13px;
+  }
+  .ryn-toolbar .toolbar-bg {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    filter: drop-shadow(0px 30px 100px rgba(0, 0, 0, 0.5));
+  }
+  .ryn-toolbar .toolbar-bg::before,
+  .ryn-toolbar .toolbar-bg::after {
+    content: "";
+    width: calc((100vw - 390px) / 2);
+    background-color: #fff;
+  }
+  .ryn-toolbar .toolbar-bg::before,
+  .ryn-toolbar .toolbar-bg::after {
+    content: "";
+    width: calc((100vw - 390px) / 2);
+    background-color: #fff;
+  }
+  .footer-buttom {
+    display: block;
+  }
+  .addres-online {
+    border-color: #333;
+    padding-top: 10px;
+  }
+  .navigation-card {
+    flex-direction: column;
+    gap: 10px;
+  }
+  .checkout-button {
+    width: 100% !important;
+  }
+  .update-cart {
+    width: 100% !important;
+  }
+  .food-cart-box {
+    gap: 10px;
+    padding: 10px 10px;
+  }
+  .food-title p {
+    font-size: 14px;
+  }
+  .food-cart-price p {
+    font-size: 14px;
+  }
+  .amount-price {
+    font-size: 14px;
+  }
+  .quantity {
+    display: flex;
+  }
+  .food-remove a {
+    font-size: 20px;
+  }
+}
+@media screen and (max-height: 450px) {
+  .sidenav {
+    padding-top: 15px;
+  }
+  .sidenav a {
+    font-size: 18px;
+  }
+}

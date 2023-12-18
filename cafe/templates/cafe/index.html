@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% load static %}
+ {% block title %} کافه و رستوران استارباکس{% endblock title %} 
+ {% block content %}
+  <body class="home-bg">
+    <main class="d-flex flex-column align-items-center px-5 gap-4">
+      <img
+        class="img-fluid img-logo"
+        src="{% static "images/starbucks.png" %}"
+        alt="logo"
+      />
+      <div class="container my-5">
+        <div class="row extera-row">
+          {% for category in all_categories %}
+          <div
+            class="col-md-3 col-sm-6 col-12 smx-box py-sm-4 d-flex justify-content-center box-item"
+          >
+            <a href="{% url 'cafe_menu' category.category_name %}">
+              <img
+                class="rounded-5"
+                src="{% static "images/" %}{{category.category_name}}.png"
+                alt=""
+            /></a>
+          </div>
+          {% endfor %}
+          {% comment %} <div
+            class="col-md-3 col-sm-6 col-12 smx-box py-sm-4 d-flex justify-content-center box-item"
+          >
+            <a href="#">
+              <img
+                class="rounded-5"
+                src="{% static "images/caf-qcu0mvo845kmo62hturciucw4el32ccyd1ftbo77to.png" %}"
+                alt=""
+            /></a>
+          </div>
+          <div 
+            {% comment %} class="col-md-3 col-sm-6 col-12 smx-box py-sm-4 d-flex justify-content-center box-item"
+          >
+            <a href="#">
+              <img
+                class="rounded-5"
+                src="{% static "images/shirini-qcu186oj0yqltz4df2ax1gt0utkljcxxahs0xglysc.png" %}"
+                alt=""
+            /></a>
+          </div>
+          <div {% endcomment %}
+            {% comment %} class="col-md-3 col-sm-6 col-12 smx-box py-sm-4 d-flex justify-content-center box-item"
+          >
+            <a href="#">
+              <img
+                class="rounded-5"
+                src="{% static "images/sobhane-qcu1694gz83dytxep88iwycwwb3fpr9scxi3ezh3ks.png" %}"
+                alt=""
+            /></a>
+          </div> {% endcomment %}
+        </div>
+      </div>
+    </main>
+    <script src="{% static "js/bootstrap.min.js" %}"></script>
+  </body>
+{% endblock content %}
