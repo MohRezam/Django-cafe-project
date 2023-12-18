@@ -1,11 +1,6 @@
 from django.db import models
 from cafe.models import Item
-
-class Customer(models.Model):
-    # customer_id = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=255)
-    email = models.EmailField(max_length=255)
-    phone_number = models.CharField(max_length=20)
+from accounts.models import Customer
 
 class Order(models.Model):
     # item_id=models.ForeignKey(Item)
