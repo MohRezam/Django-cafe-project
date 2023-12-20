@@ -19,4 +19,6 @@ class CafeMenuView(View):
         
 
 
-    
+class CartView(View):
+    def get(self, request):
+        return render(request, "cafe/cart.html")
