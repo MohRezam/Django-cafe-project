@@ -1,10 +1,9 @@
 from django.urls import path
+from . import views
 # from .views import add_order, checkout, cart
 
-# urlpatterns = [
-#     path('add_order/', add_order, name="add_order"),
-#     path('cart/', cart, name="cart"),
-#     path('checkout/', checkout, name="checkout"),
-# ]
+urlpatterns = [
+    path('checkout/', views.CheckoutView.as_view(), name="checkout"),
+]
 
 
