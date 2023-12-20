@@ -1,4 +1,5 @@
 from django.urls import path
+from .views import UserLoginView
 # from .views import account, bill, staff, manager
 
 # urlpatterns = [
@@ -7,3 +8,7 @@ from django.urls import path
 #     path("staff/", staff, name="staff"),
 #     path("manager/", manager, name="manager")
 # ]
+
+urlpatterns = [
+    path("login/", UserLoginView.as_view(), name="user_login"),
+]
