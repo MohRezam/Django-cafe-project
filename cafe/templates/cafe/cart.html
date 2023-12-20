@@ -1,7 +1,20 @@
-{% extends "base.html" %}
 {% load static %}
- {% block title %} کافه و رستوران استارباکس{% endblock title %} 
- {% block content %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>سبد خرید</title>
+    <link rel="stylesheet" href="{% static "css/style.css" %}" />
+    <link rel="stylesheet" href="{% static "css/bootstrap.min.css" %}" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+      integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+  </head>
   <body>
     <div class="container-fluid container-responsive">
       <div
@@ -9,7 +22,7 @@
       >
         <header class="d-flex flex-column align-items-center gap-2 w-100">
           <img
-            src="{% static "images/clipart2415024.png" %}"
+            src="./images/clipart2415024.png"
             alt="logo"
             class="logo img-fluid"
           />
@@ -225,59 +238,144 @@
         </footer>
       </div>
       <div class="main col-lg-9 col-sm-12 py-4">
-        <nav id="dynamic" class="navbar">
-          <ul>
-            <li class="active"><a href="#category-1">محبوب ترین</a></li>
-            <li><a href="#category-2">سالاد</a></li>
-            <li><a href="#category-3">غذای اصلی</a></li>
-            <li><a href="#category-4">پاستا</a></li>
-            <li><a href="#category-5">پیتزا</a></li>
-            <li><a href="#category-6">برگر</a></li>
-            <li><a href="#category-7">نوشیدنی</a></li>
-          </ul>
-        </nav>
-        <div class="main-item-section">
-          <div id="category-1" class="food-main-group my-5">
-            <h3 class="food-tab-title">
-              <span>محبوب ترین</span>
-            </h3>
-            <div class="food-content">
-              <div class="d-grid grid-card-food">
-                {% for item in items %}
-                <div
-                  class="food-card col-lg-6 border-1 d-flex flex-column justify-content-between w-100"
-                >
-                  <div class="food-info d-flex justify-content-between gap-1">
-                    <div class="food-info-content w-50 pt-2">
-                      <h2 class="food-info-title">{{item.name}}</h2>
-                      <p class="food-info-description">
-                        {{item.description}}
-                      </p>
-                    </div>
-                    <div
-                      class="food-info-thumbnail d-flex justify-content-end w-25"
-                    >
-                      <img src="{% static "images/اسپرینگ-رول-300x300.png" %}" />
-                    </div>
-                  </div>
-                  <div
-                    class="food-actions d-flex align-items-center justify-content-between py-3"
-                  >
-                    <div class="food-price">
-                      <p class="fw-bold">{{item.price}} تومان</p>
-                    </div>
-                    <div class="food-actions-button">
-                      <button class="btn food-button button-not-sale">
-                        تمام شده
-                      </button>
-                    </div>
-                  </div>
-                </div>
-                {% endfor %}
-                
-              
+        <h1 class="px-2 title-page">سبد خرید</h1>
+        <div class="tab-food-cart">
+          <p style="width: 40%; text-align: left">محصول</p>
+          <p style="width: 25%; text-align: left">قیمت</p>
+          <p style="width: 15%; text-align: left">تعداد</p>
+          <p style="width: 20%; text-align: left">جمع جزء</p>
+        </div>
+        <div
+          class="food-cart-box d-flex align-items-center justify-content-between"
+        >
+          <div class="food-remove">
+            <a href="#">×</a>
+          </div>
+          <div class="food-thumbnail">
+            <img src="./images/پومودور-300x300.png" />
+          </div>
+          <div class="food-title">
+            <p>نوشابه گاز دار با طعم کولا پپسی - 330 میلی لیتر</p>
+          </div>
+          <div class="food-cart-price">
+            <p>6,900 تومان</p>
+          </div>
+          <div class="food-quantity">
+            <div class="quantity">
+              <button class="plus-btn" type="button" name="button">
+                <img src="./images/plus.svg" alt="" />
+              </button>
+              <input type="text" name="name" value="1" />
+              <button class="minus-btn" type="button" name="button">
+                <img src="./images/minus.svg" alt="" />
+              </button>
             </div>
           </div>
+          <div class="food-amount">
+            <p class="amount-price">6,900 تومان</p>
+          </div>
+        </div>
+        <div
+          class="food-cart-box d-flex align-items-center justify-content-between"
+        >
+          <div class="food-remove">
+            <a href="#">×</a>
+          </div>
+          <div class="food-thumbnail">
+            <img src="./images/پومودور-300x300.png" />
+          </div>
+          <div class="food-title">
+            <p>نوشابه گاز دار با طعم کولا پپسی - 330 میلی لیتر</p>
+          </div>
+          <div class="food-cart-price">
+            <p>6,900 تومان</p>
+          </div>
+          <div class="food-quantity">
+            <div class="quantity">
+              <button class="plus-btn" type="button" name="button">
+                <img src="./images/plus.svg" alt="" />
+              </button>
+              <input type="text" name="name" value="1" />
+              <button class="minus-btn" type="button" name="button">
+                <img src="./images/minus.svg" alt="" />
+              </button>
+            </div>
+          </div>
+          <div class="food-amount">
+            <p class="amount-price">6,900 تومان</p>
+          </div>
+        </div>
+        <div
+          class="food-cart-box d-flex align-items-center justify-content-between"
+        >
+          <div class="food-remove">
+            <a href="#">×</a>
+          </div>
+          <div class="food-thumbnail">
+            <img src="./images/پومودور-300x300.png" />
+          </div>
+          <div class="food-title">
+            <p>نوشابه گاز دار با طعم کولا پپسی - 330 میلی لیتر</p>
+          </div>
+          <div class="food-cart-price">
+            <p>6,900 تومان</p>
+          </div>
+          <div class="food-quantity">
+            <div class="quantity">
+              <button class="plus-btn" type="button" name="button">
+                <img src="./images/plus.svg" alt="" />
+              </button>
+              <input type="text" name="name" value="1" />
+              <button class="minus-btn" type="button" name="button">
+                <img src="./images/minus.svg" alt="" />
+              </button>
+            </div>
+          </div>
+          <div class="food-amount">
+            <p class="amount-price">6,900 تومان</p>
+          </div>
+        </div>
+        <div
+          class="food-cart-box d-flex align-items-center justify-content-between"
+        >
+          <div class="food-remove">
+            <a href="#">×</a>
+          </div>
+          <div class="food-thumbnail">
+            <img src="./images/پومودور-300x300.png" />
+          </div>
+          <div class="food-title">
+            <p>نوشابه گاز دار با طعم کولا پپسی - 330 میلی لیتر</p>
+          </div>
+          <div class="food-cart-price">
+            <p>6,900 تومان</p>
+          </div>
+          <div class="food-quantity">
+            <div class="quantity">
+              <button class="plus-btn" type="button" name="button">
+                <img src="./images/plus.svg" alt="" />
+              </button>
+              <input type="text" name="name" value="1" />
+              <button class="minus-btn" type="button" name="button">
+                <img src="./images/minus.svg" alt="" />
+              </button>
+            </div>
+          </div>
+          <div class="food-amount">
+            <p class="amount-price">6,900 تومان</p>
+          </div>
+        </div>
+        <div
+          class="navigation-card w-100 d-flex py-3 px-2 align-items-center justify-content-between"
+        >
+          <button class="update-cart">بروزرسانی سبد خرید</button>
+          <a
+            href="https://demos.mahdisweb.net/fruit/checkout/"
+            class="checkout-button text-white d-flex align-item-center justify-content-center gap-2"
+          >
+            ادامه جهت تسویه حساب
+            <i class="fa-solid fa-arrow-left d-flex align-items-center"></i>
+          </a>
         </div>
       </div>
       <div class="toolbar col-12">
@@ -462,7 +560,7 @@
         </footer>
       </div>
     </div>
-    <script src="{% static "js/bootstrap.min.js" %}"></script>
+    <script src="./js/bootstrap.min.js"></script>
     <script>
       function myFunction() {
         document.getElementById("myDropdown").classList.toggle("show-one");
@@ -521,6 +619,38 @@
         });
       });
     </script>
+    <script>
+      document.querySelectorAll(".minus-btn").forEach(function (btn) {
+        btn.addEventListener("click", function (e) {
+          e.preventDefault();
+          var input = this.closest("div").querySelector("input");
+          var value = parseInt(input.value);
+
+          if (value > 1) {
+            value = value - 1;
+          } else {
+            value = 0;
+          }
+
+          input.value = value;
+        });
+      });
+
+      document.querySelectorAll(".plus-btn").forEach(function (btn) {
+        btn.addEventListener("click", function (e) {
+          e.preventDefault();
+          var input = this.closest("div").querySelector("input");
+          var value = parseInt(input.value);
+
+          if (value < 100) {
+            value = value + 1;
+          } else {
+            value = 100;
+          }
+
+          input.value = value;
+        });
+      });
+    </script>
   </body>
-  {% endblock %}
 </html>
