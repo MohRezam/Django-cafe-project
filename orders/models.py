@@ -10,7 +10,7 @@ class Order(models.Model):
     description= models.CharField(max_length=500)
     order_date = models.DateTimeField(auto_now_add=True ,null=True)
     table_number = models.IntegerField(null = True)
-    customer = models.ForeignKey(Session, on_delete=models.CASCADE)
+    session = models.OneToOneField(Session, on_delete=models.CASCADE)
     
 
 class OrderItem(models.Model):
@@ -18,4 +18,10 @@ class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
     item = models.ForeignKey(Item, on_delete=models.CASCADE)
     quantity = models.IntegerField()
+
+
+
+# class history(models.Model):
+#     phone_number=models.CharField(max_length=11)
+#     order_id=models.IntegerField()
     
