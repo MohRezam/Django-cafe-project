@@ -5,23 +5,6 @@ from .authenticate import PhoneBackend
 from django.contrib.auth import login
 # Create your views here.
 
-# def account(request):
-#     if request.method == "GET":
-#         return render(request, "", context={})
-    
-    
-# def bill(request):
-#     if request.method == "GET":
-#         return render(request, "", context={})
-    
-# def staff(request):
-#     if request.method == "GET":
-#         return render(request, "", context={})
-    
-# def manager(request):
-#     if request.method == "GET":
-#         return render(request, "", context={})
-    
     
 class UserLoginView(View):
     def get(self, request):
@@ -34,6 +17,6 @@ class UserLoginView(View):
             cd = form.cleaned_data
             user = PhoneBackend.authenticate(request, username=cd["phone_number"], password=cd["password"])
             if user is not None:
-                login(request, user)
+                login(request, user, backend="django.contrib.auth.backends.ModelBackend")
                 return render(request, "accounts/staff.html")
         return render(request, "accounts/login.html", {"form":form})
