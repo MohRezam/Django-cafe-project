@@ -1,7 +1,6 @@
 from .models import User
-
-
-class PhoneBackend:
+from django.contrib.auth.backends import BaseBackend
+class PhoneBackend(BaseBackend):
     def authenticate(request, username=None, password=None):
         try:
             user = User.objects.get(phone_number=username)
@@ -17,3 +16,4 @@ class PhoneBackend:
             return User.objects.get(pk=user_id)
         except User.DoesNotExist:
             return None
+        
