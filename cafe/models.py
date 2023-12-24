@@ -16,6 +16,7 @@ class Item(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=2)
     description = models.TextField()
     category = models.ForeignKey(Category, to_field="category_name", on_delete=models.CASCADE)
+    ingredients = models.TextField()
     
     def __str__(self) -> str:
         return f"Item: {self.name}"
