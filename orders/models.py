@@ -3,9 +3,10 @@ from cafe.models import Item
 # from accounts.models import Customer
 # from accounts.models import User
 from django.contrib.sessions.models import Session
+from accounts.models import TimeStampedModel
 
 
-class Order(models.Model):
+class Order(TimeStampedModel):
     description= models.CharField(max_length=500)
     order_date = models.DateTimeField(auto_now_add=True ,null=True)
     table_number = models.IntegerField(null = True)
