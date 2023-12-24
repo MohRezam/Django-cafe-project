@@ -1,8 +1,18 @@
 from django.shortcuts import render
-from django.views import View
 
 # Create your views here.
 
-class CheckoutView(View):
-    def get(self, request):
-        return render(request, "orders/checkout.html")
+def add_order(request):
+    if request.method == "GET":
+        return render(request, "", context={})
+    
+    
+def checkout(request):
+    if request.method == "GET":
+        return render(request, "", context={})
+    
+
+def cart(request):
+    if request.method == "GET":
+        return render(request, "", context={})
+    
