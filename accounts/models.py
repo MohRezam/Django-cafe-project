@@ -1,4 +1,6 @@
 from django.db import models
+from django.utils import timezone
+from django.db import models
 from django.contrib.auth.models import AbstractBaseUser
 from django.core.validators import EmailValidator
 from .managers import UserManager
@@ -77,4 +79,21 @@ class User(AbstractBaseUser):
     @property
     def is_staff(self):
         return self.is_admin
+   
+
+class TimeStampedModel(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    class Meta:
+        abstract = True
+        def save(self, *args, **kwargs):
+        # Update the 'updated_at' timestamp before saving
+            self.updated_at = timezone.now()
+            super(TimeStampedModel, self).save(*args, **kwargs)
+
+# This is an idea, it may add later
+# class BaseItem(TimeStampedModel):
+#     item_title = models.CharField(max_lengh=50)
+#     item_description = models.TextField()
+#     item_ingredeint = models.TextField()
     
