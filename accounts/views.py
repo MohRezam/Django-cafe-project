@@ -17,6 +17,6 @@ class UserLoginView(View):
             cd = form.cleaned_data
             user = PhoneBackend.authenticate(request, username=cd["phone_number"], password=cd["password"])
             if user is not None:
-                login(request, user)
+                login(request, user, backend="django.contrib.auth.backends.ModelBackend")
                 return render(request, "accounts/staff.html")
         return render(request, "accounts/login.html", {"form":form})
