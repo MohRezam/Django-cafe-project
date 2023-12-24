@@ -1,7 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Category, Item
 from django.views import View
-from .forms import UserSessionForm
 # from django.shortcuts import render, redirect
 # from django.views import View
 # from .models import Order, OrderItem
@@ -15,34 +14,25 @@ class HomeView(View):
         return render(request, "cafe/index.html", context={"all_categories":all_categories})
 
 class CafeMenuView(View):
+    def dispatch(self, request, category_name):
+        category = Category.objects.filter(category_name=category_name).exists()
+        if not category:
+            return redirect("cafe:home")
+        return super().dispatch(request, category_name)
+    
     def get(self, request, category_name):
-        if category_name not in ["maincourse", "breakfast", "sweets", "cafe"]:
-            return redirect("home")
         items = Item.objects.filter(category=category_name)
         return render(request, "cafe/menu-item.html", context={"items":items})
-    
 
 
-class CartPageView(View):
-    form_class=UserSessionForm()
-    def get():
-        ...
-
-    def post(self, request  ):
-        form=self.form_class(request.POST)
-        
-        if form.is_valid():
-            # Session.object.creat(phone_number)
-            request.session['customer_phone']={
-                "phone_number": form.cleaned_data['phone']
-            }
-        
-        
-
-
-class CartView(View):
+class AboutView(View):
     def get(self, request):
-        return render(request, "cafe/cart.html")
+        return render(request, "cafe/about.html", {})
+
+
+# class CartView(View):
+#     def get(self, request):
+#         return render(request, "cafe/cart.html")    
 
 # class AddOrderView(View):
 #     def get(self, request):

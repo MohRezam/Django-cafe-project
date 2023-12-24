@@ -23,7 +23,7 @@ import re
 
 
 # custom user
-class BaseUser(AbstractBaseUser):
+class User(AbstractBaseUser):
     email = models.EmailField(max_length=255, unique=True,validators=[EmailValidator()])
     phone_number = models.CharField(max_length=11, unique=True)
     full_name = models.CharField(max_length=255)
