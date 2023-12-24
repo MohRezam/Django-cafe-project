@@ -35,5 +35,5 @@ class UserLoginView(View):
             user = PhoneBackend.authenticate(request, username=cd["phone_number"], password=cd["password"])
             if user is not None:
                 login(request, user)
-                return render(request, "accounts/staff")
+                return render(request, "accounts/staff.html")
         return render(request, "accounts/login.html", {"form":form})
