@@ -1,0 +1,25 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fa">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %} {% endblock title %}</title>
+    <link rel="icon" type="image/png" href="{% static "staff/images/logo.png"
+    %}" />
+    <!--    font-->
+    <link rel="stylesheet" href="{% static "staff/css/font-awesome.min.css" %}"
+    /> <link rel="stylesheet" href="{% static "staff/materialdesignicons.css"
+    %}" /> <link rel="stylesheet" href="{% static
+    "staff/css/materialdesignicons.css.map" %}" />
+    <!--    font-->
+    <link rel="stylesheet" href="{% static "staff/css/bootstrap.css" %}" />
+    <link rel="stylesheet" href="{% static "staff/css/style.css" %}" />
+  </head>
+
+  <body>
+    {% block content %}{% endblock %}
+    <script src="{% static "staff/js/jquery-3.2.1.min.js" %}"></script>
+    <script src="{% static "staff/js/bootstrap.js" %}"></script>
+  </body>
+</html>
