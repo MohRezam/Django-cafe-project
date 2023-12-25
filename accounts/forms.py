@@ -45,6 +45,7 @@ class UserLoginForm(forms.Form):
     phone_number = forms.CharField(max_length=11)
     password = forms.CharField(widget=forms.PasswordInput)
     # email = forms.EmailField(widget=forms.EmailInput(attrs={"palceholder":"Enter your email"}))
+
 class CategoryForm(forms.Form):
     name = forms.CharField(
         label='نام دسته بندی',
@@ -58,5 +59,23 @@ class CategoryForm(forms.Form):
         name = self.cleaned_data['name']
         if Category.objects.filter(category_name=name).exists():
             raise forms.ValidationError('این نام دسته بندی قبلاً استفاده شده است.')
-        return name    
-    
+        return name
+       
+class AddItemForm(forms.Form):
+    name = forms.CharField(label='نام آیتم', max_length=100)
+    fixed_number = forms.DecimalField(label='قیمت آیتم')
+    category = forms.ChoiceField(
+        label='دسته بندی',
+        choices=[
+            ('date-desc', 'دسته بندی مورد نظر را انتخاب کنید'),
+            ('date-asc', 'غذای اصلی'),
+            ('rate', 'صبحانه'),
+            ('views', 'شام'),
+            ('comments', 'عصرانه'),
+        ]
+    )
+    description = forms.CharField(
+        label='توضیحات آیتم',
+        widget=forms.Textarea(attrs={'style': 'height: 80px;'})
+    )
+    form_file = forms.ImageField(label='افزودن عکس آیتم')
