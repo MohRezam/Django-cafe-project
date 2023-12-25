@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
- {% block title %} کافه و رستوران استارباکس{% endblock title %} 
- {% block content %}
+{% block title %}Checkout Page{% endblock title %}
+{% block content %}
   <body>
     <div class="container-fluid container-responsive">
       <div
@@ -9,7 +9,7 @@
       >
         <header class="d-flex flex-column align-items-center gap-2 w-100">
           <img
-            src="{% static "images/clipart2415024.png" %}"
+            src="./images/clipart2415024.png"
             alt="logo"
             class="logo img-fluid"
           />
@@ -225,60 +225,244 @@
         </footer>
       </div>
       <div class="main col-lg-9 col-sm-12 py-4">
-        <nav id="dynamic" class="navbar">
-          <ul>
-            <li class="active"><a href="#category-1">محبوب ترین</a></li>
-            <li><a href="#category-2">سالاد</a></li>
-            <li><a href="#category-3">غذای اصلی</a></li>
-            <li><a href="#category-4">پاستا</a></li>
-            <li><a href="#category-5">پیتزا</a></li>
-            <li><a href="#category-6">برگر</a></li>
-            <li><a href="#category-7">نوشیدنی</a></li>
-          </ul>
-        </nav>
-        <div class="main-item-section">
-          <div id="category-1" class="food-main-group my-5">
-            <h3 class="food-tab-title">
-              <span>محبوب ترین</span>
-            </h3>
-            <div class="food-content">
-              <div class="d-grid grid-card-food">
-                {% for item in items %}
-                <div
-                  class="food-card col-lg-6 border-1 d-flex flex-column justify-content-between w-100"
-                >
-                  <div class="food-info d-flex justify-content-between gap-1">
-                    <div class="food-info-content w-50 pt-2">
-                      <h2 class="food-info-title">{{item.name}}</h2>
-                      <p class="food-info-description">
-                        {{item.description}}
-                      </p>
-                    </div>
-                    <div
-                      class="food-info-thumbnail d-flex justify-content-end w-25"
-                    >
-                      <img src="{% static "images/اسپرینگ-رول-300x300.png" %}" />
-                    </div>
-                  </div>
-                  <div
-                    class="food-actions d-flex align-items-center justify-content-between py-3"
+        <h1 class="px-2 title-page">پرداخت</h1>
+        <div class="checkout-coupon">
+          <from
+            class="field-checkout w-100 d-flex align-items-center justify-content-between"
+            action=""
+            method="post"
+          >
+            <svg
+              width="28"
+              height="28"
+              viewBox="0 0 28 28"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <g clip-path="url(#clip0_392_173)">
+                <path
+                  d="M17.5 5.83325V8.16659"
+                  stroke="#737373"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                ></path>
+                <path
+                  d="M17.5 12.8333V15.1666"
+                  stroke="#737373"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                ></path>
+                <path
+                  d="M17.5 19.8333V22.1666"
+                  stroke="#737373"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                ></path>
+                <path
+                  d="M5.83333 5.83325H22.1667C22.7855 5.83325 23.379 6.07908 23.8166 6.51667C24.2542 6.95425 24.5 7.54775 24.5 8.16659V11.6666C23.8812 11.6666 23.2877 11.9124 22.8501 12.35C22.4125 12.7876 22.1667 13.3811 22.1667 13.9999C22.1667 14.6188 22.4125 15.2122 22.8501 15.6498C23.2877 16.0874 23.8812 16.3333 24.5 16.3333V19.8333C24.5 20.4521 24.2542 21.0456 23.8166 21.4832C23.379 21.9208 22.7855 22.1666 22.1667 22.1666H5.83333C5.21449 22.1666 4.621 21.9208 4.18342 21.4832C3.74583 21.0456 3.5 20.4521 3.5 19.8333V16.3333C4.11884 16.3333 4.71233 16.0874 5.14992 15.6498C5.5875 15.2122 5.83333 14.6188 5.83333 13.9999C5.83333 13.3811 5.5875 12.7876 5.14992 12.35C4.71233 11.9124 4.11884 11.6666 3.5 11.6666V8.16659C3.5 7.54775 3.74583 6.95425 4.18342 6.51667C4.621 6.07908 5.21449 5.83325 5.83333 5.83325"
+                  stroke="#737373"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                ></path>
+              </g>
+              <defs>
+                <clipPath id="clip0_392_173">
+                  <rect width="28" height="28" fill="white"></rect>
+                </clipPath>
+              </defs>
+            </svg>
+            <input
+              type="text"
+              name="coupon_code"
+              class="input-coupon w-75"
+              placeholder="افزودن کد تخفیف"
+              id="coupon_code"
+              value=""
+            />
+            <button
+              type="submit"
+              class="button btn-cupon-checkout"
+              name="apply_coupon"
+              value="اعمال کدتخفیف"
+            >
+              اعمال
+            </button>
+          </from>
+        </div>
+        <form>
+          <div
+            class="group-checkout-item d-flex flex-md-row justify-content-between gap-3 mt-4 flex-column"
+          >
+            <div class="checkout-right-section">
+              <div class="delivary-box border-1 rounded-3 py-3 px-3">
+                <h3 class="shipping-title my-3">
+                  جزئیات سفارش خود را وارد کنید
+                </h3>
+
+                <div class="mb-3">
+                  <label for="exampleInputnameandfamily" class="form-label"
+                    >نام و نام خانوادگی</label
                   >
-                    <div class="food-price">
-                      <p class="fw-bold">{{item.price}} تومان</p>
-                    </div>
-                    <div class="food-actions-button">
-                      <button class="btn food-button button-not-sale">
-                        تمام شده
-                      </button>
-                    </div>
+                  <input type="text" class="form-control" id="nameandfamily" />
+                </div>
+                <div class="mb-3">
+                  <label for="exampleInputPassword1" class="form-label"
+                    >شماره تلفن</label
+                  >
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="exampleInputphone"
+                  />
+                </div>
+                <div class="mb-3">
+                  <label for="exampleInputPassword1" class="form-label"
+                    >شماره میز</label
+                  >
+                  <select
+                    class="form-select"
+                    aria-label="Default select example"
+                  >
+                    <option selected>شماره میز خود را انتخاب کنید</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                  </select>
+                </div>
+
+                <h3 class="shipping-title my-3">روش تحویل را انتخاب کنید</h3>
+                <nav>
+                  <div
+                    class="nav nav-tabs d-flex justify-content-center gap-3"
+                    id="nav-tab"
+                    role="tablist"
+                  >
+                    <button
+                      class="nav-link na-link-tab active d-flex flex-column justify-content-center align-items-center"
+                      id="nav-home-tab"
+                      data-bs-toggle="tab"
+                      data-bs-target="#nav-home"
+                      type="button"
+                      role="tab"
+                      aria-controls="nav-home"
+                      aria-selected="true"
+                    >
+                      <i class="fas fa-running"></i>
+                      مراجعه حضوری
+                    </button>
+                  </div>
+                </nav>
+                <div class="tab-content" id="nav-tabContent">
+                  <div
+                    class="tab-pane pt-3 fade show active"
+                    id="nav-home"
+                    role="tabpanel"
+                    aria-labelledby="nav-home-tab"
+                  >
+                    <iframe
+                      width="100%"
+                      height="200"
+                      src="https://map.ir/lat/30.269969334440393/lng/56.99398934802959/z/13/p/ما اینجاییم"
+                      style="border: unset; border-radius: 16px"
+                    ></iframe>
                   </div>
                 </div>
-                {% endfor %}
-                
-              
+              </div>
+              <div class="pay-box mt-3 border-1 rounded-3 py-3 px-3">
+                <h3 class="shipping-title my-3">روش پرداخت را انتخاب کنید</h3>
+                <ul
+                  class="d-flex flex-column align-items-start justify-content-between p-0 gap-4"
+                >
+                  <li
+                    class="d-flex align-items-center justify-content-between gap-2"
+                  >
+                    <input
+                      id="payment_method_pec_gateway"
+                      type="radio"
+                      class="input-radio"
+                      name="payment_method"
+                      value="pec_gateway"
+                      checked="checked"
+                      data-order_button_text=""
+                    />
+
+                    <label for="payment_method_pec_gateway">
+                      <span
+                        class="d-flex align-items-center justify-content-between gap-2"
+                      >
+                        <img
+                          decoding="async"
+                          src="./images/Shetab.png"
+                          alt=""
+                        />
+                        <div class="payment-method-desc">
+                          درگاه اینترنتی پارسیان
+                          <div class="payment_box payment_method_pec_gateway">
+                            <p>قابل پرداخت با تمامی کارت های عضو شتاب</p>
+                          </div>
+                        </div>
+                      </span>
+                    </label>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div class="checkout-left-section">
+              <div class="order-review border-1 rounded-3 py-3 px-3">
+                <div
+                  class="order-item d-flex align-items-center justify-content-between py-3 border-bottom"
+                >
+                  <div class="order-name d-flex align-items-center gap-1">
+                    سنت اونوره (1 عدد )
+                  </div>
+                  <div class="order-price">۹۰,۰۰۰ تومان</div>
+                </div>
+                <div
+                  class="order-item d-flex align-items-center justify-content-between py-3 border-bottom"
+                >
+                  <div class="order-name d-flex align-items-center gap-1">
+                    سنت اونوره (1 عدد )
+                  </div>
+                  <div class="order-price">۹۰,۰۰۰ تومان</div>
+                </div>
+                <div class="order-review-footer my-4">
+                  <div
+                    class="order-item d-flex align-items-center justify-content-between border-bottom py-2"
+                  >
+                    <div class="order-name d-flex align-items-center gap-1">
+                      جمع غذاها (1 عدد )
+                    </div>
+                    <div class="order-price">۲۰۰,۰۰۰ تومان</div>
+                  </div>
+                  <div
+                    class="order-item d-flex align-items-center justify-content-between border-bottom py-2"
+                  >
+                    <div class="order-name d-flex align-items-center gap-1">
+                      مجموع
+                    </div>
+                    <div class="order-price">۲۰۰,۰۰۰ تومان</div>
+                  </div>
+                  <div class="my-3">
+                    <label for="exampleFormControlTextarea1" class="form-label"
+                      >توضیحات</label
+                    >
+                    <textarea
+                      class="form-control"
+                      id="exampleFormControlTextarea1"
+                      rows="3"
+                      placeholder="توضیحات خاصی برای آماده‌سازی و ارسال سفارش مد نظرتان است؟ اینجا بنویسید."
+                    ></textarea>
+                  </div>
+                </div>
+                <button class="btn btn-checkout w-100 py-3 px-3">پرداخت</button>
+              </div>
             </div>
           </div>
-        </div>
+        </form>
       </div>
       <div class="toolbar col-12">
         <div class="ryn-toolbar">
@@ -462,7 +646,7 @@
         </footer>
       </div>
     </div>
-    <script src="{% static "js/bootstrap.min.js" %}"></script>
+    <script src="./js/bootstrap.min.js"></script>
     <script>
       function myFunction() {
         document.getElementById("myDropdown").classList.toggle("show-one");
@@ -493,9 +677,9 @@
           ) {
             const currentId = section.getAttribute("id");
             document.querySelectorAll("navbar ").forEach((link) => {
-              link.classList.remove("active");
+              link.classList.remove("active-nav");
               if (link.getAttribute("href").includes(currentId)) {
-                link.classList.add("active");
+                link.classList.add("active-nav");
               }
             });
           }
@@ -521,6 +705,39 @@
         });
       });
     </script>
+    <script>
+      document.querySelectorAll(".minus-btn").forEach(function (btn) {
+        btn.addEventListener("click", function (e) {
+          e.preventDefault();
+          var input = this.closest("div").querySelector("input");
+          var value = parseInt(input.value);
+
+          if (value > 1) {
+            value = value - 1;
+          } else {
+            value = 0;
+          }
+
+          input.value = value;
+        });
+      });
+
+      document.querySelectorAll(".plus-btn").forEach(function (btn) {
+        btn.addEventListener("click", function (e) {
+          e.preventDefault();
+          var input = this.closest("div").querySelector("input");
+          var value = parseInt(input.value);
+
+          if (value < 100) {
+            value = value + 1;
+          } else {
+            value = 100;
+          }
+
+          input.value = value;
+        });
+      });
+    </script>
   </body>
-  {% endblock %}
 </html>
+{% endblock content %}

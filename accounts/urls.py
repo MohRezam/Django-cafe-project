@@ -9,6 +9,8 @@ from .views import UserLoginView
 #     path("manager/", manager, name="manager")
 # ]
 
+app_name = "accounts"
+
 urlpatterns = [
     path("login/", UserLoginView.as_view(), name="user_login"),
 ]
