@@ -15,7 +15,7 @@
           <div
             class="col-md-3 col-sm-6 col-12 smx-box py-sm-4 d-flex justify-content-center box-item"
           >
-            <a href="{% url 'cafe_menu' category.category_name %}">
+            <a href="{% url 'cafe:cafe_menu' category.category_name %}">
               <img
                 class="rounded-5"
                 src="{% static "images/" %}{{category.category_name}}.png"
