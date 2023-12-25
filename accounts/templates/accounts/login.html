@@ -8,43 +8,29 @@
       >
       <span class="account-head-line">ورود به پنل کارکنان</span>
       <div class="content-account">
-        <form action="#" id="login">
-          <label for="email-phone"
-            >شماره موبایل یا پست الکترونیک خود را وارد کنید</label
-          >
-          <input
-            type="text"
-            id="email-phone"
-            class="input-email-account"
-            placeholder=""
-          />
+        <form method="post" id="login" novalidate>
+          {% csrf_token %}
+          <label for="email-phone">شماره موبایل</label>
+          {{ form.phone_number }} {% if form.phone_number.errors %}
+          <div class="errorlist">
+            {% for error in form.phone_number.errors %}
+            <p class="text-danger">{{ error }}</p>
+            {% endfor %}
+          </div>
+          {% endif %}
           <label for="password">رمز عبور</label>
-          <input
-            type="password"
-            id="password"
-            class="input-password"
-            placeholder=""
-          />
+          {% if form.password.errors %}
+          <div class="errorlist">
+            {% for error in form.password.errors %}
+            <p>{{ error }}</p>
+            {% endfor %}
+          </div>
+          {% endif %} {{ form.password }}
           <div class="parent-btn">
-            <button class="dk-btn dk-btn-info text-center">
+            <button class="dk-btn dk-btn-info text-center" type="submit">
               ورود به پنل
               <i class="fa fa-sign-in sign-in"></i>
             </button>
-          </div>
-          <div class="form-auth-row">
-            <label for="remember" class="ui-checkbox">
-              <input
-                type="checkbox"
-                value="1"
-                name="login"
-                checked=""
-                id="remember"
-              />
-              <span class="ui-checkbox-check"></span>
-            </label>
-            <label for="remember" class="remember-me"
-              >مرا به خاطر داشته باش</label
-            >
           </div>
         </form>
       </div>
