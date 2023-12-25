@@ -615,6 +615,16 @@ a.checkout-button {
 .checkout-left-section {
   width: 50%;
 }
+.page img {
+  height: 400px;
+  object-fit: cover;
+}
+.p-description {
+  font-size: 19px;
+  line-height: 45px;
+  font-weight: 500;
+  text-justify: newspaper;
+}
 @media screen and (max-width: 768px) {
   .container-responsive {
     max-width: 100% !important;

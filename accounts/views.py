@@ -95,3 +95,7 @@ class StaffProfilesView(View):
     def post(self,request):
         pass
 
+class StaffProfilesView(View):
+    pass
+class StaffCategoriesView(View):
+    pass
