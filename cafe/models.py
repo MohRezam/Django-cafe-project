@@ -21,4 +21,9 @@ class Item(TimeStampedModel):
     
     def __str__(self) -> str:
         return f"Item: {self.name}"
+class Table(models.Model):
+    table_number = models.IntegerField(unique=True)
+    is_available = models.BooleanField(default=True)
 
+    def __str__(self):
+        return f"Table {self.table_number} - {'Available' if self.is_available else 'Not Available'}"
