@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .forms import UserLoginForm
 from django.views import View
 from cafe.models import Item
@@ -8,6 +8,10 @@ from .forms import CategoryForm
 from .authenticate import PhoneBackend
 from django.contrib.auth import login
 from .forms import AddItemForm
+from django.views.generic import UpdateView
+from .models import User
+from .forms import UserEditForm
+from django.urls import reverse_lazy
 # Create your views here.
 
     
@@ -62,7 +66,29 @@ def add_item_view(request):
         form = AddItemForm()
     
     return render(request, 'profile-item-add.html', {'form': form})
-
+class UserEditView(UpdateView):
+    model = User
+    form_class = UserEditForm
+    template_name = 'profile-additional-info.html'
+    success_url = reverse_lazy('profile-personal-info')  # Redirect to the user profile or another page
+    def get_object(self, queryset=None):
+        user_id = self.kwargs.get('user_id')
+        return User.objects.filter(id=user_id).first()  # Retrieve the user from the database
+    
+    def form_valid(self, form):
+        user_id = self.kwargs.get('user_id')
+        user = self.get_object()
+        if user:
+            # Update user information with the form data
+            user.full_name = form.cleaned_data['full_name']
+            user.phone_number = form.cleaned_data['phone_number']
+            user.email = form.cleaned_data['email']
+            user.save()
+            messages.success(self.request, 'اطلاعات کاربر با موفقیت ویرایش شد.')  # Success message
+        else:
+            messages.error(self.request, 'کاربر مورد نظر یافت نشد.')  # User not found message
+            return redirect('user_list')  # Redirect to a user list or another appropriate page
+        return super().form_valid(form)
 class StaffProfilesView(View):
     def get(self,request):
         pass

@@ -44,21 +44,8 @@ class UserChangeForm(forms.ModelForm):
 class UserLoginForm(forms.Form):
     phone_number = forms.CharField(max_length=11)
     password = forms.CharField(widget=forms.PasswordInput)
-    def clean_phone_number(self):
-        phone_number = self.cleaned_data.get('phone_number')
-        if phone_number and len(phone_number) != 11:
-         raise forms.ValidationError('شماره تلفن باید یازده رقم باشد')
-        return phone_number
-        
-
-# template 
-class UserLoginForm(forms.Form):
-    phone_number = forms.CharField(max_length=11)
-    password = forms.CharField(widget=forms.PasswordInput)
     # email = forms.EmailField(widget=forms.EmailInput(attrs={"palceholder":"Enter your email"}))
 
-
-# admin panel 
 class CategoryForm(forms.Form):
     name = forms.CharField(
         label='نام دسته بندی',
@@ -73,8 +60,7 @@ class CategoryForm(forms.Form):
         if Category.objects.filter(category_name=name).exists():
             raise forms.ValidationError('این نام دسته بندی قبلاً استفاده شده است.')
         return name
-
-# admin panel      
+       
 class AddItemForm(forms.Form):
     name = forms.CharField(label='نام آیتم', max_length=100)
     fixed_number = forms.DecimalField(label='قیمت آیتم')
@@ -92,8 +78,7 @@ class AddItemForm(forms.Form):
         label='توضیحات آیتم',
         widget=forms.Textarea(attrs={'style': 'height: 80px;'})
     )
-    form_file = forms.ImageField(label='افزودن عکس آیتم')
-
-
-    
-    
+class UserEditForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['full_name', 'phone_number', 'email']
