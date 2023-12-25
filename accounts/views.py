@@ -26,20 +26,4 @@ class UserLoginView(View):
 
 
 
-def Usercookiesview(request, user_id):
-
-    user = user_id_func(user_id)
-    request.session['recent_event_id'] = user.id
-    request.session['recent_event_title'] = user.name
-
-    response = HttpResponse("Event View")
-    response.set_cookie('user_id', f"{user.id}")
-    response.set_cookie('user.name' , f"{user.name}")
-
-
-def user_id_func (user_id):
-    try:
-        event = User.objects.get(id=user_id)
-        return event
-    except User.DoesNotExist:
-        raise Http404("Event does not exist")
+#
