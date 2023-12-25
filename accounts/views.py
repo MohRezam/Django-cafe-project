@@ -8,7 +8,7 @@ from django.contrib.auth import login
 # Create your views here.
 
     
-class UserLoginView(View):
+class StaffLoginView(View):
     def get(self, request):
         form = UserLoginForm()
         return render(request, "accounts/login.html", {"form":form})
@@ -22,6 +22,7 @@ class UserLoginView(View):
                 login(request, user, backend="django.contrib.auth.backends.ModelBackend")
                 return render(request, "accounts/staff.html")
         return render(request, "accounts/login.html", {"form":form})
+
 def add_category(request):
     if request.method == 'POST':
         form = CategoryForm(request.POST)
@@ -31,3 +32,10 @@ def add_category(request):
     else:
         form = CategoryForm()
     return render(request, 'profile-add-category.html', {'form': form})
+
+class StaffProfilesView(View):
+    def get(self,request):
+        pass
+    def post(self,request):
+        pass
+
