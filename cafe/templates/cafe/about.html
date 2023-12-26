@@ -1,11 +1,532 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About Cafe</title>
-</head>
-<body>
-    <h1>Welcome to the About Page</h1>
-</body>
+{% extends "base.html" %}
+{% load static %}
+{% block title %}درباره ما{% endblock title %}
+{% block content %}
+  <body>
+    <div class="container-fluid container-responsive">
+      <div
+        class="sidenav col-lg-3 col-sm-12 d-flex flex-column align-items-center justify-content-between"
+      >
+        <header class="d-flex flex-column align-items-center gap-2 w-100">
+          <img
+            src="{% static './images/starbucks.png' %}"
+            alt="logo"
+            class="logo img-fluid"
+          />
+          <div class="drop-menu bg-dark rounded-4 w-75 py-2 px-3 d-flex">
+            <span class="side-nav-btn text-white curo" onclick="myFunction()">
+              <i class="fa-solid fa-bars-staggered side-nav-btn"></i>
+            </span>
+            <ul id="myDropdown" class="dropdown-content pt-2 px-1">
+              <li class="py-2">
+                <a class="down-item text-white" href="#">درباره ما</a>
+              </li>
+              <li class="py-2">
+                <a class="down-item text-white" href="#">سوالات متداول</a>
+              </li>
+              <li class="py-2">
+                <a class="down-item text-white" href="#">قوانین و مقررات</a>
+              </li>
+              <li class="py-2">
+                <a class="down-item text-white" href="#">تماس با ما</a>
+              </li>
+            </ul>
+            <a
+              class="text-white offcanva"
+              data-bs-toggle="offcanvas"
+              href="#offcanvasExample"
+              role="button"
+              aria-controls="offcanvasExample"
+            >
+              <i class="fa-solid fa-bars-staggered side-nav-btn"></i>
+            </a>
+
+            <div
+              class="offcanvas offcanvas-end"
+              tabindex="-1"
+              id="offcanvasExample"
+              aria-labelledby="offcanvasExampleLabel"
+            >
+              <div class="offcanvas-header">
+                <h5 class="offcanvas-title" id="offcanvasExampleLabel">منو</h5>
+                <button
+                  type="button"
+                  class="btn-close text-reset"
+                  data-bs-dismiss="offcanvas"
+                  aria-label="Close"
+                ></button>
+              </div>
+              <div class="offcanvas-body">
+                <ul class="list-unstyled pt-2 px-1">
+                  <li class="py-2 border-top border-bottom">
+                    <a class="down-item text-dark" href="#">درباره ما</a>
+                  </li>
+                  <li class="py-2 border-top border-bottom">
+                    <a class="down-item text-dark" href="#">سوالات متداول</a>
+                  </li>
+                  <li class="py-2 border-top border-bottom">
+                    <a class="down-item text-dark" href="#">قوانین و مقررات</a>
+                  </li>
+                  <li class="py-2 border-top border-bottom">
+                    <a class="down-item text-dark" href="#">تماس با ما</a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="d-flex justify-content-between align-items-center w-75">
+            <div class="name-resturan text-center">
+              <p>کافه و رستوران استارباکس</p>
+            </div>
+            <div
+              class="online-ordianry d-flex flex-column align-items-center justify-content-center gap-1"
+            >
+              <svg
+                width="36"
+                height="36"
+                viewBox="0 0 36 36"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <g clip-path="url(#clip0_1086_24)">
+                  <path
+                    d="M4.5 18H6M18 4.5V6M30 18H31.5M8.4 8.4L9.45 9.45M27.6 8.4L26.55 9.45"
+                    stroke="white"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  ></path>
+                  <path
+                    d="M16.6336 10.6245C17.8317 10.4022 19.0659 10.4752 20.2294 10.8371C21.393 11.1991 22.4508 11.8391 23.3114 12.7017C24.172 13.5644 24.8094 14.6238 25.1686 15.7882C25.5277 16.9526 25.5977 18.187 25.3726 19.3845M23.3056 23.301C23.054 23.5528 22.7848 23.7864 22.5001 24C21.9144 24.5797 21.4735 25.2892 21.2129 26.0709C20.9523 26.8527 20.8794 27.6848 21.0001 28.5C21.0001 29.2957 20.684 30.0587 20.1214 30.6213C19.5588 31.1839 18.7957 31.5 18.0001 31.5C17.2044 31.5 16.4414 31.1839 15.8788 30.6213C15.3162 30.0587 15.0001 29.2957 15.0001 28.5C15.1208 27.6848 15.0479 26.8527 14.7873 26.0709C14.5267 25.2892 14.0857 24.5797 13.5001 24C12.6391 23.3545 11.9272 22.5312 11.4126 21.5862C10.8979 20.6412 10.5927 19.5965 10.5176 18.523C10.4424 17.4496 10.5992 16.3725 10.9771 15.365C11.3551 14.3575 11.9455 13.4432 12.7081 12.684"
+                    stroke="white"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  ></path>
+                  <path
+                    d="M14.55 25.5H21.45"
+                    stroke="white"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  ></path>
+                  <path
+                    d="M4.5 4.5L31.5 31.5"
+                    stroke="white"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  ></path>
+                </g>
+                <defs>
+                  <clipPath id="clip0_1086_24">
+                    <rect width="36" height="36" fill="white"></rect>
+                  </clipPath>
+                </defs>
+              </svg>
+              <p class="status-order-accept">سفارش می پذیریم.</p>
+            </div>
+          </div>
+        </header>
+        <footer
+          class="footer d-flex flex-column justify-content-center align-items-center gap-2"
+        >
+          <div
+            class="addres-online border-top border-1 w-75 d-flex align-items-center justify-content-between"
+          >
+            <p>
+              کرمان بلوار جمهوری اسلامی- کوچه رئوف 1 - برج ماهان - طبقه همکف -
+              واحد 1290
+            </p>
+            <a
+              target="_blank"
+              href="https://map.ir/lat/30.269969334440393/lng/56.99398934802959/z/13/p/ما اینجاییم"
+              >(مشاهده روی نقشه)</a
+            >
+          </div>
+          <div
+            class="content-footer d-flex justify-content-between align-items-center w-75"
+          >
+            <div
+              class="icon-social d-flex flex-column align-items-center justify-content-center"
+            >
+              <a href="#"><i class="fa-brands fa-instagram"></i></a>
+              <a href="#"><i class="fab fa-whatsapp"></i></a>
+              <a href="#"><i class="fa-brands fa-telegram"></i></a>
+            </div>
+            <div class="list-footer">
+              <ul class="list-group-footer">
+                <li class="list-group-item"><a href="#">درباره ما</a></li>
+                <li class="list-group-item"><a href="#">درباره ما</a></li>
+                <li class="list-group-item"><a href="#">درباره ما</a></li>
+                <li class="list-group-item"><a href="#">درباره ما</a></li>
+              </ul>
+            </div>
+            <div class="phone">
+              <a href="tel:03432611100">
+                <svg
+                  width="26"
+                  height="26"
+                  viewBox="0 0 26 26"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  style="margin-top: 10px; margin-right: 10px"
+                >
+                  <g clip-path="url(#clip0_1933_401)">
+                    <path
+                      d="M5.41667 4.33334H9.75L11.9167 9.75001L9.20833 11.375C10.3685 13.7275 12.2725 15.6315 14.625 16.7917L16.25 14.0833L21.6667 16.25V20.5833C21.6667 21.158 21.4384 21.7091 21.0321 22.1154C20.6257 22.5217 20.0746 22.75 19.5 22.75C15.2742 22.4932 11.2885 20.6987 8.2949 17.7051C5.3013 14.7115 3.5068 10.7258 3.25 6.50001C3.25 5.92537 3.47827 5.37427 3.8846 4.96795C4.29093 4.56162 4.84203 4.33334 5.41667 4.33334"
+                      stroke="white"
+                      stroke-width="1.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    ></path>
+                    <path
+                      d="M16.25 7.58334C16.8246 7.58334 17.3757 7.81162 17.7821 8.21795C18.1884 8.62427 18.4167 9.17537 18.4167 9.75001"
+                      stroke="white"
+                      stroke-width="1.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    ></path>
+                    <path
+                      d="M16.25 3.25C17.9739 3.25 19.6272 3.93482 20.8462 5.15381C22.0652 6.37279 22.75 8.02609 22.75 9.75"
+                      stroke="white"
+                      stroke-width="1.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    ></path>
+                  </g>
+                  <defs>
+                    <clipPath id="clip0_1933_401">
+                      <rect width="26" height="26" fill="white"></rect>
+                    </clipPath>
+                  </defs>
+                </svg>
+                <svg
+                  class="bg-line"
+                  width="118"
+                  height="53"
+                  viewBox="0 0 118 53"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    opacity="0.1"
+                    d="M1.19458 0.539307C1.19458 0.539307 16 32.5 45 45C74 57.5 117.195 49.5393 117.195 49.5393"
+                    stroke="white"
+                  ></path>
+                </svg>
+                <p>03432611100</p></a
+              >
+            </div>
+          </div>
+          <div class="copyrights border-top border-1 w-75 py-2">
+            <span>© 2023 کدک رایان</span>
+          </div>
+        </footer>
+      </div>
+      <div class="main col-lg-9 col-sm-12 py-4">
+        <h1 class="px-2 title-page">درباره ما</h1>
+        <div class="page d-flex flex-column">
+          <img src="{% static './images/img-bg.jpg' %}" class="img-fluid rounded-4" />
+          <p class="p-description py-4">
+            لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با
+            استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در
+            ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و
+            کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد. کتابهای زیادی
+            در شصت و سه درصد گذشته، حال و آینده شناخت فراوان جامعه و متخصصان را
+            می طلبد تا با نرم افزارها شناخت بیشتری را برای طراحان رایانه ای علی
+            الخصوص طراحان خلاقی و فرهنگ پیشرو در زبان فارسی ایجاد کرد. در این
+            صورت می توان امید داشت که تمام و دشواری موجود در ارائه راهکارها و
+            شرایط سخت تایپ به پایان رسد وزمان مورد نیاز شامل حروفچینی دستاوردهای
+            اصلی و جوابگوی سوالات پیوسته اهل دنیای موجود طراحی اساسا مورد
+            استفاده قرار گیرد. لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از
+            صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه
+            روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی
+            تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی
+            می باشد. کتابهای زیادی در شصت و سه درصد گذشته، حال و آینده شناخت
+            فراوان جامعه و متخصصان را می طلبد تا با نرم افزارها شناخت بیشتری را
+            برای طراحان رایانه ای علی الخصوص طراحان خلاقی و فرهنگ پیشرو در زبان
+            فارسی ایجاد کرد. در این صورت می توان امید داشت که تمام و دشواری
+            موجود در ارائه راهکارها و شرایط سخت تایپ به پایان رسد وزمان مورد
+            نیاز شامل حروفچینی دستاوردهای اصلی و جوابگوی سوالات پیوسته اهل دنیای
+            موجود طراحی اساسا مورد استفاده قرار گیرد.
+          </p>
+        </div>
+      </div>
+      <div class="toolbar col-12">
+        <div class="ryn-toolbar">
+          <a href="https://bobofood.ir/">
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <g clip-path="url(#clip0_3004_971)">
+                <path
+                  d="M5 12H3L12 3L21 12H19"
+                  stroke="#071117"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                ></path>
+                <path
+                  d="M5 12V19C5 19.5304 5.21071 20.0391 5.58579 20.4142C5.96086 20.7893 6.46957 21 7 21H17C17.5304 21 18.0391 20.7893 18.4142 20.4142C18.7893 20.0391 19 19.5304 19 19V12"
+                  stroke="#071117"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                ></path>
+                <path
+                  d="M9 21V15C9 14.4696 9.21071 13.9609 9.58579 13.5858C9.96086 13.2107 10.4696 13 11 13H13C13.5304 13 14.0391 13.2107 14.4142 13.5858C14.7893 13.9609 15 14.4696 15 15V21"
+                  stroke="#071117"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                ></path>
+              </g>
+              <defs>
+                <clipPath id="clip0_3004_971">
+                  <rect width="24" height="24" fill="white"></rect>
+                </clipPath>
+              </defs>
+            </svg>
+            <span>صفحه نخست</span>
+          </a>
+
+          <a href="https://bobofood.ir/my-account/">
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <g clip-path="url(#clip0_3009_985)">
+                <path
+                  d="M9 7H15M9 11H15M13 15H15M5 21V5C5 4.46957 5.21071 3.96086 5.58579 3.58579C5.96086 3.21071 6.46957 3 7 3H17C17.5304 3 18.0391 3.21071 18.4142 3.58579C18.7893 3.96086 19 4.46957 19 5V21L16 19L14 21L12 19L10 21L8 19L5 21Z"
+                  stroke="#071117"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                ></path>
+              </g>
+              <defs>
+                <clipPath id="clip0_3009_985">
+                  <rect width="24" height="24" fill="white"></rect>
+                </clipPath>
+              </defs>
+            </svg>
+            <span>سفارشات من</span>
+          </a>
+
+          <div class="toolbar-bg">
+            <svg
+              width="390"
+              height="64"
+              viewBox="0 0 390 64"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M390 64V0H323.801C280.081 0 238.72 36 195 36C151.28 36 109.919 0 66.1994 0H0V64H390Z"
+                fill="white"
+              ></path>
+            </svg>
+          </div>
+        </div>
+      </div>
+      <div class="footer-buttom col-12">
+        <footer
+          class="d-footer-buttom d-flex flex-column justify-content-center align-items-center gap-2"
+        >
+          <div
+            class="addres-online border-top border-1 w-75 d-flex align-items-center justify-content-between"
+          >
+            <p>
+              کرمان بلوار جمهوری اسلامی- کوچه رئوف 1 - برج ماهان - طبقه همکف -
+              واحد 1290
+            </p>
+            <a
+              target="_blank"
+              href="https://map.ir/lat/30.269969334440393/lng/56.99398934802959/z/13/p/ما اینجاییم"
+              >(مشاهده روی نقشه)</a
+            >
+          </div>
+          <div
+            class="content-footer d-flex justify-content-between align-items-center w-75"
+          >
+            <div
+              class="icon-social d-flex gap-5 align-items-center justify-content-center"
+            >
+              <a href="#"><i class="fa-brands fa-instagram"></i></a>
+              <a href="#"><i class="fab fa-whatsapp"></i></a>
+              <a href="#"><i class="fa-brands fa-telegram"></i></a>
+            </div>
+            <div class="list-footer">
+              <ul class="list-group-footer">
+                <li class="list-group-item"><a href="#">درباره ما</a></li>
+                <li class="list-group-item"><a href="#">درباره ما</a></li>
+                <li class="list-group-item"><a href="#">درباره ما</a></li>
+                <li class="list-group-item"><a href="#">درباره ما</a></li>
+              </ul>
+            </div>
+            <div class="phone">
+              <a href="tel:03432611100">
+                <svg
+                  width="26"
+                  height="26"
+                  viewBox="0 0 26 26"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  style="margin-top: 10px; margin-right: 10px"
+                >
+                  <g clip-path="url(#clip0_1933_401)">
+                    <path
+                      d="M5.41667 4.33334H9.75L11.9167 9.75001L9.20833 11.375C10.3685 13.7275 12.2725 15.6315 14.625 16.7917L16.25 14.0833L21.6667 16.25V20.5833C21.6667 21.158 21.4384 21.7091 21.0321 22.1154C20.6257 22.5217 20.0746 22.75 19.5 22.75C15.2742 22.4932 11.2885 20.6987 8.2949 17.7051C5.3013 14.7115 3.5068 10.7258 3.25 6.50001C3.25 5.92537 3.47827 5.37427 3.8846 4.96795C4.29093 4.56162 4.84203 4.33334 5.41667 4.33334"
+                      stroke="white"
+                      stroke-width="1.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    ></path>
+                    <path
+                      d="M16.25 7.58334C16.8246 7.58334 17.3757 7.81162 17.7821 8.21795C18.1884 8.62427 18.4167 9.17537 18.4167 9.75001"
+                      stroke="white"
+                      stroke-width="1.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    ></path>
+                    <path
+                      d="M16.25 3.25C17.9739 3.25 19.6272 3.93482 20.8462 5.15381C22.0652 6.37279 22.75 8.02609 22.75 9.75"
+                      stroke="white"
+                      stroke-width="1.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    ></path>
+                  </g>
+                  <defs>
+                    <clipPath id="clip0_1933_401">
+                      <rect width="26" height="26" fill="white"></rect>
+                    </clipPath>
+                  </defs>
+                </svg>
+                <svg
+                  class="bg-line"
+                  width="118"
+                  height="53"
+                  viewBox="0 0 118 53"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    opacity="0.1"
+                    d="M1.19458 0.539307C1.19458 0.539307 16 32.5 45 45C74 57.5 117.195 49.5393 117.195 49.5393"
+                    stroke="white"
+                  ></path>
+                </svg>
+                <p>03432611100</p></a
+              >
+            </div>
+          </div>
+          <div class="copyrights border-top border-1 w-75 py-2">
+            <span>© 2023 کدک رایان</span>
+          </div>
+        </footer>
+      </div>
+    </div>
+    <script src="{% static './js/bootstrap.min.js' %}"></script>
+    <script>
+      function myFunction() {
+        document.getElementById("myDropdown").classList.toggle("show-one");
+      }
+
+      window.onclick = function (event) {
+        if (!event.target.matches(".side-nav-btn")) {
+          var dropdowns = document.getElementsByClassName("dropdown-content");
+          var i;
+          for (i = 0; i < dropdowns.length; i++) {
+            var openDropdown = dropdowns[i];
+            if (openDropdown.classList.contains("show-one")) {
+              openDropdown.classList.remove("show-one");
+            }
+          }
+        }
+      };
+    </script>
+    <script>
+      window.addEventListener("scroll", () => {
+        const currentScroll = window.pageYOffset;
+        const sections = document.querySelectorAll("section");
+
+        sections.forEach((section) => {
+          if (
+            section.offsetTop <= currentScroll &&
+            section.offsetTop + section.offsetHeight > currentScroll
+          ) {
+            const currentId = section.getAttribute("id");
+            document.querySelectorAll("navbar ").forEach((link) => {
+              link.classList.remove("active");
+              if (link.getAttribute("href").includes(currentId)) {
+                link.classList.add("active");
+              }
+            });
+          }
+        });
+      });
+    </script>
+    <script>
+      window.addEventListener("scroll", function () {
+        var element = document.getElementById("dynamic");
+        if (window.scrollY > 50) {
+          element.classList.add("tab-fixed");
+        } else {
+          element.classList.remove("tab-fixed");
+        }
+      });
+    </script>
+    <script>
+      const list = document.querySelectorAll(".nav__item");
+      list.forEach((item) => {
+        item.addEventListener("click", () => {
+          list.forEach((item) => item.classList.remove("active-toolbar"));
+          item.classList.add("active-toolbar");
+        });
+      });
+    </script>
+    <script>
+      document.querySelectorAll(".minus-btn").forEach(function (btn) {
+        btn.addEventListener("click", function (e) {
+          e.preventDefault();
+          var input = this.closest("div").querySelector("input");
+          var value = parseInt(input.value);
+
+          if (value > 1) {
+            value = value - 1;
+          } else {
+            value = 0;
+          }
+
+          input.value = value;
+        });
+      });
+
+      document.querySelectorAll(".plus-btn").forEach(function (btn) {
+        btn.addEventListener("click", function (e) {
+          e.preventDefault();
+          var input = this.closest("div").querySelector("input");
+          var value = parseInt(input.value);
+
+          if (value < 100) {
+            value = value + 1;
+          } else {
+            value = 100;
+          }
+
+          input.value = value;
+        });
+      });
+    </script>
+  </body>
 </html>
+{% endblock content %}
