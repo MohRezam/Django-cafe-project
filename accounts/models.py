@@ -27,6 +27,8 @@ class User(AbstractBaseUser):
     email = models.EmailField(max_length=255, unique=True,validators=[EmailValidator()])
     phone_number = models.CharField(max_length=11, unique=True)
     full_name = models.CharField(max_length=255)
+    address = models.CharField(max_length=255, blank=True, null=True)
+    national_id = models.CharField(max_length=20, blank=True, null=True)
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
     #add address and national ID
