@@ -25,9 +25,16 @@ class CafeMenuView(View):
         return render(request, "cafe/menu-item.html", context={"items":items})
 
 
-class AboutView(View):
+class AboutUsView(View):
     def get(self, request):
         return render(request, "cafe/about.html", {})
+
+
+class ContactUsView(View):
+    def get(self, request):
+        return render(request, "cafe/contact-us.html", {})
+
+
 
 
 # class CartView(View):
