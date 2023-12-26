@@ -615,6 +615,52 @@ a.checkout-button {
 .checkout-left-section {
   width: 50%;
 }
+.page img {
+  height: 400px;
+  object-fit: cover;
+}
+.p-description {
+  font-size: 19px;
+  line-height: 45px;
+  font-weight: 500;
+  text-justify: newspaper;
+}
+.form-extera {
+  padding-top: 30px;
+}
+.box-info {
+  gap: 10px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  background: #dbdbdb;
+  border-radius: 6px;
+  width: 50%;
+  height: 100px;
+  justify-content: center;
+}
+.title-box {
+  font-size: 19px;
+  font-weight: 600;
+}
+.subtitle-box {
+  font-size: 14px;
+  padding: 0 10px;
+  font-weight: 500;
+}
+.submit-button {
+  width: 100%;
+  background-color: #036666 !important;
+  color: #f4f4f4 !important;
+  font-size: 18px !important;
+  font-weight: 500 !important;
+}
+.map-box iframe {
+  margin-top: 20px;
+  border-radius: 10px;
+  width: 100%;
+  height: 325px;
+}
 @media screen and (max-width: 768px) {
   .container-responsive {
     max-width: 100% !important;
@@ -746,6 +792,13 @@ a.checkout-button {
     width: 100% !important;
   }
   .checkout-left-section {
+    width: 100% !important;
+  }
+  .contact {
+    display: flex;
+    flex-direction: column;
+  }
+  .contact div {
     width: 100% !important;
   }
 }
