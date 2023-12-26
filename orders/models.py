@@ -11,6 +11,7 @@ class Order(TimeStampedModel):
     order_date = models.DateTimeField(auto_now_add=True ,null=True)
     table_number = models.IntegerField(null = True)
     session = models.OneToOneField(Session, on_delete=models.CASCADE)
+    # define a foriegn key to staff id and it should be unique
     
     def __str__(self) -> str:
         return f"{self.description[:20]}..."

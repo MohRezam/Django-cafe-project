@@ -29,7 +29,7 @@ class User(AbstractBaseUser):
     full_name = models.CharField(max_length=255)
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
-    
+    #add address and national ID
     objects = UserManager()
     
     USERNAME_FIELD = "phone_number"
