@@ -18,6 +18,7 @@ class Item(TimeStampedModel):
     description = models.TextField()
     category = models.ForeignKey(Category, to_field="category_name", on_delete=models.CASCADE)
     ingredients = models.TextField()
+    item_status = models.BooleanField(default=True)
     
     def __str__(self) -> str:
         return f"Item: {self.name}"
