@@ -1,5 +1,6 @@
 from django import forms
 from .models import User
+from cafe.models import Category
 from django.core.exceptions import ValidationError
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 
@@ -44,5 +45,40 @@ class UserLoginForm(forms.Form):
     phone_number = forms.CharField(max_length=11)
     password = forms.CharField(widget=forms.PasswordInput)
     # email = forms.EmailField(widget=forms.EmailInput(attrs={"palceholder":"Enter your email"}))
-    
-    
+
+class CategoryForm(forms.Form):
+    name = forms.CharField(
+        label='نام دسته بندی',
+        max_length=100,
+        widget=forms.TextInput(attrs={
+            'class': 'input-name-checkout',
+            'placeholder': 'نام دسته بندی را وارد کنید',
+        })
+    )   
+    def clean_name(self):
+        name = self.cleaned_data['name']
+        if Category.objects.filter(category_name=name).exists():
+            raise forms.ValidationError('این نام دسته بندی قبلاً استفاده شده است.')
+        return name
+       
+class AddItemForm(forms.Form):
+    name = forms.CharField(label='نام آیتم', max_length=100)
+    fixed_number = forms.DecimalField(label='قیمت آیتم')
+    category = forms.ChoiceField(
+        label='دسته بندی',
+        choices=[
+            ('date-desc', 'دسته بندی مورد نظر را انتخاب کنید'),
+            ('date-asc', 'غذای اصلی'),
+            ('rate', 'صبحانه'),
+            ('views', 'شام'),
+            ('comments', 'عصرانه'),
+        ]
+    )
+    description = forms.CharField(
+        label='توضیحات آیتم',
+        widget=forms.Textarea(attrs={'style': 'height: 80px;'})
+    )
+class UserEditForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['full_name', 'phone_number', 'email']
