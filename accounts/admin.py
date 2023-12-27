@@ -1,14 +1,14 @@
 from django.contrib import admin
 from .models import User
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
-from .forms import UserCreationForm, UserChangeForm
+from .forms import UserForm, UserChangeForm
 from django.contrib.auth.models import Group
 
 # Register your models here.
 
 class UserAdmin(BaseUserAdmin):
     form = UserChangeForm
-    add_form = UserCreationForm
+    add_form = UserForm
     
     list_display = ('email', 'phone_number', 'is_admin')
     list_filter = ('is_admin',)

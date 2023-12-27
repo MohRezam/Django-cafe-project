@@ -1,0 +1,10 @@
+{% extends "base-staff.html" %} {% load static %} {% block title %} پنل
+کارکنان{% endblock title %} {% block content %}
+<main class="contentM">
+  <h2>register user</h2>
+  <form action="" method="post">
+    {% csrf_token %} {{ form.as_p }}
+    <input type="submit" value="Register" />
+  </form>
+</main>
+{% endblock %}

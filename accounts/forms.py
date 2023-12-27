@@ -6,29 +6,28 @@ from django.contrib.auth.forms import ReadOnlyPasswordHashField
 
 
 # admin panel
-class UserCreationForm(forms.ModelForm):
-    password1 = forms.CharField(label="password", widget=forms.PasswordInput)
-    password2 = forms.CharField(label="confirm password", widget=forms.PasswordInput)
-    
-    
+
+class UserForm(forms.ModelForm):
+    password = forms.CharField(widget=forms.PasswordInput)
     class Meta:
         model = User
-        fields = ('email', 'phone_number', 'full_name')
+        fields = ['email', 'phone_number', 'full_name', 'address', 'national_id', 'is_active', 'is_admin','password']
     
-    
-    def clean_password2(self):
-        cd = self.cleaned_data
-        if cd["password1"] and cd["password2"] and cd["password1"] != cd['password2']:
-            raise ValidationError("passwords don't match")
-        return cd["password2"]
-    
-    def save(self, commit=True):
-        user = super().save(commit=False)
-        user.set_password(self.cleaned_data["password1"])
-        if commit:
-            user.save()
-        return user
-   
+    def clean_phone_number(self):
+        phone_number = self.cleaned_data.get('phone_number')
+        cleaned_phone_number = User().convert_to_english_numbers(phone_number)
+        # Additional validation (e.g., ensuring the length or format of the phone number)
+        # For example:
+        if len(cleaned_phone_number) != 11:
+            raise forms.ValidationError('شماره تلفن باید ۱۱ رقم باشد.')
+        
+        return cleaned_phone_number
+
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        # Additional email validation if necessary
+        return email
+
    
 # admin panel 
 class UserChangeForm(forms.ModelForm):
@@ -42,20 +41,14 @@ class UserChangeForm(forms.ModelForm):
 
 # template 
 class UserLoginForm(forms.Form):
-    phone_number = forms.CharField(max_length=11)
-    password = forms.CharField(widget=forms.PasswordInput)
+    phone_number = forms.CharField(label="شماره موبایل :",max_length=11)
+    password = forms.CharField(label="رمز عبور :",widget=forms.PasswordInput)
     def clean_phone_number(self):
         phone_number = self.cleaned_data.get('phone_number')
         if phone_number and len(phone_number) != 11:
          raise forms.ValidationError('شماره تلفن باید یازده رقم باشد')
         return phone_number
         
-
-# template 
-class UserLoginForm(forms.Form):
-    phone_number = forms.CharField(max_length=11)
-    password = forms.CharField(widget=forms.PasswordInput)
-    # email = forms.EmailField(widget=forms.EmailInput(attrs={"palceholder":"Enter your email"}))
 
 
 # admin panel 

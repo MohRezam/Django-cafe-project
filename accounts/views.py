@@ -1,30 +1,59 @@
 from django.shortcuts import render, redirect
-from .forms import UserLoginForm
+from .forms import UserLoginForm,UserForm
 from django.views import View
 from cafe.models import Item,Category
 from accounts.models import User
 from django.contrib import messages
 from .forms import CategoryForm
 from .authenticate import PhoneBackend
-from django.contrib.auth import login
+from django.contrib.auth import login,authenticate
 from .forms import AddItemForm
 # Create your views here.
 
-    
-class StaffLoginView(View):
+class StaffRegisterView(View):
+    form_class = UserForm  
+    template_name = 'accounts/register.html'
+
     def get(self, request):
-        form = UserLoginForm()
-        return render(request, "accounts/login.html", {"form":form})
-            
+        form = self.form_class()
+        return render(request, self.template_name, {'form': form})
+
     def post(self, request):
-        form = UserLoginForm(request.POST)
+        form = self.form_class(request.POST)
         if form.is_valid():
             cd = form.cleaned_data
-            user = PhoneBackend.authenticate(request, username=cd["phone_number"], password=cd["password"])
+            user = User.objects.create_user(email=cd['email'],phone_number=cd['phone_number'],full_name = cd['full_name'] , password=cd['password'])  
+            user.address = cd['address']
+            user.national_id = cd['national_id']
+            user.is_active = cd['is_active']
+            user.is_admin = cd['is_admin']
+            user.save()  
+            messages.success(request, 'ثبت نام شما با موفقیت انجام شد', 'success')
+            return redirect('accounts:staff-profile')
+        return render(request, self.template_name, {'form': form})
+
+
+    
+class StaffLoginView(View):
+    form_class = UserLoginForm
+    template_name = 'accounts/login.html'
+
+    def get(self, request):
+        form = self.form_class
+        return render(request, self.template_name, {'form': form})
+
+    def post(self, request):
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            cd = form.cleaned_data
+            user = authenticate(request, username=cd['phone_number'], password=cd['password'])
             if user is not None:
-                login(request, user, backend="django.contrib.auth.backends.ModelBackend")
-                return render(request, "accounts/staff.html")
-        return render(request, "accounts/login.html", {"form":form})
+                login(request, user)
+                messages.success(request, 'you logged in successfully', 'success')
+                return redirect('accounts:staff-profile')
+            messages.error(request, 'username or password is wrong', 'warning')
+        return render(request, self.template_name, {'form': form})
+
 
 class AddCategoryView(View):
     def get(self,request):
@@ -86,4 +115,7 @@ class AddItemView(View):
 #             messages.error(self.request, 'کاربر مورد نظر یافت نشد.')  # User not found message
 #             return redirect('user_list')  # Redirect to a user list or another appropriate page
 #         return super().form_valid(form)
-
+        
+class StffProfileView(View):
+     def get(slef,request):
+          return render(request,'accounts/profile.html')
