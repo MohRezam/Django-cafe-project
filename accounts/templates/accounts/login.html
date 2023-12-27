@@ -1,37 +1,23 @@
-{% extends "base-staff.html" %} {% load static %} {% block title %} ورود به پنل
+{% extends "base-staff.html" %} {% load static %} {% block title %}ورود به پنل
 کارکنان{% endblock title %} {% block content %}
 <div id="main">
   <div class="col-lg-4 col-md-6 col-xs-12 mx-auto">
+    {% if messages %} {% for message in messages %}
+    <div class="alert alert-secondary mt-2" role="alert">{{ message }}</div>
+    {% endfor %}{% endif %}
+
     <div class="account-box">
       <a href="index.html" class="logo-account"
-        ><img src="{% static "staff/images/logo-login.png" %}" alt="logo" /></a
-      >
+        ><img src="{% static 'staff/images/logo-login.png' %}" alt="logo"
+      /></a>
       <span class="account-head-line">ورود به پنل کارکنان</span>
       <div class="content-account">
-        <form method="post" id="login" novalidate>
-          {% csrf_token %}
-          <label for="email-phone">شماره موبایل</label>
-          {{ form.phone_number }} {% if form.phone_number.errors %}
-          <div class="errorlist">
-            {% for error in form.phone_number.errors %}
-            <p class="text-danger">{{ error }}</p>
-            {% endfor %}
-          </div>
-          {% endif %}
-          <label for="password">رمز عبور</label>
-          {% if form.password.errors %}
-          <div class="errorlist">
-            {% for error in form.password.errors %}
-            <p>{{ error }}</p>
-            {% endfor %}
-          </div>
-          {% endif %} {{ form.password }}
-          <div class="parent-btn">
-            <button class="dk-btn dk-btn-info text-center" type="submit">
-              ورود به پنل
-              <i class="fa fa-sign-in sign-in"></i>
-            </button>
-          </div>
+        <form class="login-form" action="" method="post" novalidate>
+          {% csrf_token %} {{ form.as_p }}
+          <button class="dk-btn dk-btn-info text-center">
+            ورود به پنل
+            <i class="fa fa-sign-in sign-in"></i>
+          </button>
         </form>
       </div>
     </div>

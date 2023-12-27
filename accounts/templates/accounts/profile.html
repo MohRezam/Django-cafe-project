@@ -1,0 +1,227 @@
+{% extends "base-staff.html" %} {% load static %} {% block title %} پنل
+کارکنان{% endblock title %} {% block content %}
+<main class="contentM">
+  <div class="container">
+    <div class="col-lg-3 col-md-4 col-xs-12 pull-right">
+      <div class="sidebar-wrapper">
+        <div class="box-sidebar">
+          <div class="profile-box">
+            <div class="profile-box-avator">
+              <img src="assets/images/svg/user-profile.svg" alt="profile" />
+            </div>
+
+            <div class="profile-box-content">
+              <span class="profile-box-nameuser"
+                >{{request.user.full_name}}</span
+              >
+              <span class="profile-box-phone">09922222222</span>
+            </div>
+          </div>
+          <ul class="profile-menu-items">
+            <li>
+              <a href="profile.html" class="profile-menu-url active-profile">
+                <span class="mdi mdi-account-outline"></span> پروفایل
+              </a>
+            </li>
+            <li>
+              <a href="profile-order.html" class="profile-menu-url">
+                <span class="mdi mdi-basket"></span> همه سفارش ها
+                <i class="fa-solid fa-chevron-left"></i>
+              </a>
+              <ul class="profile-menu-items-children">
+                <li><a href="#">سفارش های باز</a></li>
+                <li><a href="#">سفارش های کامل شده</a></li>
+                <li><a href="#">سفارش های لغو شده</a></li>
+              </ul>
+            </li>
+            <li>
+              <a href="profile-items.html" class="profile-menu-url">
+                <span><i class="fa-solid fa-list"></i></span> آیتم ها
+                <i class="fa-solid fa-chevron-left"></i>
+              </a>
+              <ul class="profile-menu-items-children">
+                <li><a href="#">افزودن آیتم ها</a></li>
+              </ul>
+            </li>
+            <li>
+              <a href="profile-items.html" class="profile-menu-url">
+                <span><i class="fa fa-list-alt" aria-hidden="true"></i></span>
+                دسته بندی ها
+                <i class="fa-solid fa-chevron-left"></i>
+              </a>
+              <ul class="profile-menu-items-children">
+                <li><a href="#">افزودن دسته بندی</a></li>
+              </ul>
+            </li>
+            <li>
+              <a href="profile-personal-info.html" class="profile-menu-url">
+                <span class="mdi mdi-account-circle"></span> اطلاعات شخصی
+              </a>
+            </li>
+            <li>
+              <a
+                href="{% url 'accounts:staff-logout' %}"
+                class="profile-menu-url"
+              >
+                <span class="mdi mdi-power"></span> خروج
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-9 col-md-8 col-xs-12 pull-right">
+      <div class="col-lg-12 col-xs-12 pull-right">
+        <div class="headline-profile">
+          <span>اطلاعات شخصی</span>
+        </div>
+        <div class="profile-stats mt-3">
+          <div class="profile-stats-row">
+            <div
+              class="col-lg-6 col-md-6 col-xs-12 pull-right"
+              style="padding: 0"
+            >
+              <div class="profile-stats-col">
+                <p><span> نام و نام خانوادگی :</span>حسن شجاعی</p>
+              </div>
+            </div>
+            <div
+              class="col-lg-6 col-md-6 col-xs-12 pull-right"
+              style="padding: 0"
+            >
+              <div class="profile-stats-col">
+                <p><span>پست الکترونیک :</span>info@digistore.com</p>
+              </div>
+            </div>
+            <div
+              class="col-lg-6 col-md-6 col-xs-12 pull-right"
+              style="padding: 0"
+            >
+              <div class="profile-stats-col">
+                <p><span>شماره تلفن همراه :</span>09922222222</p>
+              </div>
+            </div>
+            <div
+              class="col-lg-6 col-md-6 col-xs-12 pull-right"
+              style="padding: 0"
+            >
+              <div class="profile-stats-col">
+                <p><span>کد ملی :</span>-</p>
+              </div>
+            </div>
+            <div class="profile-stats-action">
+              <a href="profile-additional-info.html" class="link-spoiler-edit"
+                ><i class="fa fa-pencil"></i>ویرایش اطلاعات شخصی</a
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="headline-profile order-end" style="margin-top: 0">
+        <span>آخرین سفارش ها</span>
+      </div>
+      <div class="profile-stats profile-table">
+        <div class="table-orders">
+          <table class="table">
+            <thead class="thead-light">
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">شماره سفارش</th>
+                <th scope="col">تاریخ ثبت سفارش</th>
+                <th scope="col">ساعت ثبت سفارش</th>
+                <th scope="col">مبلغ قابل پرداخت</th>
+                <th scope="col">آیتم</th>
+                <th scope="col">مبلغ کل</th>
+                <th scope="col">عملیات پرداخت</th>
+                <th scope="col">جزئیات</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1</td>
+                <td class="order-code">57262900</td>
+                <td>28 آذر 1402</td>
+                <td>12:30</td>
+                <td>0</td>
+                <td>اسپرسو</td>
+                <td>43,000 تومان</td>
+                <td class="text-success">پرداخت موفق</td>
+                <td><i class="fa fa-angle-left"></i></td>
+              </tr>
+              <tr>
+                <td>2</td>
+                <td class="order-code">57262900</td>
+                <td>28 آذر 1402</td>
+                <td>12:30</td>
+                <td>0</td>
+                <td>اسپرسو</td>
+                <td>43,000 تومان</td>
+                <td class="text-success">پرداخت موفق</td>
+                <td><i class="fa fa-angle-left"></i></td>
+              </tr>
+              <tr>
+                <td>3</td>
+                <td class="order-code">57262900</td>
+                <td>28 آذر 1402</td>
+                <td>12:30</td>
+                <td>0</td>
+                <td>اسپرسو</td>
+                <td>43,000 تومان</td>
+                <td class="text-success">پرداخت موفق</td>
+                <td><i class="fa fa-angle-left"></i></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <a href="#" class="table-orders-show-more">مشاهده لیست سفارش‌ها</a>
+        </div>
+      </div>
+      <div class="page-profile headline-profile-favorites">
+        <div class="page-navigation">
+          <div class="page-navigation-title">سفارش‌های من</div>
+          <a href="#" class="page-navigation-btn-back"
+            >بازگشت <i class="fa fa-angle-left"></i
+          ></a>
+        </div>
+        <div class="profile-orders">
+          <div class="collapse">
+            <div class="profile-orders-item">
+              <div class="profile-orders-header">
+                <a
+                  href="profile-order-2.html"
+                  class="profile-orders-header-details"
+                >
+                  <div class="profile-orders-header-summary">
+                    <div class="profile-orders-header-row">
+                      <span class="profile-orders-header-id">DKC-79356178</span>
+                      <span class="profile-orders-header-state"
+                        >پرداخت شده</span
+                      >
+                    </div>
+                  </div>
+                </a>
+                <hr class="ui-separator" />
+                <div class="profile-orders-header-data">
+                  <div class="profile-info-row">
+                    <div class="profile-info-label">تاریخ ثبت سفارش</div>
+                    <div class="profile-info-value">۷ آذر ۱۳۹۸</div>
+                  </div>
+                  <div class="profile-info-row">
+                    <div class="profile-info-label">مبلغ قابل پرداخت</div>
+                    <div class="profile-info-value">0</div>
+                  </div>
+                  <div class="profile-info-row">
+                    <div class="profile-info-label">مبلغ کل</div>
+                    <div class="profile-info-value">430,000,0</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+{% endblock %}
