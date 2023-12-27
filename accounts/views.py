@@ -4,9 +4,10 @@ from django.views import View
 from cafe.models import Item,Category
 from accounts.models import User
 from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import CategoryForm
-from .authenticate import PhoneBackend
-from django.contrib.auth import login,authenticate
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth import login,authenticate,logout
 from .forms import AddItemForm
 # Create your views here.
 
@@ -51,8 +52,14 @@ class StaffLoginView(View):
                 login(request, user)
                 messages.success(request, 'you logged in successfully', 'success')
                 return redirect('accounts:staff-profile')
-            messages.error(request, 'username or password is wrong', 'warning')
+            messages.error(request, 'این شماره تلفن یا رمز عبور درست نمی باشد', 'warning')
         return render(request, self.template_name, {'form': form})
+    
+class StffLogoutView(LoginRequiredMixin, View):
+	def get(self, request):
+		logout(request)
+		messages.success(request, 'خروج موفقیت آمیز انجام شد', 'success')
+		return redirect('accounts:staff-login')
 
 
 class AddCategoryView(View):
