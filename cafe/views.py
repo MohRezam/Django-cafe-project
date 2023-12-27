@@ -1,3 +1,4 @@
+from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Category, Item
 from django.views import View
@@ -19,7 +20,7 @@ class CafeMenuView(View):
         if not category:
             return redirect("cafe:home")
         return super().dispatch(request, category_name)
-    
+
     def get(self, request, category_name):
         items = Item.objects.filter(category=category_name)
         return render(request, "cafe/menu-item.html", context={"items":items})
@@ -99,4 +100,6 @@ class ContactUsView(View):
 #         else:
 #             return redirect('cart')
 
+
     
+

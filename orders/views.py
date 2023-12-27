@@ -71,16 +71,19 @@ class CartView(View):
 #     except Order.DoesNotExist:
 #         return render(request, 'order_not_found.html')
             
+# Mehdi Sadeghi was here and wrote this block of code
+from django.shortcuts import render
+from .models import Order
+def order_status(request, order_id , status):
+    try:
+        order = Order.objects.get(id=order_id)
+        context = {
+        'order': order,
+        'status':status
+        }
+        return render(request, 'order_status.html', context)
+    except Order.DoesNotExist:
+        return render(request, 'order_not_found.html')
+            
 
-# from django.shortcuts import render
-# from .models import Order
-# def order_status(request, order_id , status):
-#     try:
-#         order = Order.objects.get(id=order_id)
-#         context = {
-#         'order': order,
-#         'status':status
-#         }
-#         return render(request, 'order_status.html', context)
-#     except Order.DoesNotExist:
-#         return render(request, 'order_not_found.html')
+
