@@ -30,12 +30,18 @@ class UserForm(forms.ModelForm):
 
    
 # admin panel 
-class UserChangeForm(forms.ModelForm):
-    password = ReadOnlyPasswordHashField(help_text="you can change password using <a href=\"../password/\">this form.</a>")
-    
+class UserChangeForm(forms.ModelForm):    
     class Meta:
         model = User
-        fields = ('email', 'phone_number', 'full_name', 'password', 'last_login')
+        fields = ('email', 'phone_number', 'full_name', 'address', 'national_id')
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['email'].label = 'ایمیل'
+        self.fields['phone_number'].label = 'شماره تلفن'
+        self.fields['full_name'].label = 'نام و نام خانوادگی'
+        self.fields['address'].label = 'آدرس'
+        self.fields['national_id'].label = 'کد ملی'
         
         
 

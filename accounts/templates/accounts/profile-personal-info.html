@@ -1,0 +1,144 @@
+{% extends "base-staff.html" %} {% load static %} {% block title %}اطلاعات
+شخصی{% endblock title %} {% block content %}
+<main class="contentM">
+  <div class="container">
+    <div class="col-lg-3 col-md-4 col-xs-12 pull-right">
+      <div class="sidebar-wrapper">
+        <div class="box-sidebar">
+          <div class="profile-box">
+            <div class="profile-box-avator">
+              <img
+                src="{% static 'staff/images/svg/user-profile.svg' %}"
+                alt="profile"
+              />
+            </div>
+
+            <div class="profile-box-content">
+              <span class="profile-box-nameuser"
+                >{{request.user.full_name}}</span
+              >
+              <span class="profile-box-phone"
+                >{{request.user.phone_number}}</span
+              >
+            </div>
+          </div>
+          <ul class="profile-menu-items">
+            <li>
+              <a
+                href="{% url 'accounts:staff-profile' %}"
+                class="profile-menu-url active-profile"
+              >
+                <span class="mdi mdi-account-outline"></span> پروفایل
+              </a>
+            </li>
+            <li>
+              <a href="profile-order.html" class="profile-menu-url">
+                <span class="mdi mdi-basket"></span> همه سفارش ها
+                <i class="fa-solid fa-chevron-left"></i>
+              </a>
+              <ul class="profile-menu-items-children">
+                <li><a href="#">سفارش های باز</a></li>
+                <li><a href="#">سفارش های کامل شده</a></li>
+                <li><a href="#">سفارش های لغو شده</a></li>
+              </ul>
+            </li>
+            {% if request.user.is_admin %}
+            <li>
+              <a href="profile-items.html" class="profile-menu-url">
+                <span><i class="fa-solid fa-list"></i></span> آیتم ها
+                <i class="fa-solid fa-chevron-left"></i>
+              </a>
+              <ul class="profile-menu-items-children">
+                <li><a href="#">افزودن آیتم ها</a></li>
+              </ul>
+            </li>
+            {% endif %} {% if request.user.is_admin %}
+            <li>
+              <a href="profile-items.html" class="profile-menu-url">
+                <span><i class="fa fa-list-alt" aria-hidden="true"></i></span>
+                دسته بندی ها
+                <i class="fa-solid fa-chevron-left"></i>
+              </a>
+              <ul class="profile-menu-items-children">
+                <li><a href="#">افزودن دسته بندی</a></li>
+              </ul>
+            </li>
+            {% endif %}
+            <li>
+              <a
+                href="{% url 'accounts:staff-personal-info' %}"
+                class="profile-menu-url"
+              >
+                <span class="mdi mdi-account-circle"></span> اطلاعات شخصی
+              </a>
+            </li>
+            <li>
+              <a
+                href="{% url 'accounts:staff-logout' %}"
+                class="profile-menu-url"
+              >
+                <span class="mdi mdi-power"></span> خروج
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-9 col-md-8 col-xs-12 pull-right">
+      <div class="col-lg-12 col-xs-12 pull-right">
+        <div class="headline-profile">
+          <span>اطلاعات شخصی</span>
+        </div>
+        <div class="profile-stats">
+          <div class="profile-stats-row">
+            <div
+              class="col-lg-6 col-md-6 col-xs-12 pull-right"
+              style="padding: 0"
+            >
+              <div class="profile-stats-col">
+                <p>
+                  <span> نام و نام خانوادگی :</span>{{request.user.full_name}}
+                </p>
+              </div>
+            </div>
+            <div
+              class="col-lg-6 col-md-6 col-xs-12 pull-right"
+              style="padding: 0"
+            >
+              <div class="profile-stats-col">
+                <p><span>پست الکترونیک :</span>{{request.user.email}}</p>
+              </div>
+            </div>
+            <div
+              class="col-lg-6 col-md-6 col-xs-12 pull-right"
+              style="padding: 0"
+            >
+              <div class="profile-stats-col">
+                <p>
+                  <span>شماره تلفن همراه :</span>{{ request.user.phone_number }}
+                </p>
+              </div>
+            </div>
+            <div
+              class="col-lg-6 col-md-6 col-xs-12 pull-right"
+              style="padding: 0"
+            >
+              <div class="profile-stats-col">
+                <p><span>کد ملی :</span>{{ request.user.national_id }}</p>
+              </div>
+            </div>
+
+            <div class="profile-stats-action">
+              <a
+                href="{% url 'accounts:staff-profile-info' request.user.id %}"
+                class="link-spoiler-edit"
+                ><i class="fa fa-pencil"></i>ویرایش اطلاعات شخصی</a
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+{% endblock %}
