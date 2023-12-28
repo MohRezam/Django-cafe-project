@@ -238,26 +238,28 @@
           <div class="food-remove">
             <a href="#">×</a>
           </div>
+          {% for item in cart_items %}
           <div class="food-thumbnail">
             <img src="./images/پومودور-300x300.png" />
           </div>
           <div class="food-title">
-            <p>نوشابه گاز دار با طعم کولا پپسی - 330 میلی لیتر</p>
+            <p>{{item.name}}</p>
           </div>
           <div class="food-cart-price">
-            <p>6,900 تومان</p>
+            <p>{{item.price}} </p>
           </div>
           <div class="food-quantity">
             <div class="quantity">
               <button class="plus-btn" type="button" name="button">
                 <img src="./images/plus.svg" alt="" />
               </button>
-              <input type="text" name="name" value="1" />
+              <input type="text" name="name" value="{{ quantity }}" />
               <button class="minus-btn" type="button" name="button">
                 <img src="./images/minus.svg" alt="" />
               </button>
             </div>
           </div>
+          {% endfor %}
           <div class="food-amount">
             <p class="amount-price">6,900 تومان</p>
           </div>

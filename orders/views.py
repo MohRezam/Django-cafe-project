@@ -2,6 +2,8 @@ from django.shortcuts import render
 from django.views import View
 from .forms import UserSessionForm
 from django.contrib import messages
+from cafe.models import Item
+import json
 # Create your views here.
 
 class CheckoutView(View):
@@ -9,19 +11,18 @@ class CheckoutView(View):
         return render(request, "orders/checkout.html")
     
 
-class CartView(View):
-    form_class=UserSessionForm()
+class ViewCartView(View):
     def get(self, request):
-        return render(request, "orders/cart.html")
-
-    def post(self, request):
-        form=self.form_class(request.POST)
+        cart_item_ids = request.COOKIES.get('cart')
+        cart_item_ids=eval(cart_item_ids)
+        cart_items = Item.objects.filter(id__in=cart_item_ids.keys())
+        value=(cart_item_ids.values())
+        values=(*value,)
         
-        if form.is_valid():
-            # Session.object.creat(phone_number)
-            request.session['customer_phone']={
-                "phone_number": form.cleaned_data['phone']
-            }
+        
+        return render(request, 'orders/cart.html', {'cart_items': cart_items, "quantity":values[0]})
+
+
         
 
 # Create your views here.

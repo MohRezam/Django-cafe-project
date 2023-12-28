@@ -150,9 +150,9 @@
             <div
               class="icon-social d-flex flex-column align-items-center justify-content-center"
             >
-            <a href="https://www.instagram.com/ir.starbucks2024?igsh=OGQ5ZDc2ODk2ZA=="><i class="fa-brands fa-instagram"></i></a>
-            <a href="https://chat.whatsapp.com/EC1Z5tZkD5oHCi3fNz8Koe"><i class="fab fa-whatsapp"></i></a>
-            <a href="https://t.me/ir_starbucks2024"><i class="fa-brands fa-telegram"></i></a>
+              <a href="#"><i class="fa-brands fa-instagram"></i></a>
+              <a href="#"><i class="fab fa-whatsapp"></i></a>
+              <a href="#"><i class="fa-brands fa-telegram"></i></a>
             </div>
             <div class="list-footer">
               <ul class="list-group-footer">
@@ -267,9 +267,36 @@
                       <p class="fw-bold">{{item.price}} تومان</p>
                     </div>
                     <div class="food-actions-button">
-                      <button class="btn food-button button-not-sale">
-                        تمام شده
+                      <button
+                        class="btn food-button"
+                        onclick="increaseCartCount()"
+                        id="addButton"
+                      >
+                        افزودن
                       </button>
+                      <form
+                        action=""
+                        method="post"
+                        class="form-quantity"
+                        id="quantitybutton"
+                      >
+                      {% csrf_token %}
+                        <div class="quantity">
+                          <button class="plus-btn" type="button" name="button">
+                            <img src="{% static 'images/plus.svg' %}" alt="" />
+                          </button>
+                          {{ form.quantity }}
+                          <input type="hidden" name="iditem" value="{{item.id}}" />
+                          <button class="minus-btn" type="button" name="button">
+                            <img src="{% static 'images/minus.svg' %}" alt="-" />
+                          </button>
+                          
+
+                        </div>
+                        <button type="submit" id="submitButton" class="btn">
+                          ثبت سفارش
+                        </button>
+                      </form>
                     </div>
                   </div>
                 </div>
@@ -387,9 +414,9 @@
             <div
               class="icon-social d-flex gap-5 align-items-center justify-content-center"
             >
-              <a href="https://www.instagram.com/ir.starbucks2024?igsh=OGQ5ZDc2ODk2ZA=="><i class="fa-brands fa-instagram"></i></a>
-              <a href="https://chat.whatsapp.com/EC1Z5tZkD5oHCi3fNz8Koe"><i class="fab fa-whatsapp"></i></a>
-              <a href="https://t.me/ir_starbucks2024"><i class="fa-brands fa-telegram"></i></a>
+              <a href="#"><i class="fa-brands fa-instagram"></i></a>
+              <a href="#"><i class="fab fa-whatsapp"></i></a>
+              <a href="#"><i class="fa-brands fa-telegram"></i></a>
             </div>
             <div class="list-footer">
               <ul class="list-group-footer">
@@ -521,6 +548,59 @@
         });
       });
     </script>
+      <script>
+        let cartCounter = 0;
+  
+        function increaseCartCount() {
+          showquantityButton();
+          showSubmitButton();
+        }
+  
+        function showSubmitButton() {
+          var submitButton = document.getElementById("submitButton");
+          submitButton.style.display = "flex";
+        }
+  
+        function showquantityButton() {
+          var addButton = document.getElementById("addButton");
+          var quantityButton = document.getElementById("quantitybutton");
+          addButton.style.display = "none";
+          quantityButton.style.display = "block";
+        }
+      </script>
+      <script>
+        document.querySelectorAll(".minus-btn").forEach(function (btn) {
+          btn.addEventListener("click", function (e) {
+            e.preventDefault();
+            var input = this.closest("div").querySelector("input");
+            var value = parseInt(input.value);
+  
+            if (value > 1) {
+              value = value - 1;
+            } else {
+              value = 0;
+            }
+  
+            input.value = value;
+          });
+        });
+  
+        document.querySelectorAll(".plus-btn").forEach(function (btn) {
+          btn.addEventListener("click", function (e) {
+            e.preventDefault();
+            var input = this.closest("div").querySelector("input");
+            var value = parseInt(input.value);
+  
+            if (value < 100) {
+              value = value + 1;
+            } else {
+              value = 100;
+            }
+  
+            input.value = value;
+          });
+        });
+      </script>
   </body>
   {% endblock %}
 </html>
