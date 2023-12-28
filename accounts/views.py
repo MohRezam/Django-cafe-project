@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .forms import UserLoginForm,UserForm
+from .forms import UserLoginForm,UserForm,UserChangeForm
 from django.views import View
 from cafe.models import Item,Category
 from accounts.models import User
@@ -86,8 +86,6 @@ class AddItemView(View):
     def post(self,request):
         form = AddItemForm(request.POST, request.FILES)
         if form.is_valid():
-            # Process the form data (save to database, etc.)
-            # Example: Save the form data to a model
             item = Item(
                 name=form.cleaned_data['name'],
                 fixed_number=form.cleaned_data['fixed_number'],
@@ -123,6 +121,30 @@ class AddItemView(View):
 #             return redirect('user_list')  # Redirect to a user list or another appropriate page
 #         return super().form_valid(form)
         
-class StffProfileView(View):
+class StffProfileView(LoginRequiredMixin,View):
      def get(slef,request):
           return render(request,'accounts/profile.html')
+     
+
+class StaffProfileInfoView(LoginRequiredMixin, View):
+    form_class = UserChangeForm
+    template_name = "accounts/profile-info.html"
+
+    def get(self, request, staff_user_id):
+        user = User.objects.get(id=staff_user_id)
+        form = self.form_class(instance=user)
+        return render(request, self.template_name, {'form': form})
+
+    def post(self, request, staff_user_id):
+        user = User.objects.get(id=staff_user_id)
+        form = self.form_class(request.POST, instance=user)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'آپدیت اطلاعات شخصی با موفقیت انجام شد', 'success')
+            return redirect('accounts:staff-profile')
+        else:
+            form = self.form_class(instance=user)
+            return render(request, self.template_name, {'form': form})
+class StaffProfilePersonalView(LoginRequiredMixin, View):
+     def get(self,request):
+          return render(request,'accounts/profile-personal-info.html')
