@@ -27,15 +27,19 @@ class User(AbstractBaseUser):
     email = models.EmailField(max_length=255, unique=True,validators=[EmailValidator()])
     phone_number = models.CharField(max_length=11, unique=True)
     full_name = models.CharField(max_length=255)
-    address = models.CharField(max_length=255, blank=True, null=True)
+    address = models.TextField(blank=True, null=True)
     national_id = models.CharField(max_length=20, blank=True, null=True)
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
+    # date_joined = models.DateTimeField(auto_now_add=True)
     #add address and national ID
     objects = UserManager()
     
     USERNAME_FIELD = "phone_number"
     REQUIRED_FIELDS = ["email", "full_name"]
+    
+    class Meta:
+        verbose_name_plural = 'کارمندان'
     
     def convert_to_english_numbers(self, input_str):
         persian_to_english = {
