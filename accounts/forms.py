@@ -42,6 +42,7 @@ class UserChangeForm(forms.ModelForm):
         self.fields['full_name'].label = 'نام و نام خانوادگی'
         self.fields['address'].label = 'آدرس'
         self.fields['national_id'].label = 'کد ملی'
+        self.fields["password"].label = "رمز"
         
         
 
