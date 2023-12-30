@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'cafe.apps.CafeConfig',
     'accounts.apps.AccountsConfig',
     'orders.apps.OrdersConfig',
+
 ]
 
 MIDDLEWARE = [

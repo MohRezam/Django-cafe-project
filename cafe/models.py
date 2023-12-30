@@ -9,6 +9,11 @@ class Menu(models.Model):
 class Category(models.Model):
     category_name = models.CharField(max_length=255, unique=True)
     
+    
+    class Meta:  
+        verbose_name = 'Category'
+        verbose_name_plural = 'Categories'
+    
     def __str__(self) -> str:
         return f"Category: {self.category_name}"
 
