@@ -1,8 +1,9 @@
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Category, Item
+from .models import Category, Item, Cafe
 from django.views import View
-from .forms import CartAddForm
+from .forms import CartAddForm, SearchForm
+from django.db.models import Q
 # from django.shortcuts import render, redirect
 # from django.views import View
 # from .models import Order, OrderItem
@@ -12,8 +13,9 @@ from .forms import CartAddForm
 
 class HomeView(View):
     def get(self, request):
+        cafe = get_object_or_404(Cafe)
         all_categories = Category.objects.all()        
-        return render(request, "cafe/index.html", context={"all_categories":all_categories})
+        return render(request, "cafe/index.html", context={"all_categories":all_categories, "cafe":cafe})
 
 class CafeMenuView(View):
     data = {}
@@ -25,9 +27,16 @@ class CafeMenuView(View):
         return super().dispatch(request, category_name)
 
     def get(self, request, category_name):
-        form = CartAddForm()
+        cart_form = CartAddForm()
+        cafe = get_object_or_404(Cafe)
         items = Item.objects.filter(category=category_name)
-        return render(request, "cafe/menu-item.html", context={"items": items, "form": form})
+        search_form = SearchForm()
+        if "search" in request.GET:
+            search_form = SearchForm(request.GET)
+            if search_form.is_valid():
+                cd = search_form.cleaned_data["search"]
+                items = Item.objects.filter(Q(name__icontains=cd) | Q(price__icontains=cd), category=category_name)
+        return render(request, "cafe/menu-item.html", context={"items": items, "cart_form": cart_form, "cafe":cafe, "search_form":search_form})
 
     def post(self, request, category_name):
         form = CartAddForm(request.POST)
@@ -59,12 +68,14 @@ def generate_random_id():
 
 class AboutUsView(View):
     def get(self, request):
-        return render(request, "cafe/about.html", {})
+        cafe = get_object_or_404(Cafe)
+        return render(request, "cafe/about.html", {"cafe":cafe})
 
 
 class ContactUsView(View):
     def get(self, request):
-        return render(request, "cafe/contact-us.html", {})
+        cafe = get_object_or_404(Cafe)
+        return render(request, "cafe/contact-us.html", {"cafe":cafe})
 #in zir
 class SetCartCookieView(View):
     def get(self, request):
