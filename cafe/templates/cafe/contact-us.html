@@ -9,7 +9,7 @@
       >
         <header class="d-flex flex-column align-items-center gap-2 w-100">
           <img
-            src="{% static './images/startbucks.png' %}"
+            src="{{ cafe.logo_image.url }}"
             alt="logo"
             class="logo img-fluid"
           />
@@ -19,7 +19,7 @@
             </span>
             <ul id="myDropdown" class="dropdown-content pt-2 px-1">
               <li class="py-2">
-                <a class="down-item text-white" href="#">درباره ما</a>
+                <a class="down-item text-white" href="{% url "cafe:about" %}">درباره ما</a>
               </li>
               <li class="py-2">
                 <a class="down-item text-white" href="#">سوالات متداول</a>
@@ -76,7 +76,7 @@
           </div>
           <div class="d-flex justify-content-between align-items-center w-75">
             <div class="name-resturan text-center">
-              <p>کافه و رستوران استارباکس</p>
+              <p>{{ cafe.name }}  </p>
             </div>
             <div
               class="online-ordianry d-flex flex-column align-items-center justify-content-center gap-1"
@@ -135,8 +135,7 @@
             class="addres-online border-top border-1 w-75 d-flex align-items-center justify-content-between"
           >
             <p>
-              کرمان بلوار جمهوری اسلامی- کوچه رئوف 1 - برج ماهان - طبقه همکف -
-              واحد 1290
+              {{ cafe.address }}
             </p>
             <a
               target="_blank"
@@ -278,13 +277,13 @@
             >
               <div class="box-info">
                 <span class="title-box">شماره تماس</span>
-                <span class="subtitle-box">0933333333</span>
+                <span class="subtitle-box">{{ cafe.phone_number }}</span>
               </div>
               <div class="box-info">
                 <span class="title-box">آدرس</span>
                 <span class="subtitle-box"
-                  >کرمان بلوار جمهوری اسلامی- کوچه رئوف 1 - برج ماهان -
-                  طبقه</span
+                  > {{ cafe.address }}
+                  </span
                 >
               </div>
             </div>

@@ -1,12 +1,12 @@
 {% extends "base.html" %}
 {% load static %}
- {% block title %} کافه و رستوران استارباکس{% endblock title %} 
+ {% block title %}{{ cafe.name }}{% endblock title %} 
  {% block content %}
   <body class="home-bg">
     <main class="d-flex flex-column align-items-center px-5 gap-4">
       <img
         class="img-fluid img-logo"
-        src="{% static "images/starbucks.png" %}"
+        src="{{ cafe.logo_image.url }}"
         alt="logo"
       />
       <div class="container my-5">
@@ -18,7 +18,7 @@
             <a href="{% url 'cafe:cafe_menu' category.category_name %}">
               <img
                 class="rounded-5"
-                src="{% static "images/" %}{{category.category_name}}.png"
+                src="{{ category.image.url }}"
                 alt=""
             /></a>
           </div>
