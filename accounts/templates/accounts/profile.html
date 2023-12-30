@@ -7,19 +7,27 @@
         <div class="box-sidebar">
           <div class="profile-box">
             <div class="profile-box-avator">
-              <img src="assets/images/svg/user-profile.svg" alt="profile" />
+              <img
+                src="{% static 'staff/images/svg/user-profile.svg' %}"
+                alt="profile"
+              />
             </div>
 
             <div class="profile-box-content">
               <span class="profile-box-nameuser"
                 >{{request.user.full_name}}</span
               >
-              <span class="profile-box-phone">09922222222</span>
+              <span class="profile-box-phone"
+                >{{request.user.phone_number}}</span
+              >
             </div>
           </div>
           <ul class="profile-menu-items">
             <li>
-              <a href="profile.html" class="profile-menu-url active-profile">
+              <a
+                href="{% url 'accounts:staff-profile' %}"
+                class="profile-menu-url active-profile"
+              >
                 <span class="mdi mdi-account-outline"></span> پروفایل
               </a>
             </li>
@@ -34,6 +42,7 @@
                 <li><a href="#">سفارش های لغو شده</a></li>
               </ul>
             </li>
+            {% if request.user.is_admin %}
             <li>
               <a href="profile-items.html" class="profile-menu-url">
                 <span><i class="fa-solid fa-list"></i></span> آیتم ها
@@ -43,6 +52,7 @@
                 <li><a href="#">افزودن آیتم ها</a></li>
               </ul>
             </li>
+            {% endif %} {% if request.user.is_admin %}
             <li>
               <a href="profile-items.html" class="profile-menu-url">
                 <span><i class="fa fa-list-alt" aria-hidden="true"></i></span>
@@ -53,13 +63,20 @@
                 <li><a href="#">افزودن دسته بندی</a></li>
               </ul>
             </li>
+            {% endif %}
             <li>
-              <a href="profile-personal-info.html" class="profile-menu-url">
+              <a
+                href="{% url 'accounts:staff-personal-info' %}"
+                class="profile-menu-url"
+              >
                 <span class="mdi mdi-account-circle"></span> اطلاعات شخصی
               </a>
             </li>
             <li>
-              <a href="index.html" class="profile-menu-url">
+              <a
+                href="{% url 'accounts:staff-logout' %}"
+                class="profile-menu-url"
+              >
                 <span class="mdi mdi-power"></span> خروج
               </a>
             </li>
@@ -79,7 +96,9 @@
               style="padding: 0"
             >
               <div class="profile-stats-col">
-                <p><span> نام و نام خانوادگی :</span>حسن شجاعی</p>
+                <p>
+                  <span> نام و نام خانوادگی :</span>{{request.user.full_name}}
+                </p>
               </div>
             </div>
             <div
@@ -87,7 +106,7 @@
               style="padding: 0"
             >
               <div class="profile-stats-col">
-                <p><span>پست الکترونیک :</span>info@digistore.com</p>
+                <p><span>پست الکترونیک :</span>{{request.user.email}}</p>
               </div>
             </div>
             <div
@@ -95,7 +114,9 @@
               style="padding: 0"
             >
               <div class="profile-stats-col">
-                <p><span>شماره تلفن همراه :</span>09922222222</p>
+                <p>
+                  <span>شماره تلفن همراه :</span>{{request.user.phone_number}}
+                </p>
               </div>
             </div>
             <div
@@ -103,11 +124,13 @@
               style="padding: 0"
             >
               <div class="profile-stats-col">
-                <p><span>کد ملی :</span>-</p>
+                <p><span>کد ملی :</span>{{request.user.national_id}}</p>
               </div>
             </div>
             <div class="profile-stats-action">
-              <a href="profile-additional-info.html" class="link-spoiler-edit"
+              <a
+                href="{% url 'accounts:staff-profile-info' request.user.id %}"
+                class="link-spoiler-edit"
                 ><i class="fa fa-pencil"></i>ویرایش اطلاعات شخصی</a
               >
             </div>

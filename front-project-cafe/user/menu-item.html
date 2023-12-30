@@ -281,9 +281,30 @@
                       <button
                         class="btn food-button"
                         onclick="increaseCartCount()"
+                        id="addButton"
                       >
-                        انتخاب
+                        افزودن
                       </button>
+                      <form
+                        action=""
+                        method="post"
+                        class="form-quantity"
+                        id="quantitybutton"
+                      >
+                        <div class="quantity">
+                          <button class="plus-btn" type="button" name="button">
+                            <img src="./images/plus.svg" alt="" />
+                          </button>
+                          <input type="text" name="quantity" value="1" />
+                          <input type="hidden" name="iditem" value="1" />
+                          <button class="minus-btn" type="button" name="button">
+                            <img src="./images/minus.svg" alt="" />
+                          </button>
+                        </div>
+                        <button type="submit" id="submitButton" class="btn">
+                          ثبت سفارش
+                        </button>
+                      </form>
                     </div>
                   </div>
                 </div>
@@ -313,7 +334,7 @@
                       class="btn food-button"
                       onclick="increaseCartCount()"
                     >
-                      انتخاب
+                      افزودن
                     </button>
                   </div>
                 </div>
@@ -343,7 +364,7 @@
                       class="btn food-button"
                       onclick="increaseCartCount()"
                     >
-                      انتخاب
+                      افزودن
                     </button>
                   </div>
                 </div>
@@ -373,7 +394,7 @@
                       class="btn food-button"
                       onclick="increaseCartCount()"
                     >
-                      انتخاب
+                      افزودن
                     </button>
                   </div>
                 </div>
@@ -441,7 +462,7 @@
                       class="btn food-button"
                       onclick="increaseCartCount()"
                     >
-                      انتخاب
+                      افزودن
                     </button>
                   </div>
                 </div>
@@ -471,7 +492,7 @@
                       class="btn food-button"
                       onclick="increaseCartCount()"
                     >
-                      انتخاب
+                      افزودن
                     </button>
                   </div>
                 </div>
@@ -501,7 +522,7 @@
                       class="btn food-button"
                       onclick="increaseCartCount()"
                     >
-                      انتخاب
+                      افزودن
                     </button>
                   </div>
                 </div>
@@ -569,7 +590,7 @@
                       class="btn food-button"
                       onclick="increaseCartCount()"
                     >
-                      انتخاب
+                      افزودن
                     </button>
                   </div>
                 </div>
@@ -599,7 +620,7 @@
                       class="btn food-button"
                       onclick="increaseCartCount()"
                     >
-                      انتخاب
+                      افزودن
                     </button>
                   </div>
                 </div>
@@ -629,7 +650,7 @@
                       class="btn food-button"
                       onclick="increaseCartCount()"
                     >
-                      انتخاب
+                      افزودن
                     </button>
                   </div>
                 </div>
@@ -697,7 +718,7 @@
                       class="btn food-button"
                       onclick="increaseCartCount()"
                     >
-                      انتخاب
+                      افزودن
                     </button>
                   </div>
                 </div>
@@ -727,7 +748,7 @@
                       class="btn food-button"
                       onclick="increaseCartCount()"
                     >
-                      انتخاب
+                      افزودن
                     </button>
                   </div>
                 </div>
@@ -757,7 +778,7 @@
                       class="btn food-button"
                       onclick="increaseCartCount()"
                     >
-                      انتخاب
+                      افزودن
                     </button>
                   </div>
                 </div>
@@ -825,7 +846,7 @@
                       class="btn food-button"
                       onclick="increaseCartCount()"
                     >
-                      انتخاب
+                      افزودن
                     </button>
                   </div>
                 </div>
@@ -855,7 +876,7 @@
                       class="btn food-button"
                       onclick="increaseCartCount()"
                     >
-                      انتخاب
+                      افزودن
                     </button>
                   </div>
                 </div>
@@ -885,7 +906,7 @@
                       class="btn food-button"
                       onclick="increaseCartCount()"
                     >
-                      انتخاب
+                      افزودن
                     </button>
                   </div>
                 </div>
@@ -953,7 +974,7 @@
                       class="btn food-button"
                       onclick="increaseCartCount()"
                     >
-                      انتخاب
+                      افزودن
                     </button>
                   </div>
                 </div>
@@ -983,7 +1004,7 @@
                       class="btn food-button"
                       onclick="increaseCartCount()"
                     >
-                      انتخاب
+                      افزودن
                     </button>
                   </div>
                 </div>
@@ -1013,7 +1034,7 @@
                       class="btn food-button"
                       onclick="increaseCartCount()"
                     >
-                      انتخاب
+                      افزودن
                     </button>
                   </div>
                 </div>
@@ -1081,7 +1102,7 @@
                       class="btn food-button"
                       onclick="increaseCartCount()"
                     >
-                      انتخاب
+                      افزودن
                     </button>
                   </div>
                 </div>
@@ -1111,7 +1132,7 @@
                       class="btn food-button"
                       onclick="increaseCartCount()"
                     >
-                      انتخاب
+                      افزودن
                     </button>
                   </div>
                 </div>
@@ -1141,7 +1162,7 @@
                       class="btn food-button"
                       onclick="increaseCartCount()"
                     >
-                      انتخاب
+                      افزودن
                     </button>
                   </div>
                 </div>
@@ -1331,10 +1352,6 @@
           </div>
         </footer>
       </div>
-      <a href="./cart.html" id="submitButton" class="btn">
-        ثبت سفارش
-        <span id="cartCount" class="number-cart">مورد0</span>
-      </a>
     </div>
     <script src="./js/bootstrap.min.js"></script>
     <script>
@@ -1399,10 +1416,7 @@
       let cartCounter = 0;
 
       function increaseCartCount() {
-        cartCounter++;
-        document.getElementById(
-          "cartCount"
-        ).textContent = `${cartCounter} مورد`;
+        showquantityButton();
         showSubmitButton();
       }
 
@@ -1410,6 +1424,46 @@
         var submitButton = document.getElementById("submitButton");
         submitButton.style.display = "flex";
       }
+
+      function showquantityButton() {
+        var addButton = document.getElementById("addButton");
+        var quantityButton = document.getElementById("quantitybutton");
+        addButton.style.display = "none";
+        quantityButton.style.display = "block";
+      }
+    </script>
+    <script>
+      document.querySelectorAll(".minus-btn").forEach(function (btn) {
+        btn.addEventListener("click", function (e) {
+          e.preventDefault();
+          var input = this.closest("div").querySelector("input");
+          var value = parseInt(input.value);
+
+          if (value > 1) {
+            value = value - 1;
+          } else {
+            value = 0;
+          }
+
+          input.value = value;
+        });
+      });
+
+      document.querySelectorAll(".plus-btn").forEach(function (btn) {
+        btn.addEventListener("click", function (e) {
+          e.preventDefault();
+          var input = this.closest("div").querySelector("input");
+          var value = parseInt(input.value);
+
+          if (value < 100) {
+            value = value + 1;
+          } else {
+            value = 100;
+          }
+
+          input.value = value;
+        });
+      });
     </script>
   </body>
 </html>
