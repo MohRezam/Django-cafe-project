@@ -12,6 +12,7 @@ class Order(TimeStampedModel):
     table_number = models.IntegerField(verbose_name="شماره میز", null = True)
     session = models.OneToOneField(Session, on_delete=models.CASCADE)
     # define a foriegn key to staff id and it should be unique
+    # define a order_id (this is which we generate it in CafeMenuView )
     
     class Meta:
         verbose_name_plural = 'سفارشات'
@@ -26,7 +27,15 @@ class OrderItem(models.Model):
 
 
 
-# class history(models.Model):
+# class Checkouts(models.Model):
+#     discountـcode=models.CharField()
+#     name= models.CharField(max_length=250)
 #     phone_number=models.CharField(max_length=11)
-#     order_id=models.IntegerField()
-    
+#     order_id=models.CharField()
+#     table_number= models.IntegerField()
+
+
+# class discount (models.Model):
+#     code = models.CharField()
+#     amount= models.IntegerField()
+
