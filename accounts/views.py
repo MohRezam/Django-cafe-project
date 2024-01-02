@@ -97,29 +97,7 @@ class AddItemView(View):
             messages.success(request, 'آیتم با موفقیت اضافه شد.')
             return redirect('profile-items.html')
 
-# class UserEditView(UpdateView):
-#     model = User
-#     form_class = UserEditForm
-#     template_name = 'profile-additional-info.html'
-#     success_url = reverse_lazy('profile-personal-info')  # Redirect to the user profile or another page
-#     def get_object(self, queryset=None):
-#         user_id = self.kwargs.get('user_id')
-#         return User.objects.filter(id=user_id).first()  # Retrieve the user from the database
-    
-#     def form_valid(self, form):
-#         user_id = self.kwargs.get('user_id')
-#         user = self.get_object()
-#         if user:
-#             # Update user information with the form data
-#             user.full_name = form.cleaned_data['full_name']
-#             user.phone_number = form.cleaned_data['phone_number']
-#             user.email = form.cleaned_data['email']
-#             user.save()
-#             messages.success(self.request, 'اطلاعات کاربر با موفقیت ویرایش شد.')  # Success message
-#         else:
-#             messages.error(self.request, 'کاربر مورد نظر یافت نشد.')  # User not found message
-#             return redirect('user_list')  # Redirect to a user list or another appropriate page
-#         return super().form_valid(form)
+
         
 class StffProfileView(LoginRequiredMixin,View):
      def get(slef,request):
@@ -148,3 +126,7 @@ class StaffProfileInfoView(LoginRequiredMixin, View):
 class StaffProfilePersonalView(LoginRequiredMixin, View):
      def get(self,request):
           return render(request,'accounts/profile-personal-info.html')
+class StaffProfileCategories(LoginRequiredMixin,View):
+     def get(sefl,request):
+          category = Category.objects.all()
+          return render(request,'accounts/categories.html',{'category':category})
