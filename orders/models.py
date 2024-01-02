@@ -27,15 +27,8 @@ class OrderItem(models.Model):
 
 
 
-# class Checkouts(models.Model):
-#     discountـcode=models.CharField()
-#     name= models.CharField(max_length=250)
-#     phone_number=models.CharField(max_length=11)
-#     order_id=models.CharField()
-#     table_number= models.IntegerField()
 
-
-# class discount (models.Model):
+# class Discount (models.Model):
 #     code = models.CharField()
 #     amount= models.IntegerField()
 
