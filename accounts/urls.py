@@ -10,5 +10,6 @@ urlpatterns = [
     path('login/',views.StaffLoginView.as_view(),name="staff-login"),
     path('Logout/',views.StffLogoutView.as_view(),name="staff-logout"),
     path('profile-info/<int:staff_user_id>/',views.StaffProfileInfoView.as_view(),name="staff-profile-info"),
-    path('profile-personal-info',views.StaffProfilePersonalView.as_view(),name="staff-personal-info")
+    path('profile-personal-info/',views.StaffProfilePersonalView.as_view(),name="staff-personal-info"),
+    path('profile-categories/',views.StaffProfileCategories.as_view(),name="staff-categories")
 ]
