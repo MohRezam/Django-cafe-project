@@ -101,5 +101,14 @@ class RemoveItemForm(forms.Form):
 
     item_id = forms.IntegerField(label='شناسه محصول')
 
+class EditItemStatusForm(forms.Form):
+    def __init__(self, *args, **kwargs):
+        super(EditItemStatusForm, self).__init__(*args, **kwargs)
+        self.fields['item_id'].label = 'شناسه محصول'
+        self.fields['new_status'].label = 'وضعیت جدید'
+
+    item_id = forms.IntegerField(label='شناسه محصول')
+    new_status = forms.BooleanField(label='وضعیت جدید')
+
     
     
