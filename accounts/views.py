@@ -9,6 +9,7 @@ from .forms import CategoryForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import login,authenticate,logout
 from .forms import AddItemForm
+from .forms import RemoveItemForm
 # Create your views here.
 
 class StaffRegisterView(View):
@@ -98,7 +99,21 @@ class AddItemView(View):
             return redirect('profile-items.html')
 
 
-        
+class RemoveItemView(View):
+    def get(self, request):
+        form = RemoveItemForm()
+        return render(request, 'remove_item.html', {'form': form})
+
+    def post(self, request):
+        form = RemoveItemForm(request.POST)
+        if form.is_valid():
+            item_id = form.cleaned_data['item_id']
+            item = Item.objects.get(id=item_id)
+            item.delete()
+            messages.success(request, "محصول با موفقیت حذف شد")  # Farsi success message
+        return render(request, 'remove_item.html', {'form': form})
+
+
 class StffProfileView(LoginRequiredMixin,View):
      def get(slef,request):
           return render(request,'accounts/profile.html')
