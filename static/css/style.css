@@ -261,7 +261,9 @@ a:visited {
   padding-top: 14px;
   list-style-type: none;
 }
-
+form.form-info-edit {
+  margin: 10px 0;
+}
 .navbar li:first-child {
   margin-right: 16px;
 }
