@@ -187,8 +187,8 @@ class StatisticsView(TemplateView):
         # Most reserved tables
         context['most_reserved_tables'] = Order.objects.values('table_number').annotate(total_reservations=Count('id')).order_by('-total_reservations')[:20]
 
-        # Peak business hours
-        context['peak_hours'] = self.model.objects.filter(order_date__date=timezone.now().date()).values('order_date__hour').annotate(total_orders=Count('id')).order_by('-total_orders')[:20]
+       # Peak business hours
+        context['peak_hours'] = Order.objects.filter(order_date__date=timezone.now().date()).values('order_date__hour').annotate(total_orders=Count('id')).order_by('-total_orders')[:20]
 
         # Total sales
         context['total_sales'] = self.model.objects.aggregate(total_sales=Sum('item__price'))
