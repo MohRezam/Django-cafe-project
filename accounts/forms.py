@@ -82,8 +82,6 @@ class ItemForm(forms.ModelForm):
             'ingredients': 'محتویات',
             'item_status': 'وضعیت موجودی',
         }
-        widgets = {
-            'image': forms.FileInput(attrs={'type': 'file'}),
-        }
+
     
     

@@ -1,4 +1,4 @@
-{% extends "base-staff.html" %} {% load static %} {% block title %}افزودن محصول{% endblock title %} {% block content %}
+{% extends "base-staff.html" %} {% load static %} {% block title %}ویرایش محصول{% endblock title %} {% block content %}
 <main class="contentM">
   <div class="container">
     <div class="col-lg-3 col-md-4 col-xs-12 pull-right">
@@ -89,7 +89,7 @@
               class="profile-navbar-btn-back"
               >بازگشت</a
             >
-            <h4 class="edit-personal">افزودن محصول</h4>
+            <h4 class="edit-personal">ویرایش محصول</h4>
           </div>
         </div>
         <div class="profile-stats">
@@ -113,6 +113,7 @@
                     </div>
                     <div>
                         <label for="id_image">تصویر:</label>
+                        <img src="{{ form.image.value.url }}" alt="تصویر" width="100" height="100">
                         {{ form.image }}
                     </div>
                     <div>
