@@ -160,7 +160,55 @@ class StaffProfileInfoView(LoginRequiredMixin, View):
 class StaffProfilePersonalView(LoginRequiredMixin, View):
      def get(self,request):
           return render(request,'accounts/profile-personal-info.html')
-class StaffProfileCategories(LoginRequiredMixin,View):
-     def get(sefl,request):
+class StaffProfileCategoriesView(LoginRequiredMixin,View):
+     def get(self,request):
           category = Category.objects.all()
           return render(request,'accounts/categories.html',{'category':category})
+class StaffCategoryDeleteView(LoginRequiredMixin,View):
+     def get(self,request,id_category):
+          category = get_object_or_404(Category, pk=id_category)
+          category.delete()
+          messages.success(request,"دسته بندی با موفقیت حذف شد","success")
+          return redirect("accounts:staff-categories")
+class StaffCategoryUpdateView(LoginRequiredMixin, View):
+    form_class = CategoryForm
+    template_name = "accounts/profile-update-category.html"
+    
+    def get(self, request, id_category):
+        category = get_object_or_404(Category, id=id_category)
+        form = self.form_class(instance=category)
+        return render(request, self.template_name, {'form': form})
+        
+    def post(self, request, id_category):
+        category = get_object_or_404(Category, id=id_category)
+        form = self.form_class(request.POST, instance=category)
+        
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'آپدیت اطلاعات شخصی با موفقیت انجام شد', 'success')
+            return redirect('accounts:staff-categories')
+        
+        return render(request, self.template_name, {'form': form})
+    
+class StaffAddCategoryView(LoginRequiredMixin, View):
+    form_class = CategoryForm
+    template_name = "accounts/profile-add-category.html"
+    
+    def get(self, request):
+        form = self.form_class()
+        return render(request, self.template_name, {'form': form})
+    
+    def post(self, request):
+        form = self.form_class(request.POST, request.FILES)
+        
+        if form.is_valid():
+            cd = form.cleaned_data
+            category = Category.objects.create()
+            category.category_name = cd['category_name']
+            category.image = cd['image']
+            category.created_at = cd['created_at']
+            category.save()
+            messages.success(request, 'دسته بندی جدید با موفقیت ایجاد شد', 'success')
+            return redirect('accounts:staff-categories')
+        
+        return render(request, self.template_name, {'form': form})

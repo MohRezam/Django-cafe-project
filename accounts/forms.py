@@ -111,4 +111,13 @@ class EditItemStatusForm(forms.Form):
     new_status = forms.BooleanField(label='وضعیت جدید')
 
     
-    
+class CategoryForm(forms.ModelForm):
+
+    class Meta:
+        model = Category
+        exclude = ['created_at']
+        fields = ('category_name', 'image')
+        labels = {
+            'category_name': 'دسته بندی',
+            'image': 'تصویر',
+        }

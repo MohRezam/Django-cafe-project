@@ -60,7 +60,7 @@
                   <i class="fa-solid fa-chevron-left"></i>
                 </a>
                 <ul class="profile-menu-items-children">
-                  <li><a href="#">افزودن دسته بندی</a></li>
+                  <li><a href="{% url 'accounts:staff-add-category' %}">افزودن دسته بندی</a></li>
                 </ul>
               </li>
               {% endif %}
@@ -85,6 +85,9 @@
         </div>
       </div>
     <div class="col-lg-9 col-md-8 col-xs-12 pull-right">
+      {% if messages %} {% for message in messages %}
+      <div class="alert alert-secondary mt-2" role="alert">{{ message }}</div>
+      {% endfor %}{% endif %}
       <div class="d-block">
         <div class="profile-content">
           <div class="headline-profile">
@@ -98,7 +101,8 @@
                   <tr>
                     <th scope="col">#</th>
                     <th scope="col">تصویر دسته بندی</th>
-                    <th scope="col">نام دسته بندس</th>
+                    <th scope="col">نام دسته بندی</th>
+                    <th scope="col">تاریخ ایجاد</th>
                     <th scope="col">حذف</th>
                     <th scope="col">ویرایش</th>
                   </tr>
@@ -107,12 +111,13 @@
                 <tbody>
                   <tr>
                     <td>{{ category.id }}</td>
-                    <td class="order-code">57262900</td>
-                    <td>28 آذر 1402</td>
-                    <td><a class="btn-remove-address btn btn-danger text-light" type="submit">
-                        حذف
+                    <td class="order-code"><img src="{{ category.image.url }}"></td>
+                    <td>{{ category.category_name }}</td>
+                    <td>{{ category.created_at }}</td>
+                    <td><a href="{% url 'accounts:staff-category-delete' category.id %}" class="btn-remove-address btn btn-danger text-light">
+                            حذف
                     </a></td>
-                    <td><a class="btn-remove-address btn btn-secondary text-light" type="submit">
+                    <td><a href="{% url 'accounts:staff-category-update' category.id %}" class="btn-remove-address btn btn-secondary text-light">
                         ویرایش
                       </a></td>
                   </tr>

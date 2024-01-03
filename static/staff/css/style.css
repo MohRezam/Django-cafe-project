@@ -746,6 +746,11 @@ form.form-info-edit {
   float: right;
 }
 
+td.order-code img {
+  width: 70px;
+  height: 70px;
+}
+
 .mini-cart-dropdown
   ul.header-basket-list
   li.js-mini-cart-item
