@@ -247,7 +247,6 @@
           </div>
           <div class="food-cart-price">
             <p>{{item.price}} </p>
-            <input type="number" id="item_price" placeholder="Enter item price"> 
           </div>
           <div class="food-quantity">
             <div class="quantity">
@@ -255,7 +254,6 @@
                 <img src="./images/plus.svg" alt="" />
               </button>
               <input type="text" name="name" value="{{ quantity }}" />
-              <input type="number" id="quantity" placeholder="Enter quantity">
               <button class="minus-btn" type="button" name="button">
                 <img src="./images/minus.svg" alt="" />
               </button>
@@ -643,27 +641,7 @@
         });
       });
     </script>
-    <script>
-      function calculateTotal() {
-          // Get values from input fields
-          var quantity = parseFloat(document.getElementById('quantity').value) || 0;
-          var itemPrice = parseFloat(document.getElementById('item_price').value) || 0;
-
-          // Calculate total price
-          var totalPrice = quantity * itemPrice;
-
-          // Update total price in the HTML
-          document.getElementById('total_price').textContent = totalPrice;
-
-          // Update all_total_price by adding the current total price
-          var allTotalPriceElement = document.getElementById('all_total_price');
-          var allTotalPrice = parseFloat(allTotalPriceElement.textContent) || 0;
-          allTotalPrice += totalPrice;
-
-          // Update all_total_price in the HTML
-          allTotalPriceElement.textContent = allTotalPrice;
-      }
-  </script>
+ 
   </body>
 </html>
 {% endblock content %}
