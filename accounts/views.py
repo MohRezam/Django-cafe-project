@@ -286,6 +286,13 @@ class StatisticsView(TemplateView):
             for customer in sales_by_customer:
                 writer.writerow([customer['customer__name'], customer['total_sales']])
 
+            writer.writerow([])  
+
+            writer.writerow(['Sales by Time of Day'])
+            writer.writerow(['Hour', 'Total Sales'])
+            for hour in sales_by_time_of_day:
+                writer.writerow([hour['hour'], hour['total_sales']])
+
             return response
         else:
             return HttpResponse("You are not authorized to download the statistics.", status=403)
