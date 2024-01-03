@@ -6012,7 +6012,49 @@ ul.listing-sort li a.nav-link.active {
   display: inline-block;
   padding: 0 15px;
 }
+.update-item-form {
+  margin: 15px 0;
+}
+.update-item-form div {
+  display: flex;
+  flex-direction: column;
+  align-items: self-start;
+  gap: 10px;
+  padding: 20px 0;
+}
+.update-item-form div input {
+  width: 100%;
+  padding: 10px 5px;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+}
+.update-item-form div select {
+  width: 100%;
+  padding: 10px 5px;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+}
+.update-item-form div textarea {
+  border: 1px solid #ddd;
+  width: 100%;
+  border-radius: 3px;
+  padding: 10px 5px;
+}
+.status-item {
+  display: flex;
+  align-items: center !important;
+  justify-content: space-between !important;
+  flex-direction: row !important;
+  gap: 20px !important;
+}
+.status-item label {
+  width: 50%;
+}
 
+.status-item input {
+  display: block !important;
+  width: 50%;
+}
 .pager ul.page-item li.pagination-item {
   display: inline-block;
 }

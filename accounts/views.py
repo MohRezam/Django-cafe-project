@@ -157,7 +157,25 @@ class StaffProfileDeleteItemView(LoginRequiredMixin,View):
           item.delete()
           messages.success(request,"محصول با موفقیت حذف شد","success")
           return redirect("accounts:staff-items")
-class StaffProfileUpdateView(LoginRequiredMixin,View):
+class StaffProfileUpdateItemView(LoginRequiredMixin,View):
+     form_class = ItemForm
+     template_name = "accounts/profile-update-item.html"
+     def get(self,request,id_item) :
+        item = get_object_or_404(Item, id=id_item)
+        form = self.form_class(instance=item)
+        return render(request, self.template_name, {'form': form})
+     
+     def post(self,request,id_item):
+        item = get_object_or_404(Item, id=id_item)
+        form = self.form_class(request.POST,request.FILES,instance=item)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'آپدیت محصول با موفقیت انجام شد', 'success')
+            return redirect('accounts:staff-items')
+        else:
+            form = self.form_class(instance=item)
+            return render(request, self.template_name, {'form': form})  
+class StaffProfileAddItemView(LoginRequiredMixin,View):
      form_class = ItemForm
      template_name = "accounts/profile-add-item.html"
      def get(self,request,id_item) :
