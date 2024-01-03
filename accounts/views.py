@@ -272,6 +272,13 @@ class StatisticsView(TemplateView):
             for item in top_selling_items:
                 writer.writerow([item['item__name'], item['total_quantity']])
 
+            writer.writerow([]) 
+
+            writer.writerow(['Sales by Category'])
+            writer.writerow(['Category', 'Total Sales'])
+            for category in sales_by_category:
+                writer.writerow([category['item__category__name'], category['total_sales']])
+
             return response
         else:
             return HttpResponse("You are not authorized to download the statistics.", status=403)
