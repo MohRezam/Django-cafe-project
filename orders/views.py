@@ -1,37 +1,54 @@
-from django.shortcuts import render
+from django.http import HttpResponse
+from django.shortcuts import redirect, render
 from django.views import View
-from .forms import UserSessionForm
+from .forms import UserSessionForm  , OrderForm
 from django.contrib import messages
 from cafe.models import Item
 import json
+from cafe.views import generate_random_id
+from.models import Order
 # from .models import Checkouts , Discount
 
 # Create your views here.
 
 class CheckoutView(View):
-    # model = Checkouts
-    # model_1= Discount
-    def get(self, request):
-        return render(request, "orders/checkout.html")
-    
-    # def post(self, request):
-    #         form = CheckoutForm(request.POST)
-    #         if form.is_valid():
-    #             cd = form.cleaned_data
-    #             discount_code_result= any(self.model_1.objects.get(code=cd["discount_code"]))
-    #             if discount_code_result is True:
-                    #    ...
-    #                 self.model.objects.create (name=cd["name"] , phone_number= cd["phone_number"] , order_id= ... , table_number=cd["table_number"] , discountـcode="discountـcode" )
-    #                 messages.success(request , "با موفقیت ثبت شد" , "success")
-    #             else:
+    template_name = 'checkout.html'  #Replace with the actual template file path
+    model=Order    
+    def get(self, request, *args, **kwargs):
+        # Show the HTML form for GET requests
+        form = OrderForm()  # Assuming you have a form for your Order model
+        return render(request, self.template_name, {'form': form})
 
-    #             return response
-    #         else:
-    #             # Print form errors to the console for debugging
-    #             print("Form errors:", form.errors)
-                
-    #             return HttpResponse("Form is not valid. Check form.errors for details.")
+    def post(self, request, *args, **kwargs):
+        # Process the form submission for POST requests
+        form = OrderForm(request.POST)
+        
+        if form.is_valid():
+            order_instance = form.cleaned_data
+            session_data = request.session.get("order", {})
+            order_dict = session_data.get("order", {})
+            Order.objects.create(
+                    description="Your description here",
+                    table_number=order_instance["table_number"],
+                    order_detail=order_dict.get("item", []), 
+                    customer_name=order_instance["Name"],
+                    phone_number=order_instance["phone_number"],  
+                    discount_code=order_instance["discount_code"], 
+                    order_id=order_dict.get("id")
+    )
+            # Redirect to a success page or any other desired page
+            return redirect('cafe:home')
+        else:
+            # Form data is invalid, render the form with errors
+            return render(request, self.template_name, {'form': form})
 
+    def put(self, request, *args, **kwargs):
+        # Implement PUT logic if needed
+        pass
+
+    def delete(self, request, *args, **kwargs):
+        # Implement DELETE logic if needed
+        pass
     
 
 class ViewCartView(View):
@@ -133,3 +150,42 @@ def order_status(request, order_id , status):
             
 
 
+# class EditCookieView(View):
+#     template_name = 'orders/edit_cart.html'
+
+#     def get(self, request):
+#             # Retrieve the cart data from the cookie
+#             cart_data = request.COOKIES.get('cart', '{}')
+
+#             # Process cart_data as needed
+#             # ...
+
+#             return render(request, self.template_name, {'cart_data': cart_data})
+
+#     def post(self, request, category_name):
+#         form = CartEditForm(request.POST)
+
+#         if form.is_valid():
+#             cd = form.cleaned_data
+
+#             # Delete the previous cookie
+#             response = HttpResponse()
+#             response.delete_cookie('cart')
+
+#             # Set new cookie
+#             self.data[cd["iditem"]] = cd['quantity']
+#             response.set_cookie("cart", f"{self.data}", expires=9)
+
+#             # Delete previous session and add a new one
+#             order = {"id": generate_random_id(), "item": self.data}
+#             request.session.pop("order", None)
+#             request.session["order"] = {"order": order, "status": ""}
+            
+#             # Redirect to the cart page
+#             return redirect('orders:cart_page')
+
+#         else:
+#             # Print form errors to the console for debugging
+#             print("Form errors:", form.errors)
+
+#             return HttpResponse("Form is not valid. Check form.errors for details.")
