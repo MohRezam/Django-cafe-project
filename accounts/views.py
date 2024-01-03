@@ -202,6 +202,8 @@ class StatisticsView(TemplateView):
         # Top-selling items (filtered by date)
         context['top_selling_items'] = Order.objects.filter(order_date__date=timezone.now().date()).values('order_detail__item').annotate(total_quantity=Sum('order_detail__quantity')).order_by('-total_quantity')[:20]
 
+        # Sales by category
+        context['sales_by_category'] = Order.objects.values('order_detail__item__category').annotate(total_sales=Sum('order_detail__item__price')).order_by('-total_sales')
         return context
     def get(self, request, *args, **kwargs):
         if request.user.is_staff:
