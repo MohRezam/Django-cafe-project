@@ -181,17 +181,47 @@ class StatisticsView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         
-        # Most ordered items and their quantities
-        context['most_ordered_items'] = self.model.objects.values('item').annotate(total_quantity=Sum('quantity')).order_by('-total_quantity')[:20]
+         # Most ordered items and their quantities
+        context['most_ordered_items'] = Order.objects.values('order_detail__item').annotate(total_quantity=Sum('order_detail__quantity')).order_by('-total_quantity')[:20]
 
         # Most reserved tables
-        context['most_reserved_tables'] = self.model.objects.values('table_number').annotate(total_reservations=Count('id')).order_by('-total_reservations')[:20]
+        context['most_reserved_tables'] = Order.objects.values('table_number').annotate(total_reservations=Count('id')).order_by('-total_reservations')[:20]
 
-        # Peak business hours
-        context['peak_hours'] = self.model.objects.filter(order_date__date=timezone.now().date()).values('order_date__hour').annotate(total_orders=Count('id')).order_by('-total_orders')[:20]
+       # Peak business hours
+        context['peak_hours'] = Order.objects.filter(order_date__date=timezone.now().date()).values('order_date__hour').annotate(total_orders=Count('id')).order_by('-total_orders')[:20]
 
         # Total sales
-        context['total_sales'] = self.model.objects.aggregate(total_sales=Sum('item__price'))
+        context['total_sales'] = Order.objects.aggregate(total_sales=Sum('order_detail__item__price'))
+        
+        # Monthly sales
+        context['monthly_sales'] = Order.objects.filter(order_date__month=timezone.now().month).aggregate(total_sales=Sum('order_detail__item__price'))
+
+        # Yearly sales
+        context['yearly_sales'] = Order.objects.filter(order_date__year=timezone.now().year).aggregate(total_sales=Sum('order_detail__item__price'))
+
+        # Top-selling items (filtered by date)
+        context['top_selling_items'] = Order.objects.filter(order_date__date=timezone.now().date()).values('order_detail__item').annotate(total_quantity=Sum('order_detail__quantity')).order_by('-total_quantity')[:20]
+
+        # Sales by category
+        context['sales_by_category'] = Order.objects.values('order_detail__item__category').annotate(total_sales=Sum('order_detail__item__price')).order_by('-total_sales')
+
+        # Sales based on customer (phone)
+        context['sales_by_customer'] = Order.objects.values('phone_number').annotate(total_sales=Sum('order_detail__item__price')).order_by('-total_sales')
+
+        # Sales based on time of day
+        context['sales_by_time_of_day'] = Order.objects.values('order_date__hour').annotate(total_sales=Sum('order_detail__item__price')).order_by('order_date__hour')
+
+        # Order status report (daily)
+        context['order_status_report'] = Order.objects.filter(order_date__date=timezone.now().date()).values('status').annotate(total_orders=Count('id')).order_by('status')
+
+        # Daily sales
+        context['daily_sales'] = Order.objects.filter(order_date__date=timezone.now().date()).aggregate(total_sales=Sum('order_detail__item__price'))
+
+        # Sales by employee report
+        context['sales_by_employee_report'] = Order.objects.values('staff_id__username').annotate(total_sales=Sum('order_detail__item__price')).order_by('-total_sales')
+
+        # Customer order history report
+        context['customer_order_history_report'] = Order.objects.filter(phone_number=self.request.user.phone_number).order_by('-order_date')
 
         return context
     def get(self, request, *args, **kwargs):
@@ -205,21 +235,78 @@ class StatisticsView(TemplateView):
                 writer.writerow([item['item__name'], item['total_quantity']])
 
             writer.writerow([]) # Add an empty row for separation
-
             writer.writerow(['Table Number', 'Total Reservations'])
             for table in self.get_context_data()['most_reserved_tables']:
                 writer.writerow([table['table_number'], table['total_reservations']])
 
             writer.writerow([])  
-
             writer.writerow(['Order Hour', 'Total Orders'])
             for hour in self.get_context_data()['peak_hours']:
                 writer.writerow([hour['order_date__hour'], hour['total_orders']])
 
             writer.writerow([])  
-
             writer.writerow(['Total Sales'])
             writer.writerow([self.get_context_data()['total_sales']['total_sales']])
+
+            writer.writerow([])
+            writer.writerow(['Monthly Sales'])
+            writer.writerow(['Month', 'Total Sales'])
+            for month in monthly_sales:
+                writer.writerow([calendar.month_name[month['month']], month['total_sales']])
+
+            writer.writerow([])  
+            writer.writerow(['Yearly Sales'])
+            writer.writerow(['Year', 'Total Sales'])
+            for year in yearly_sales:
+                writer.writerow([year['year'], year['total_sales']])
+
+            writer.writerow([])  
+            writer.writerow(['Top Selling Items'])
+            writer.writerow(['Item Name', 'Total Quantity'])
+            for item in top_selling_items:
+                writer.writerow([item['item__name'], item['total_quantity']])
+
+            writer.writerow([]) 
+            writer.writerow(['Sales by Category'])
+            writer.writerow(['Category', 'Total Sales'])
+            for category in sales_by_category:
+                writer.writerow([category['item__category__name'], category['total_sales']])
+
+            writer.writerow([]) 
+            writer.writerow(['Sales by Customer'])
+            writer.writerow(['Customer', 'Total Sales'])
+            for customer in sales_by_customer:
+                writer.writerow([customer['customer__name'], customer['total_sales']])
+
+            writer.writerow([])  
+            writer.writerow(['Sales by Time of Day'])
+            writer.writerow(['Hour', 'Total Sales'])
+            for hour in sales_by_time_of_day:
+                writer.writerow([hour['hour'], hour['total_sales']])
+
+            writer.writerow([])  
+            writer.writerow(['Order Status Report'])
+            writer.writerow(['Status', 'Total Orders'])
+            for status in order_status_report:
+                writer.writerow([status['status'], status['total_orders']])
+
+            writer.writerow([])  
+            writer.writerow(['Daily Sales'])
+            writer.writerow(['Date', 'Total Sales'])
+            for day in daily_sales:
+                writer.writerow([day['date'], day['total_sales']])
+
+            writer.writerow([])
+            writer.writerow(['Sales by Employee Report'])
+            writer.writerow(['Employee', 'Total Sales'])
+            for employee in sales_by_employee_report:
+                writer.writerow([employee['employee__name'], employee['total_sales']])
+            
+             writer.writerow([])
+            writer.writerow(['Customer Order History Report'])
+            writer.writerow(['Customer', 'Total Orders'])
+            for customer in customer_order_history_report:
+                writer.writerow([customer['customer__name'], customer['total_orders']])
 
             return response
         else:
