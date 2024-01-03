@@ -204,6 +204,10 @@ class StatisticsView(TemplateView):
 
         # Sales by category
         context['sales_by_category'] = Order.objects.values('order_detail__item__category').annotate(total_sales=Sum('order_detail__item__price')).order_by('-total_sales')
+
+        # Sales based on customer (phone)
+        context['sales_by_customer'] = Order.objects.values('phone_number').annotate(total_sales=Sum('order_detail__item__price')).order_by('-total_sales')
+
         return context
     def get(self, request, *args, **kwargs):
         if request.user.is_staff:
