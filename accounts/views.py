@@ -9,7 +9,7 @@ from django.contrib.auth import login,authenticate,logout
 from django.views.generic import TemplateView
 from django.db.models import Count, Sum
 from django.utils import timezone
-from orders.models import OrderItem, Order
+from orders.models import Order
 import csv
 from django.http import HttpResponse
 # Create your views here.
@@ -177,8 +177,7 @@ class StaffProfileUpdateView(LoginRequiredMixin,View):
             return render(request, self.template_name, {'form': form})  
 class StatisticsView(TemplateView):
     template_name = 'statistics.html' # Here, you can enter the template name you want to show the statestics
-    model = OrderItem
-    mode_1= Order
+    model = Order
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         
@@ -186,10 +185,10 @@ class StatisticsView(TemplateView):
         context['most_ordered_items'] = self.model.objects.values('item').annotate(total_quantity=Sum('quantity')).order_by('-total_quantity')[:20]
 
         # Most reserved tables
-        context['most_reserved_tables'] = self.mode_1.objects.values('table_number').annotate(total_reservations=Count('id')).order_by('-total_reservations')[:20]
+        context['most_reserved_tables'] = self.model.objects.values('table_number').annotate(total_reservations=Count('id')).order_by('-total_reservations')[:20]
 
         # Peak business hours
-        context['peak_hours'] = self.mode_1.objects.filter(order_date__date=timezone.now().date()).values('order_date__hour').annotate(total_orders=Count('id')).order_by('-total_orders')[:20]
+        context['peak_hours'] = self.model.objects.filter(order_date__date=timezone.now().date()).values('order_date__hour').annotate(total_orders=Count('id')).order_by('-total_orders')[:20]
 
         # Total sales
         context['total_sales'] = self.model.objects.aggregate(total_sales=Sum('item__price'))
