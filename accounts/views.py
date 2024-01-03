@@ -293,6 +293,13 @@ class StatisticsView(TemplateView):
             for hour in sales_by_time_of_day:
                 writer.writerow([hour['hour'], hour['total_sales']])
 
+            writer.writerow([])  # Add an empty row for separation
+
+            writer.writerow(['Order Status Report'])
+            writer.writerow(['Status', 'Total Orders'])
+            for status in order_status_report:
+                writer.writerow([status['status'], status['total_orders']])
+
             return response
         else:
             return HttpResponse("You are not authorized to download the statistics.", status=403)
