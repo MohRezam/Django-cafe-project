@@ -191,7 +191,7 @@ class StatisticsView(TemplateView):
         context['peak_hours'] = Order.objects.filter(order_date__date=timezone.now().date()).values('order_date__hour').annotate(total_orders=Count('id')).order_by('-total_orders')[:20]
 
         # Total sales
-        context['total_sales'] = self.model.objects.aggregate(total_sales=Sum('item__price'))
+        context['total_sales'] = Order.objects.aggregate(total_sales=Sum('order_detail__item__price'))
 
         return context
     def get(self, request, *args, **kwargs):
