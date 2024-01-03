@@ -1,5 +1,6 @@
 from django import forms
 from .models import User
+from cafe.models import Item
 from cafe.models import Category
 from django.core.exceptions import ValidationError
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
@@ -93,6 +94,21 @@ class AddItemForm(forms.Form):
     )
     form_file = forms.ImageField(label='افزودن عکس آیتم')
 
+class RemoveItemForm(forms.Form):
+    def __init__(self, *args, **kwargs):
+        super(RemoveItemForm, self).__init__(*args, **kwargs)
+        self.fields['item_id'].label = 'شناسه محصول'
+
+    item_id = forms.IntegerField(label='شناسه محصول')
+
+class EditItemStatusForm(forms.Form):
+    def __init__(self, *args, **kwargs):
+        super(EditItemStatusForm, self).__init__(*args, **kwargs)
+        self.fields['item_id'].label = 'شناسه محصول'
+        self.fields['new_status'].label = 'وضعیت جدید'
+
+    item_id = forms.IntegerField(label='شناسه محصول')
+    new_status = forms.BooleanField(label='وضعیت جدید')
 
     
     

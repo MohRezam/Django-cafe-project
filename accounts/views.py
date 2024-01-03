@@ -9,6 +9,8 @@ from .forms import CategoryForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import login,authenticate,logout
 from .forms import AddItemForm
+from .forms import RemoveItemForm
+from .forms import EditItemStatusForm
 # Create your views here.
 
 class StaffRegisterView(View):
@@ -98,7 +100,39 @@ class AddItemView(View):
             return redirect('profile-items.html')
 
 
-        
+class RemoveItemView(View):
+    def get(self, request):
+        form = RemoveItemForm()
+        return render(request, 'remove_item.html', {'form': form})
+
+    def post(self, request):
+        form = RemoveItemForm(request.POST)
+        if form.is_valid():
+            item_id = form.cleaned_data['item_id']
+            item = Item.objects.get(id=item_id)
+            item.delete()
+            messages.success(request, "محصول با موفقیت حذف شد") 
+            return redirect('remove_item_url')  # Redirect to the same page to display the form again
+        return render(request, 'remove_item.html', {'form': form})
+
+
+class EditItemStatusView(View):
+    def get(self, request):
+        form = EditItemStatusForm()
+        return render(request, 'edit_item_status.html', {'form': form})
+
+    def post(self, request):
+        form = EditItemStatusForm(request.POST)
+        if form.is_valid():
+            item_id = form.cleaned_data['item_id']
+            new_status = form.cleaned_data['new_status']
+            item = Item.objects.get(id=item_id)
+            item.item_status = new_status
+            item.save()
+            messages.success(request, "وضعیت محصول با موفقیت ویرایش شد") 
+            return redirect('edit_item_status_url')  # Redirect to the same page to display the form again
+        return render(request, 'edit_item_status.html', {'form': form})
+
 class StffProfileView(LoginRequiredMixin,View):
      def get(slef,request):
           return render(request,'accounts/profile.html')
