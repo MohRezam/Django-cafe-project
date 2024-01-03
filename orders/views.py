@@ -6,7 +6,7 @@ from django.contrib import messages
 from cafe.models import Item
 import json
 from cafe.views import generate_random_id
-from.models import Order
+from.models import Order , Discount
 # from .models import Checkouts , Discount
 
 # Create your views here.
@@ -27,14 +27,19 @@ class CheckoutView(View):
             order_instance = form.cleaned_data
             session_data = request.session.get("order", {})
             order_dict = session_data.get("order", {})
+            discount_data = request.session.get('discount', {})
+            discount_price_reduction = discount_data.get('price_reduction', 0)
+            original_price=0 # it should be calculate
+            final_price = original_price - discount_price_reduction
             Order.objects.create(
-                    description="Your description here",
-                    table_number=order_instance["table_number"],
-                    order_detail=order_dict.get("item", []), 
-                    customer_name=order_instance["Name"],
-                    phone_number=order_instance["phone_number"],  
-                    discount_code=order_instance["discount_code"], 
-                    order_id=order_dict.get("id")
+                description="Your description here",
+                table_number=order_instance["table_number"],
+                order_detail=order_dict.get("item", []),
+                customer_name=order_instance["Name"],
+                phone_number=order_instance["phone_number"],
+                discount_code=order_instance["discount_code"],
+                order_id=order_dict.get("id"),
+                final_price=final_price  
     )
             # Redirect to a success page or any other desired page
             return redirect('cafe:home')
@@ -42,13 +47,27 @@ class CheckoutView(View):
             # Form data is invalid, render the form with errors
             return render(request, self.template_name, {'form': form})
 
-    def put(self, request, *args, **kwargs):
-        # Implement PUT logic if needed
-        pass
+# def apply_discount(request):
+#     if request.method == 'POST':
+#         form = DiscountCodeForm(request.POST)
+#         if form.is_valid():
+#             discount_code = form.cleaned_data['discount_code']
+#             try:
+#                 discount = Discount.objects.get(code=discount_code, valid_until__gte=timezone.now())
 
-    def delete(self, request, *args, **kwargs):
-        # Implement DELETE logic if needed
-        pass
+#                 # request.session['discount'] = {
+#                 #     'code': discount.code,
+#                 #     'price_reduction': discount.price_reduction
+#                 # }
+#                 return discount
+#                 messages.success(request, 'Discount applied successfully!')
+#             except Discount.DoesNotExist:
+#                 messages.error(request, 'Invalid discount code or expired.')
+#             return redirect('your_redirect_url')  # Replace with your actual redirect URL
+#     else:
+#         form = DiscountCodeForm()
+
+#     return render(request, 'your_discount_template.html', {'form': form})
     
 
 class ViewCartView(View):
