@@ -1,9 +1,8 @@
 from django import forms
 from .models import User
-from cafe.models import Item
-from cafe.models import Category
 from django.core.exceptions import ValidationError
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
+from cafe.models import Item,Category
 
 
 # admin panel
@@ -58,59 +57,7 @@ class UserLoginForm(forms.Form):
         
 
 
-# admin panel 
-class CategoryForm(forms.Form):
-    name = forms.CharField(
-        label='نام دسته بندی',
-        max_length=100,
-        widget=forms.TextInput(attrs={
-            'class': 'input-name-checkout',
-            'placeholder': 'نام دسته بندی را وارد کنید',
-        })
-    )   
-    def clean_name(self):
-        name = self.cleaned_data['name']
-        if Category.objects.filter(category_name=name).exists():
-            raise forms.ValidationError('این نام دسته بندی قبلاً استفاده شده است.')
-        return name
-
-# admin panel      
-class AddItemForm(forms.Form):
-    name = forms.CharField(label='نام آیتم', max_length=100)
-    fixed_number = forms.DecimalField(label='قیمت آیتم')
-    category = forms.ChoiceField(
-        label='دسته بندی',
-        choices=[
-            ('date-desc', 'دسته بندی مورد نظر را انتخاب کنید'),
-            ('date-asc', 'غذای اصلی'),
-            ('rate', 'صبحانه'),
-            ('views', 'شام'),
-            ('comments', 'عصرانه'),
-        ]
-    )
-    description = forms.CharField(
-        label='توضیحات آیتم',
-        widget=forms.Textarea(attrs={'style': 'height: 80px;'})
-    )
-    form_file = forms.ImageField(label='افزودن عکس آیتم')
-
-class RemoveItemForm(forms.Form):
-    def __init__(self, *args, **kwargs):
-        super(RemoveItemForm, self).__init__(*args, **kwargs)
-        self.fields['item_id'].label = 'شناسه محصول'
-
-    item_id = forms.IntegerField(label='شناسه محصول')
-
-class EditItemStatusForm(forms.Form):
-    def __init__(self, *args, **kwargs):
-        super(EditItemStatusForm, self).__init__(*args, **kwargs)
-        self.fields['item_id'].label = 'شناسه محصول'
-        self.fields['new_status'].label = 'وضعیت جدید'
-
-    item_id = forms.IntegerField(label='شناسه محصول')
-    new_status = forms.BooleanField(label='وضعیت جدید')
-
-    
+# admin panel
 class CategoryForm(forms.ModelForm):
 
     class Meta:
@@ -121,3 +68,22 @@ class CategoryForm(forms.ModelForm):
             'category_name': 'دسته بندی',
             'image': 'تصویر',
         }
+class ItemForm(forms.ModelForm):
+    class Meta:
+        model = Item
+        exclude = ['created_at']
+        fields = ['name', 'price', 'description', 'image', 'category', 'ingredients', 'item_status']
+        labels = {
+            'name': 'نام محصول',
+            'price': 'قیمت',
+            'image': 'تصویر',
+            'description': 'توضیحات',
+            'category': 'دسته بندی',
+            'ingredients': 'محتویات',
+            'item_status': 'وضعیت موجودی',
+        }
+        widgets = {
+            'image': forms.FileInput(attrs={'type': 'file'}),
+        }
+    
+    
