@@ -181,8 +181,8 @@ class StatisticsView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         
-        # Most ordered items and their quantities
-        context['most_ordered_items'] = self.model.objects.values('item').annotate(total_quantity=Sum('quantity')).order_by('-total_quantity')[:20]
+         # Most ordered items and their quantities
+        context['most_ordered_items'] = Order.objects.values('order_detail__item').annotate(total_quantity=Sum('order_detail__quantity')).order_by('-total_quantity')[:20]
 
         # Most reserved tables
         context['most_reserved_tables'] = self.model.objects.values('table_number').annotate(total_reservations=Count('id')).order_by('-total_reservations')[:20]
