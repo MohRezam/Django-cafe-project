@@ -307,6 +307,13 @@ class StatisticsView(TemplateView):
             for day in daily_sales:
                 writer.writerow([day['date'], day['total_sales']])
 
+            writer.writerow([])
+
+            writer.writerow(['Sales by Employee Report'])
+            writer.writerow(['Employee', 'Total Sales'])
+            for employee in sales_by_employee_report:
+                writer.writerow([employee['employee__name'], employee['total_sales']])
+
             return response
         else:
             return HttpResponse("You are not authorized to download the statistics.", status=403)
