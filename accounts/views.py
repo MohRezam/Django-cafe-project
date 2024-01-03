@@ -220,6 +220,9 @@ class StatisticsView(TemplateView):
         # Sales by employee report
         context['sales_by_employee_report'] = Order.objects.values('staff_id__username').annotate(total_sales=Sum('order_detail__item__price')).order_by('-total_sales')
 
+        # Customer order history report
+        context['customer_order_history_report'] = Order.objects.filter(phone_number=self.request.user.phone_number).order_by('-order_date')
+
         return context
     def get(self, request, *args, **kwargs):
         if request.user.is_staff:
