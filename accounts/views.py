@@ -293,12 +293,19 @@ class StatisticsView(TemplateView):
             for hour in sales_by_time_of_day:
                 writer.writerow([hour['hour'], hour['total_sales']])
 
-            writer.writerow([])  # Add an empty row for separation
+            writer.writerow([])  
 
             writer.writerow(['Order Status Report'])
             writer.writerow(['Status', 'Total Orders'])
             for status in order_status_report:
                 writer.writerow([status['status'], status['total_orders']])
+
+            writer.writerow([])  
+
+            writer.writerow(['Daily Sales'])
+            writer.writerow(['Date', 'Total Sales'])
+            for day in daily_sales:
+                writer.writerow([day['date'], day['total_sales']])
 
             return response
         else:
