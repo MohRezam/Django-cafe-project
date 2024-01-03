@@ -279,6 +279,13 @@ class StatisticsView(TemplateView):
             for category in sales_by_category:
                 writer.writerow([category['item__category__name'], category['total_sales']])
 
+            writer.writerow([]) 
+
+            writer.writerow(['Sales by Customer'])
+            writer.writerow(['Customer', 'Total Sales'])
+            for customer in sales_by_customer:
+                writer.writerow([customer['customer__name'], customer['total_sales']])
+
             return response
         else:
             return HttpResponse("You are not authorized to download the statistics.", status=403)
