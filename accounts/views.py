@@ -11,6 +11,12 @@ from django.contrib.auth import login,authenticate,logout
 from .forms import AddItemForm
 from .forms import RemoveItemForm
 from .forms import EditItemStatusForm
+from django.views.generic import TemplateView
+from django.db.models import Count, Sum
+from django.utils import timezone
+from .models import OrderItem, Order
+import csv
+from django.http import HttpResponse
 # Create your views here.
 
 class StaffRegisterView(View):
@@ -212,3 +218,55 @@ class StaffAddCategoryView(LoginRequiredMixin, View):
             return redirect('accounts:staff-categories')
         
         return render(request, self.template_name, {'form': form})
+    
+
+
+class StatisticsView(TemplateView):
+    template_name = 'statistics.html' # Here, you can enter the template name you want to show the statestics
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        
+        # Most ordered items and their quantities
+        context['most_ordered_items'] = OrderItem.objects.values('item').annotate(total_quantity=Sum('quantity')).order_by('-total_quantity')[:20]
+
+        # Most reserved tables
+        context['most_reserved_tables'] = Order.objects.values('table_number').annotate(total_reservations=Count('id')).order_by('-total_reservations')[:20]
+
+        # Peak business hours
+        context['peak_hours'] = Order.objects.filter(order_date__date=timezone.now().date()).values('order_date__hour').annotate(total_orders=Count('id')).order_by('-total_orders')[:20]
+
+        # Total sales
+        context['total_sales'] = OrderItem.objects.aggregate(total_sales=Sum('item__price'))
+
+        return context
+    def get(self, request, *args, **kwargs):
+        if request.user.is_staff:
+            response = HttpResponse(content_type='text/csv')
+            response['Content-Disposition'] = 'attachment; filename="statistics.csv"'
+
+            writer = csv.writer(response)
+            writer.writerow(['Item Name', 'Total Quantity'])
+            for item in self.get_context_data()['most_ordered_items']:
+                writer.writerow([item['item__name'], item['total_quantity']])
+
+            writer.writerow([]) # Add an empty row for separation
+
+            writer.writerow(['Table Number', 'Total Reservations'])
+            for table in self.get_context_data()['most_reserved_tables']:
+                writer.writerow([table['table_number'], table['total_reservations']])
+
+            writer.writerow([])  
+
+            writer.writerow(['Order Hour', 'Total Orders'])
+            for hour in self.get_context_data()['peak_hours']:
+                writer.writerow([hour['order_date__hour'], hour['total_orders']])
+
+            writer.writerow([])  
+
+            writer.writerow(['Total Sales'])
+            writer.writerow([self.get_context_data()['total_sales']['total_sales']])
+
+            return response
+        else:
+            return HttpResponse("You are not authorized to download the statistics.", status=403)
