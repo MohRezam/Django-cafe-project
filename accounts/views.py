@@ -251,6 +251,13 @@ class StatisticsView(TemplateView):
             writer.writerow(['Total Sales'])
             writer.writerow([self.get_context_data()['total_sales']['total_sales']])
 
+            writer.writerow([])
+
+            writer.writerow(['Monthly Sales'])
+            writer.writerow(['Month', 'Total Sales'])
+            for month in monthly_sales:
+                writer.writerow([calendar.month_name[month['month']], month['total_sales']])
+
             return response
         else:
             return HttpResponse("You are not authorized to download the statistics.", status=403)
