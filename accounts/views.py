@@ -211,6 +211,9 @@ class StatisticsView(TemplateView):
         # Sales based on time of day
         context['sales_by_time_of_day'] = Order.objects.values('order_date__hour').annotate(total_sales=Sum('order_detail__item__price')).order_by('order_date__hour')
 
+        # Order status report (daily)
+        context['order_status_report'] = Order.objects.filter(order_date__date=timezone.now().date()).values('status').annotate(total_orders=Count('id')).order_by('status')
+
         return context
     def get(self, request, *args, **kwargs):
         if request.user.is_staff:
