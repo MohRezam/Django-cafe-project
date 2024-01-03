@@ -196,6 +196,9 @@ class StatisticsView(TemplateView):
         # Monthly sales
         context['monthly_sales'] = Order.objects.filter(order_date__month=timezone.now().month).aggregate(total_sales=Sum('order_detail__item__price'))
 
+        # Yearly sales
+        context['yearly_sales'] = Order.objects.filter(order_date__year=timezone.now().year).aggregate(total_sales=Sum('order_detail__item__price'))
+
         return context
     def get(self, request, *args, **kwargs):
         if request.user.is_staff:
