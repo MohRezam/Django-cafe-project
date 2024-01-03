@@ -44,7 +44,6 @@ class CafeMenuView(View):
         if form.is_valid():
             cd = form.cleaned_data
             self.data[cd["iditem"]] = cd['quantity']  
-
             order = {"id": generate_random_id(), "item": self.data}
             response = redirect('orders:cart_page')
             response.set_cookie("cart", f"{self.data}", expires=9)
