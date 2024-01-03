@@ -357,9 +357,10 @@
         <div
           class="navigation-card w-100 d-flex py-3 px-2 align-items-center justify-content-between"
         >
-          <button class="update-cart">بروزرسانی سبد خرید</button>
+        <a href="{% url 'cafe:home' %}"><button class="update-cart"> از سر گیری  سفارش </button>
+        </a>
           <a
-            href="https://demos.mahdisweb.net/fruit/checkout/"
+            href="{% url 'orders:checkout' %}"
             class="checkout-button text-white d-flex align-item-center justify-content-center gap-2"
           >
             ادامه جهت تسویه حساب
