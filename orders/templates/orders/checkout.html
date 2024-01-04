@@ -297,50 +297,28 @@
           <div
             class="group-checkout-item d-flex flex-md-row justify-content-between gap-3 mt-4 flex-column"
           >
-            <div class="checkout-right-section">
-              <div class="delivary-box border-1 rounded-3 py-3 px-3">
-                <h3 class="shipping-title my-3">
-                  جزئیات سفارش خود را وارد کنید
-                </h3>
-
-                <div class="mb-3">
-                  <label for="exampleInputnameandfamily" class="form-label"
-                    >نام و نام خانوادگی</label
-                  >
-                  <input type="text" class="form-control" id="nameandfamily" />
-                </div>
-                <div class="mb-3">
-                  <label for="exampleInputPassword1" class="form-label"
-                    >شماره تلفن</label
-                  >
-                  <input
-                    type="text"
-                    class="form-control"
-                    id="exampleInputphone"
-                  />
-                </div>
-                <div class="mb-3">
-                  <label for="exampleInputPassword1" class="form-label"
-                    >شماره میز</label
-                  >
-                  <select
-                    class="form-select"
-                    aria-label="Default select example"
-                  >
-                    <option selected>شماره میز خود را انتخاب کنید</option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                  </select>
-                </div>
-
-                <h3 class="shipping-title my-3">روش تحویل را انتخاب کنید</h3>
-                <nav>
-                  <div
-                    class="nav nav-tabs d-flex justify-content-center gap-3"
-                    id="nav-tab"
-                    role="tablist"
-                  >
+          <form method="post" action="{% url 'your_checkout_url_name' %}">
+            {% csrf_token %}
+            <div class="mb-3">
+              <label for="nameandfamily" class="form-label">نام و نام خانوادگی</label>
+              <input type="text" class="form-control" id="nameandfamily" name="name" required />
+            </div>
+            <div class="mb-3">
+              <label for="exampleInputphone" class="form-label">شماره تلفن</label>
+              <input type="text" class="form-control" id="exampleInputphone" name="phone_number" required />
+            </div>
+            <div class="mb-3">
+              <label for="tableNumber" class="form-label">شماره میز</label>
+              <select class="form-select" id="tableNumber" name="table_number" aria-label="Default select example" required>
+                <option selected disabled>شماره میز خود را انتخاب کنید</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+              </select>
+            </div>
+          
+            <button type="submit" class="btn btn-primary">ثبت سفارش</button>
+          </form>
                     <button
                       class="nav-link na-link-tab active d-flex flex-column justify-content-center align-items-center"
                       id="nav-home-tab"

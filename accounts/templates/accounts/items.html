@@ -1,0 +1,197 @@
+{% extends "base-staff.html" %} {% load static %} {% block title %} محصولات
+{% endblock title %} {% block content %}
+<main class="contentM">
+  <div class="container">
+    <div class="col-lg-3 col-md-4 col-xs-12 pull-right">
+      <div class="sidebar-wrapper">
+        <div class="box-sidebar">
+          <div class="profile-box">
+            <div class="profile-box-avator">
+              <img
+                src="{% static 'staff/images/svg/user-profile.svg' %}"
+                alt="profile"
+              />
+            </div>
+
+            <div class="profile-box-content">
+              <span class="profile-box-nameuser"
+                >{{request.user.full_name}}</span
+              >
+              <span class="profile-box-phone"
+                >{{request.user.phone_number}}</span
+              >
+            </div>
+          </div>
+          <ul class="profile-menu-items">
+            <li>
+              <a
+                href="{% url 'accounts:staff-profile' %}"
+                class="profile-menu-url active-profile"
+              >
+                <span class="mdi mdi-account-outline"></span> پروفایل
+              </a>
+            </li>
+            <li>
+              <a href="profile-order.html" class="profile-menu-url">
+                <span class="mdi mdi-basket"></span> همه سفارش ها
+                <i class="fa-solid fa-chevron-left"></i>
+              </a>
+              <ul class="profile-menu-items-children">
+                <li><a href="#">سفارش های باز</a></li>
+                <li><a href="#">سفارش های کامل شده</a></li>
+                <li><a href="#">سفارش های لغو شده</a></li>
+              </ul>
+            </li>
+            <li>
+              <a href="{% url 'accounts:staff-items' %}" class="profile-menu-url">
+                <span><i class="fa-solid fa-bowl-food"></i></i></span> آیتم ها
+                <i class="fa-solid fa-chevron-left"></i>
+              </a>
+              <ul class="profile-menu-items-children">
+                <li><a href="{% url 'accounts:staff-add-item' %}">افزودن آیتم ها</a></li>
+              </ul>
+            </li>
+            <li>
+              <a href="{% url 'accounts:staff-categories' %}" class="profile-menu-url">
+                <span><i class="fa fa-list-alt" aria-hidden="true"></i></span>
+                دسته بندی ها
+                <i class="fa-solid fa-chevron-left"></i>
+              </a>
+              <ul class="profile-menu-items-children">
+                <li><a href="{% url 'accounts:staff-add-category' %}">افزودن دسته بندی</a></li>
+              </ul>
+            </li>
+            <li>
+              <a
+                href="{% url 'accounts:staff-personal-info' %}"
+                class="profile-menu-url"
+              >
+                <span class="mdi mdi-account-circle"></span> اطلاعات شخصی
+              </a>
+            </li>
+            <li>
+              <a
+                href="{% url 'accounts:staff-logout' %}"
+                class="profile-menu-url"
+              >
+                <span class="mdi mdi-power"></span> خروج
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+   </div>
+    <div class="col-lg-9 col-md-8 col-xs-12 pull-right">
+      {% if messages %} {% for message in messages %}
+      <div class="alert alert-secondary mt-2" role="alert">{{ message }}</div>
+      {% endfor %}{% endif %}
+      <div class="d-block">
+        <div class="profile-content">
+          <div class="headline-profile">
+            <span>دسته بندی ها</span>
+          </div>
+
+          <div class="profile-stats profile-table">
+            <div class="table-orders">
+              <table class="table">
+                <thead class="thead-light">
+                  <tr>
+                    <th scope="col">تصویر</th>
+                    <th scope="col">نام محصول</th>
+                    <th scope="col">دسته بندی</th>
+                    <th scope="col">تاریخ ایجاد</th>
+                    <th scope="col">موجودیت</th>
+                    <th scope="col">قیمت</th>
+                    <th scope="col">حذف</th>
+                    <th scope="col">ویرایش</th>
+                  </tr>
+                </thead>
+                {% for item in items %}
+                <tbody>
+                  <tr>
+                    <td class="order-code"><img src="{{ item.image.url }}"></td>
+                    <td>{{ item.name }}</td>
+                    <td>{{ item.category }}</td>
+                    <td>{{ item.created_at }}</td>
+                    {% if item.item_status %}
+                    <td>بله</td>
+                    {% else %}
+                    <td>خیر</td>
+                    {% endif %}
+                    <td>{{ item.price }}</td>
+                    <td><a href="{% url 'accounts:staff-delete-item' item.id %}" class="btn-remove-address btn btn-danger text-light">
+                            حذف
+                    </a></td>
+                    <td><a href="{% url 'accounts:staff-update-item' item.id %}" class="btn-remove-address btn btn-secondary text-light">
+                        ویرایش
+                      </a></td>
+                  </tr>
+                </tbody>
+                {% endfor %}
+              </table>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <!--       modal----------------------->
+    <div
+      class="modal fade"
+      id="modalAddress"
+      tabindex="-1"
+      aria-labelledby="modalAddress"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="modalAddress">ویرایش دسته بندی</h5>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="middle-container">
+              <form action="#" class="form-checkout">
+                <div class="form-checkout-headline">افزودن دسته بندی</div>
+                <div class="form-checkout-row">
+                  <label for="name"
+                    >نام دسته بندی
+                    <span class="required-star" style="color: red"
+                      >*</span
+                    ></label
+                  >
+                  <input
+                    type="text"
+                    id="name"
+                    class="input-name-checkout"
+                    placeholder="نام دسته بندی را وارد کنید"
+                  />
+                </div>
+              </form>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+            >
+              بازگشت
+            </button>
+            <button type="button" class="btn btn-primary mr-2">
+              ثبت دسته بندی
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+{% endblock %}

@@ -1,5 +1,4 @@
-{% extends "base-staff.html" %} {% load static %} {% block title %}اطلاعات
-شخصی{% endblock title %} {% block content %}
+{% extends "base-staff.html" %} {% load static %} {% block title %}افزودن دسته بندی{% endblock title %} {% block content %}
 <main class="contentM">
   <div class="container">
     <div class="col-lg-3 col-md-4 col-xs-12 pull-right">
@@ -90,14 +89,14 @@
               class="profile-navbar-btn-back"
               >بازگشت</a
             >
-            <h4 class="edit-personal">ویرایش اطلاعات شخصی</h4>
+            <h4 class="edit-personal">افزودن دسته بندی</h4>
           </div>
         </div>
         <div class="profile-stats">
           <div class="form-legal-row">
             <div class="col-lg-6 col-xs-12 mx-auto">
               <div class="form-legal-col">
-                <form class="form-info-edit" action="" method="post">
+                <form class="form-info-edit" action="" method="post" novalidate>
                   {% csrf_token %} {{ form.as_p }}
                   <button
                     type="submit"
