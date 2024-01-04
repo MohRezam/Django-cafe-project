@@ -155,6 +155,7 @@
               </tr>
             </thead>
             <tbody>
+             {% for order in orders %}
               <tr>
                 <td>1</td>
                 <td class="order-code">57262900</td>
@@ -166,28 +167,7 @@
                 <td class="text-success">پرداخت موفق</td>
                 <td><i class="fa fa-angle-left"></i></td>
               </tr>
-              <tr>
-                <td>2</td>
-                <td class="order-code">57262900</td>
-                <td>28 آذر 1402</td>
-                <td>12:30</td>
-                <td>0</td>
-                <td>اسپرسو</td>
-                <td>43,000 تومان</td>
-                <td class="text-success">پرداخت موفق</td>
-                <td><i class="fa fa-angle-left"></i></td>
-              </tr>
-              <tr>
-                <td>3</td>
-                <td class="order-code">57262900</td>
-                <td>28 آذر 1402</td>
-                <td>12:30</td>
-                <td>0</td>
-                <td>اسپرسو</td>
-                <td>43,000 تومان</td>
-                <td class="text-success">پرداخت موفق</td>
-                <td><i class="fa fa-angle-left"></i></td>
-              </tr>
+              {% endfor %}
             </tbody>
           </table>
 

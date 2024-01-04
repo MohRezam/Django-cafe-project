@@ -71,7 +71,8 @@ class StffLogoutView(LoginRequiredMixin, View):
         
 class StffProfileView(LoginRequiredMixin,View):
      def get(slef,request):
-          return render(request,'accounts/profile.html')
+          order = Order.objects.all()
+          return render(request,'accounts/profile.html',{"orders":order})
      
 
 class StaffProfileInfoView(LoginRequiredMixin, View):
@@ -320,7 +321,7 @@ class StatisticsView(TemplateView):
             for employee in sales_by_employee_report:
                 writer.writerow([employee['employee__name'], employee['total_sales']])
             
-             writer.writerow([])
+            writer.writerow([])
             writer.writerow(['Customer Order History Report'])
             writer.writerow(['Customer', 'Total Orders'])
             for customer in customer_order_history_report:
