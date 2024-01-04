@@ -53,7 +53,6 @@ class StaffLoginView(View):
             user = authenticate(request, username=cd['phone_number'], password=cd['password'])
             if user is not None:
                 login(request, user)
-                messages.success(request, 'you logged in successfully', 'success')
                 return redirect('accounts:staff-profile')
             messages.error(request, 'این شماره تلفن یا رمز عبور درست نمی باشد', 'warning')
         return render(request, self.template_name, {'form': form})
@@ -179,20 +178,18 @@ class StaffProfileUpdateItemView(LoginRequiredMixin,View):
 class StaffProfileAddItemView(LoginRequiredMixin,View):
      form_class = ItemForm
      template_name = "accounts/profile-add-item.html"
-     def get(self,request,id_item) :
-        item = get_object_or_404(Item, id=id_item)
-        form = self.form_class(instance=item)
+     def get(self,request,) :
+        form = self.form_class()
         return render(request, self.template_name, {'form': form})
      
-     def post(self,request,id_item):
-        item = get_object_or_404(Item, id=id_item)
-        form = self.form_class(request.POST, instance=item)
+     def post(self,request):
+        form = self.form_class(request.POST,request.FILES)
         if form.is_valid():
             form.save()
-            messages.success(request, 'آپدیت محصول با موفقیت انجام شد', 'success')
+            messages.success(request, 'آفزودن محصول با موفقیت انجام شد', 'success')
             return redirect('accounts:staff-items')
         else:
-            form = self.form_class(instance=item)
+            form = self.form_class()
             return render(request, self.template_name, {'form': form})  
 class StatisticsView(TemplateView):
     template_name = 'statistics.html' # Here, you can enter the template name you want to show the statestics
@@ -330,3 +327,19 @@ class StatisticsView(TemplateView):
             return response
         else:
             return HttpResponse("You are not authorized to download the statistics.", status=403)
+class StaffProfileOrdersView(LoginRequiredMixin,View):
+    def get(self,request):
+          order = Order.objects.all()
+          return render(request,'accounts/orders.html',{"orders":order})
+class StaffProfileOrderUncompleteView(LoginRequiredMixin,View):
+    def get(self,request):
+          order = Order.objects.filter(order_status=False)
+          return render(request,'accounts/orders-uncomplete.html',{"orders":order})
+class StaffProfileOrdercompleteView(LoginRequiredMixin,View):
+    def get(self,request):
+          order = Order.objects.filter(order_status=True)
+          return render(request,'accounts/orders-complete.html',{"orders":order})
+class StaffProfileOrderDetailView(LoginRequiredMixin,View):
+    def get(self,request,id_order):
+        order = Order.objects.get(id=id_order)
+        return render(request,'accounts/profile-order-details.html',{"order":order})

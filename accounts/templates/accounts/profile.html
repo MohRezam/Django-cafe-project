@@ -32,14 +32,13 @@
               </a>
             </li>
             <li>
-              <a href="profile-order.html" class="profile-menu-url">
+              <a href="{% url 'accounts:staff-orders' %}" class="profile-menu-url">
                 <span class="mdi mdi-basket"></span> همه سفارش ها
                 <i class="fa-solid fa-chevron-left"></i>
               </a>
               <ul class="profile-menu-items-children">
-                <li><a href="#">سفارش های باز</a></li>
-                <li><a href="#">سفارش های کامل شده</a></li>
-                <li><a href="#">سفارش های لغو شده</a></li>
+                <li><a href="{% url 'accounts:staff-orders-complete' %}">سفارش های پرداخت شده</a></li>
+                <li><a href="{% url 'accounts:staff-orders-uncomplete' %}">سفارش های پرداخت نشده</a></li>
               </ul>
             </li>
             <li>
@@ -149,25 +148,33 @@
                 <th scope="col">ساعت ثبت سفارش</th>
                 <th scope="col">مبلغ قابل پرداخت</th>
                 <th scope="col">آیتم</th>
-                <th scope="col">مبلغ کل</th>
                 <th scope="col">عملیات پرداخت</th>
                 <th scope="col">جزئیات</th>
               </tr>
             </thead>
             <tbody>
-             {% for order in orders %}
+             
+              {% for order in orders %}
               <tr>
-                <td>1</td>
-                <td class="order-code">57262900</td>
-                <td>28 آذر 1402</td>
-                <td>12:30</td>
-                <td>0</td>
-                <td>اسپرسو</td>
-                <td>43,000 تومان</td>
-                <td class="text-success">پرداخت موفق</td>
+                <td>{{ forloop.counter }}</td>
+                <td class="order-code">{{ order.order_number }}</td>
+                <td>{{ order.created_at|date:"j F y" }}</td>
+                <td>{{ order.created_at|time:"H:i" }}</td>
+                <td>{{order.order_detail.details_items.0.total_price}}</td>
+                <td>
+                {% for food_item in order.order_detail.food_items %}
+                     <p>{{ forloop.counter }}-{{ food_item.name }}</p>
+                {% endfor %}
+                </td>
+                {% if order.order_status %}
+                <td class="text-success">پرداخت شده</td>
+                {% else %}
+                <td class="text-danger">پرداخت نشده</td>
+                {% endif %}
                 <td><i class="fa fa-angle-left"></i></td>
               </tr>
-              {% endfor %}
+            {% endfor %}
+            
             </tbody>
           </table>
 

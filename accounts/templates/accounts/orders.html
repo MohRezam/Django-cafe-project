@@ -1,0 +1,176 @@
+{% extends "base-staff.html" %} {% load static %} {% block title %} سفارش ها {% endblock title %} {% block content %}
+<main class="contentM">
+  <div class="container">
+    <div class="col-lg-3 col-md-4 col-xs-12 pull-right">
+      <div class="sidebar-wrapper">
+        <div class="box-sidebar">
+          <div class="profile-box">
+            <div class="profile-box-avator">
+              <img
+                src="{% static 'staff/images/svg/user-profile.svg' %}"
+                alt="profile"
+              />
+            </div>
+
+            <div class="profile-box-content">
+              <span class="profile-box-nameuser"
+                >{{request.user.full_name}}</span
+              >
+              <span class="profile-box-phone"
+                >{{request.user.phone_number}}</span
+              >
+            </div>
+          </div>
+          <ul class="profile-menu-items">
+            <li>
+              <a
+                href="{% url 'accounts:staff-profile' %}"
+                class="profile-menu-url active-profile"
+              >
+                <span class="mdi mdi-account-outline"></span> پروفایل
+              </a>
+            </li>
+            <li>
+              <a href="{% url 'accounts:staff-orders' %}" class="profile-menu-url">
+                <span class="mdi mdi-basket"></span> همه سفارش ها
+                <i class="fa-solid fa-chevron-left"></i>
+              </a>
+              <ul class="profile-menu-items-children">
+                <li><a href="{% url 'accounts:staff-orders-complete' %}">سفارش های پرداخت شده</a></li>
+                <li><a href="{% url 'accounts:staff-orders-uncomplete' %}">سفارش های پرداخت نشده</a></li>
+              </ul>
+            </li>
+            <li>
+              <a href="{% url 'accounts:staff-items' %}" class="profile-menu-url">
+                <span><i class="fa-solid fa-bowl-food"></i></i></span> آیتم ها
+                <i class="fa-solid fa-chevron-left"></i>
+              </a>
+              <ul class="profile-menu-items-children">
+                <li><a href="{% url 'accounts:staff-add-item' %}">افزودن آیتم ها</a></li>
+              </ul>
+            </li>
+            <li>
+              <a href="{% url 'accounts:staff-categories' %}" class="profile-menu-url">
+                <span><i class="fa fa-list-alt" aria-hidden="true"></i></span>
+                دسته بندی ها
+                <i class="fa-solid fa-chevron-left"></i>
+              </a>
+              <ul class="profile-menu-items-children">
+                <li><a href="{% url 'accounts:staff-add-category' %}">افزودن دسته بندی</a></li>
+              </ul>
+            </li>
+            <li>
+              <a
+                href="{% url 'accounts:staff-personal-info' %}"
+                class="profile-menu-url"
+              >
+                <span class="mdi mdi-account-circle"></span> اطلاعات شخصی
+              </a>
+            </li>
+            <li>
+              <a
+                href="{% url 'accounts:staff-logout' %}"
+                class="profile-menu-url"
+              >
+                <span class="mdi mdi-power"></span> خروج
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+   </div>
+    <div class="col-lg-9 col-md-8 col-xs-12 pull-left">
+      <div class="headline-profile page-profile-order">
+        <span>همه سفارش ها</span>
+      </div>
+      <div class="profile-stats page-profile-order">
+        <div class="table-orders">
+          <table class="table">
+            <thead class="thead-light">
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">شماره سفارش</th>
+                <th scope="col">تاریخ ثبت سفارش</th>
+                <th scope="col">ساعت ثبت سفارش</th>
+                <th scope="col">مبلغ قابل پرداخت</th>
+                <th scope="col">آیتم</th>
+                <th scope="col">عملیات پرداخت</th>
+                <th scope="col">جزئیات</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for order in orders %}
+              <tr>
+                <td>{{ forloop.counter }}</td>
+                <td class="order-code">{{ order.order_number }}</td>
+                <td>{{ order.created_at|date:"j F y" }}</td>
+                <td>{{ order.created_at|time:"H:i" }}</td>
+                <td>{{order.order_detail.details_items.0.total_price}}</td>
+                <td>
+                  {% for food_item in order.order_detail.food_items %}
+                  <p>{{ forloop.counter }}-{{ food_item.name }}</p>
+                  {% endfor %}
+                </td>
+                {% if order.order_status %}
+                <td class="text-success">پرداخت شده</td>
+                {% else %}
+                <td class="text-danger">پرداخت نشده</td>
+                {% endif %}
+                <td><a href="{% url 'accounts:staff-order-detail' order.id %}"><i class="fa fa-angle-left"></i></a></td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!--        responsive-profile-order------------------------->
+      <div class="page-profile">
+        <div class="page-navigation">
+          <div class="page-navigation-title">سفارش‌های من</div>
+          <a href="#" class="page-navigation-btn-back"
+            >بازگشت <i class="fa fa-angle-left"></i
+          ></a>
+        </div>
+        <div class="profile-orders">
+          <div class="collapse">
+            <div class="profile-orders-item">
+              <div class="profile-orders-header">
+                <a
+                  href="profile-order-2.html"
+                  class="profile-orders-header-details"
+                >
+                  <div class="profile-orders-header-summary">
+                    <div class="profile-orders-header-row">
+                      <span class="profile-orders-header-id">DKC-79356178</span>
+                      <span class="profile-orders-header-state"
+                        >پرداخت شده</span
+                      >
+                    </div>
+                  </div>
+                </a>
+                <hr class="ui-separator" />
+                <div class="profile-orders-header-data">
+                  <div class="profile-info-row">
+                    <div class="profile-info-label">تاریخ ثبت سفارش</div>
+                    <div class="profile-info-value">۷ آذر ۱۳۹۸</div>
+                  </div>
+                  <div class="profile-info-row">
+                    <div class="profile-info-label">مبلغ قابل پرداخت</div>
+                    <div class="profile-info-value">0</div>
+                  </div>
+                  <div class="profile-info-row">
+                    <div class="profile-info-label">مبلغ کل</div>
+                    <div class="profile-info-value">430,000,0</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!--        responsive-profile-order------------------------->
+    </div>
+  </div>
+</main>
+{% endblock %}
