@@ -92,6 +92,8 @@ class User(AbstractBaseUser):
 class TimeStampedModel(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+
     class Meta:
         abstract = True
     def save(self, *args, **kwargs):

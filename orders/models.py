@@ -1,3 +1,4 @@
+import random
 from django.db import models
 from cafe.models import Item
 # from accounts.models import Customer
@@ -20,12 +21,24 @@ class Order(TimeStampedModel):
     table_number= models.IntegerField(verbose_name=" شماره میز ")
     discount_code=models.CharField(verbose_name="کد تخفیف ",max_length=255 , null=True , blank=True)
     final_price= models.CharField(max_length=255)
+    order_status = models.BooleanField(verbose_name="پرداخت شده", default=False)
 
 
     class Meta:
         verbose_name_plural = 'سفارشات'
+
     def __str__(self) -> str:
         return f"{self.description[:20]}..."
+
+    def save(self, *args, **kwargs):
+        if not self.order_number:
+            self.order_number = self.generate_order_number()
+        super().save(*args, **kwargs)
+
+    def generate_order_number(self):
+        return ''.join(random.choices('0123456789', k=10))  
+
+
 
 # class OrderItem(models.Model):
 #     order = models.ForeignKey(Order, on_delete=models.CASCADE)

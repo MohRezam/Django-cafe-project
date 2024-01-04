@@ -71,7 +71,8 @@ class StffLogoutView(LoginRequiredMixin, View):
         
 class StffProfileView(LoginRequiredMixin,View):
      def get(slef,request):
-          return render(request,'accounts/profile.html')
+          order = Order.objects.all()
+          return render(request,'accounts/profile.html',{"orders":order})
      
 
 class StaffProfileInfoView(LoginRequiredMixin, View):
