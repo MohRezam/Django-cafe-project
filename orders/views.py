@@ -12,7 +12,7 @@ from.models import Order , Discount
 # Create your views here.
 
 class CheckoutView(View):
-    template_name = 'checkout.html'  #Replace with the actual template file path
+    template_name = 'orders/checkout.html'  #Replace with the actual template file path
     model=Order    
     def get(self, request, *args, **kwargs):
         # Show the HTML form for GET requests
@@ -32,7 +32,7 @@ class CheckoutView(View):
             original_price=0 # it should be calculate
             final_price = original_price - discount_price_reduction
             Order.objects.create(
-                description="Your description here",
+                description=order_instance["description"],
                 table_number=order_instance["table_number"],
                 order_detail=order_dict.get("item", []),
                 customer_name=order_instance["Name"],

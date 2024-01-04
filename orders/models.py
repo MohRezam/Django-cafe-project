@@ -18,7 +18,8 @@ class Order(TimeStampedModel):
     customer_name= models.CharField(verbose_name="نام مشتری",blank = True , null = True , max_length=255) 
     phone_number = models.CharField(verbose_name="شماره تلفن",blank = True , null = True , max_length=11) 
     table_number= models.IntegerField(verbose_name=" شماره میز ")
-    disacount_code=models.CharField(verbose_name="کد تخفیف ",max_length=255)
+    discount_code=models.CharField(verbose_name="کد تخفیف ",max_length=255 , null=True , blank=True)
+    final_price= models.CharField(max_length=255)
 
 
     class Meta:

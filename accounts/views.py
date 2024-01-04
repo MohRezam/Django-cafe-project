@@ -320,7 +320,7 @@ class StatisticsView(TemplateView):
             for employee in sales_by_employee_report:
                 writer.writerow([employee['employee__name'], employee['total_sales']])
             
-             writer.writerow([])
+            writer.writerow([])
             writer.writerow(['Customer Order History Report'])
             writer.writerow(['Customer', 'Total Orders'])
             for customer in customer_order_history_report:

@@ -4,7 +4,7 @@ from .models import Order
 class OrderForm(forms.ModelForm):
     class Meta:
         model = Order
-        fields = ['name', 'phone_number', 'table_number', 'discount_code']
+        fields = ['customer_name', 'phone_number', 'table_number', 'discount_code']
 
 class DiscountCodeForm(forms.Form):
     discount_code = forms.CharField(max_length=255)
