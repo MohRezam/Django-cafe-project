@@ -447,3 +447,9 @@ class StaffProfileOrderDetailView(LoginRequiredMixin,View):
     def get(self,request,id_order):
         order = Order.objects.get(id=id_order)
         return render(request,'accounts/profile-order-details.html',{"order":order})
+    def get(self,request,id_order):
+        order = Order.objects.get(id=id_order)
+        return render(request,'accounts/profile-order-details.html',{"order":order})
+    def get(self,request,id_order):
+        order = Order.objects.get(id=id_order)
+        return render(request,'accounts/profile-order-details.html',{"order":order})
