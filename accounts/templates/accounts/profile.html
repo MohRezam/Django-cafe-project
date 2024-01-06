@@ -1,134 +1,129 @@
 {% extends "base-staff.html" %} {% load static %} {% block title %} پنل
 کارکنان{% endblock title %} {% block content %}
 <main class="contentM">
-  <div class="container">
-    <div class="col-lg-3 col-md-4 col-xs-12 pull-right">
-      <div class="sidebar-wrapper">
-        <div class="box-sidebar">
-          <div class="profile-box">
-            <div class="profile-box-avator">
-              <img
-                src="{% static 'staff/images/svg/user-profile.svg' %}"
-                alt="profile"
-              />
-            </div>
-
-            <div class="profile-box-content">
-              <span class="profile-box-nameuser"
-                >{{request.user.full_name}}</span
-              >
-              <span class="profile-box-phone"
-                >{{request.user.phone_number}}</span
-              >
-            </div>
-          </div>
-          <ul class="profile-menu-items">
-            <li>
-              <a
-                href="{% url 'accounts:staff-profile' %}"
-                class="profile-menu-url active-profile"
-              >
-                <span class="mdi mdi-account-outline"></span> پروفایل
-              </a>
-            </li>
-            <li>
-              <a href="{% url 'accounts:staff-orders' %}" class="profile-menu-url">
-                <span class="mdi mdi-basket"></span> همه سفارش ها
-                <i class="fa-solid fa-chevron-left"></i>
-              </a>
-              <ul class="profile-menu-items-children">
-                <li><a href="{% url 'accounts:staff-orders-complete' %}">سفارش های پرداخت شده</a></li>
-                <li><a href="{% url 'accounts:staff-orders-uncomplete' %}">سفارش های پرداخت نشده</a></li>
-              </ul>
-            </li>
-            <li>
-              <a href="{% url 'accounts:staff-items' %}" class="profile-menu-url">
-                <span><i class="fa-solid fa-bowl-food"></i></i></span> آیتم ها
-                <i class="fa-solid fa-chevron-left"></i>
-              </a>
-              <ul class="profile-menu-items-children">
-                <li><a href="{% url 'accounts:staff-add-item' %}">افزودن آیتم ها</a></li>
-              </ul>
-            </li>
-            <li>
-              <a href="{% url 'accounts:staff-categories' %}" class="profile-menu-url">
-                <span><i class="fa fa-list-alt" aria-hidden="true"></i></span>
-                دسته بندی ها
-                <i class="fa-solid fa-chevron-left"></i>
-              </a>
-              <ul class="profile-menu-items-children">
-                <li><a href="{% url 'accounts:staff-add-category' %}">افزودن دسته بندی</a></li>
-              </ul>
-            </li>
-            <li>
-              <a
-                href="{% url 'accounts:staff-personal-info' %}"
-                class="profile-menu-url"
-              >
-                <span class="mdi mdi-account-circle"></span> اطلاعات شخصی
-              </a>
-            </li>
-            <li>
-              <a
-                href="{% url 'accounts:staff-logout' %}"
-                class="profile-menu-url"
-              >
-                <span class="mdi mdi-power"></span> خروج
-              </a>
-            </li>
-          </ul>
-        </div>
-      </div>
-   </div>
-    <div class="col-lg-9 col-md-8 col-xs-12 pull-right">
-      <div class="col-lg-12 col-xs-12 pull-right">
+  <div class="container d-flex align-items-center justify-content-center">
+    <div class="col-lg-10 col-md-10 col-xs-12 pull-right">
+      <div class="col-lg-4 col-xs-12 pull-right">
         <div class="headline-profile">
-          <span>اطلاعات شخصی</span>
+          <span>مدیریت سفارش ها</span>
         </div>
         <div class="profile-stats mt-3">
           <div class="profile-stats-row">
             <div
-              class="col-lg-6 col-md-6 col-xs-12 pull-right"
+              class="col-lg-12 col-md-12 col-xs-12 pull-right"
               style="padding: 0"
             >
               <div class="profile-stats-col">
-                <p>
-                  <span> نام و نام خانوادگی :</span>{{request.user.full_name}}
-                </p>
+                <p><span> سفارشات امروز :</span>352 سفارش</p>
+              </div>
+            </div>
+
+            <div
+              class="col-lg-12 col-md-12 col-xs-12 pull-right"
+              style="padding: 0"
+            >
+              <div class="profile-stats-col">
+                <p><span>سفارشات پرداخت شده :</span>150 سفارش</p>
               </div>
             </div>
             <div
-              class="col-lg-6 col-md-6 col-xs-12 pull-right"
+              class="col-lg-12 col-md-12 col-xs-12 pull-right"
               style="padding: 0"
             >
               <div class="profile-stats-col">
-                <p><span>پست الکترونیک :</span>{{request.user.email}}</p>
+                <p><span>سفارشات پرداخت نشده :</span>100 سفارش</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 col-xs-12 pull-right">
+        <div class="headline-profile">
+          <span>مدیریت فروش</span>
+        </div>
+        <div class="profile-stats mt-3">
+          <div class="profile-stats-row">
+            <div
+              class="col-lg-12 col-md-12 col-xs-12 pull-right"
+              style="padding: 0"
+            >
+              <div class="profile-stats-col">
+                <p><span>فروش امروز :</span>360,000 تومان</p>
+              </div>
+            </div>
+
+            <div
+              class="col-lg-12 col-md-12 col-xs-12 pull-right"
+              style="padding: 0"
+            >
+              <div class="profile-stats-col">
+                <p><span> فروش ماهانه :</span>4,555,325 تومان</p>
               </div>
             </div>
             <div
-              class="col-lg-6 col-md-6 col-xs-12 pull-right"
+              class="col-lg-12 col-md-12 col-xs-12 pull-right"
               style="padding: 0"
             >
               <div class="profile-stats-col">
-                <p>
-                  <span>شماره تلفن همراه :</span>{{request.user.phone_number}}
-                </p>
+                <p><span>فروش سالانه :</span>429,435,767 تومان</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 col-xs-12 pull-right">
+        <div class="headline-profile">
+          <span>پرفروش ترین محصولات</span>
+        </div>
+        <div class="profile-stats mt-3">
+          <div class="profile-stats-row">
+            <div
+              class="col-lg-12 col-md-12 col-xs-12 pull-right"
+              style="padding: 0"
+            >
+              <div class="profile-stats-col">
+                <div>
+                  <div class="img-bo-product">
+                    <img src="{% static 'images/اسپرینگ-رول-300x300.png' %}" />
+                  </div>
+                  <div class="box-detail">
+                    <p>غذای اسپرینگ رولت</p>
+                    <span>250,000 تومان</span>
+                  </div>
+                </div>
               </div>
             </div>
             <div
-              class="col-lg-6 col-md-6 col-xs-12 pull-right"
+              class="col-lg-12 col-md-12 col-xs-12 pull-right"
               style="padding: 0"
             >
               <div class="profile-stats-col">
-                <p><span>کد ملی :</span>{{request.user.national_id}}</p>
+                <div>
+                  <div class="img-bo-product">
+                    <img src="{% static 'images/اسپرینگ-رول-300x300.png' %}" />
+                  </div>
+                  <div class="box-detail">
+                    <p>غذای اسپرینگ رولت</p>
+                    <span>250,000 تومان</span>
+                  </div>
+                </div>
               </div>
             </div>
-            <div class="profile-stats-action">
-              <a
-                href="{% url 'accounts:staff-profile-info' request.user.id %}"
-                class="link-spoiler-edit"
-                ><i class="fa fa-pencil"></i>ویرایش اطلاعات شخصی</a
-              >
+            <div
+              class="col-lg-12 col-md-12 col-xs-12 pull-right"
+              style="padding: 0"
+            >
+              <div class="profile-stats-col">
+                <div>
+                  <div class="img-bo-product">
+                    <img src="{% static 'images/اسپرینگ-رول-300x300.png' %}" />
+                  </div>
+                  <div class="box-detail">
+                    <p>غذای اسپرینگ رولت</p>
+                    <span>250,000 تومان</span>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -153,18 +148,17 @@
               </tr>
             </thead>
             <tbody>
-             
               {% for order in orders %}
               <tr>
                 <td>{{ forloop.counter }}</td>
-                <td class="order-code">{{ order.order_number }}</td>
+                <td class="order-code">{{ order.order_id }}</td>
                 <td>{{ order.created_at|date:"j F y" }}</td>
                 <td>{{ order.created_at|time:"H:i" }}</td>
                 <td>{{order.order_detail.details_items.0.total_price}}</td>
                 <td>
-                {% for food_item in order.order_detail.food_items %}
-                     <p>{{ forloop.counter }}-{{ food_item.name }}</p>
-                {% endfor %}
+                  {% for food_item in order.order_detail.food_items %}
+                  <p>{{ forloop.counter }}-{{ food_item.name }}</p>
+                  {% endfor %}
                 </td>
                 {% if order.order_status %}
                 <td class="text-success">پرداخت شده</td>
@@ -173,12 +167,15 @@
                 {% endif %}
                 <td><i class="fa fa-angle-left"></i></td>
               </tr>
-            {% endfor %}
-            
+              {% endfor %}
             </tbody>
           </table>
 
-          <a href="#" class="table-orders-show-more">مشاهده لیست سفارش‌ها</a>
+          <a
+            href="{% url 'accounts:staff-orders' %}"
+            class="table-orders-show-more"
+            >مشاهده لیست سفارش‌ها</a
+          >
         </div>
       </div>
       <div class="page-profile headline-profile-favorites">

@@ -102,7 +102,7 @@
               {% for order in orders %}
               <tr>
                 <td>{{ forloop.counter }}</td>
-                <td class="order-code">{{ order.order_number }}</td>
+                <td class="order-code">{{ order.order_id }}</td>
                 <td>{{ order.created_at|date:"j F y" }}</td>
                 <td>{{ order.created_at|time:"H:i" }}</td>
                 <td>{{order.order_detail.details_items.0.total_price}}</td>

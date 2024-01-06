@@ -17,7 +17,7 @@ class Order(TimeStampedModel):
     staff_id= models.ForeignKey(User , on_delete=models.CASCADE)
     order_detail= models.JSONField(default=dict) #save like dictionary
     order_id= models.CharField(max_length=255,null=True)
-    customer_name= models.CharField(verbose_name="نام مشتری",blank = True , null = True , max_length=255) 
+    customer_name = models.CharField(verbose_name="نام مشتری",blank = True , null = True , max_length=255) 
     phone_number = models.CharField(verbose_name="شماره تلفن",blank = True , null = True , max_length=11) 
     table_number= models.IntegerField(verbose_name=" شماره میز ",null=True)
     discount_code=models.CharField(verbose_name="کد تخفیف ",max_length=255 , null=True , blank=True)
@@ -29,14 +29,7 @@ class Order(TimeStampedModel):
 
     def __str__(self) -> str:
         return f"{self.description[:20]}..."
-
-    def save(self, *args, **kwargs):
-        if not self.order_number:
-            self.order_number = self.generate_order_number()
-        super().save(*args, **kwargs)
-
-    def generate_order_number(self):
-        return ''.join(random.choices('0123456789', k=10))  
+  
 
 
 

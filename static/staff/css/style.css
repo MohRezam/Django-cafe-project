@@ -110,7 +110,7 @@ header {
   width: 100%;
   height: auto;
   float: left;
-  position: relative;
+  position: fixed;
 }
 
 .header-main-page.fixed {
@@ -123,6 +123,18 @@ main.contentM {
   position: relative;
   margin-top: 60px;
   display: inline-block;
+  margin-top: 100px;
+}
+.headline-profile::before {
+  content: "";
+  position: relative;
+  top: 0;
+  right: 0;
+  width: 28px;
+  height: 28px;
+  border: 6px solid #e2efef;
+  border-radius: 50%;
+  background-color: #57cfb1;
 }
 
 .container {
@@ -173,10 +185,72 @@ main.contentM {
 }
 
 .header-right .logo {
-  margin-top: 0;
+  margin-top: 10px;
   margin-bottom: 10px;
   text-align: center;
-  float: right;
+}
+.menu-uniq {
+  list-style: none;
+  padding: 0;
+  margin-bottom: 0;
+}
+
+.menu-uniq li {
+  display: inline-block;
+  position: relative;
+}
+
+.menu-uniq li a {
+  text-decoration: none;
+  color: #333;
+  padding: 8px 20px;
+  display: block;
+  font-size: 17px;
+}
+
+.menu-uniq .submenu-uniq {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: -30px;
+  opacity: 0;
+  visibility: hidden;
+  background-color: #fff;
+  min-width: 200px;
+  z-index: 1;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+  border: 1px solid #dddd;
+  border-radius: 8px;
+}
+.menu-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.menu-uniq li:hover .submenu-uniq {
+  display: block;
+  opacity: 1;
+  visibility: visible;
+}
+
+.menu-uniq .submenu-uniq li {
+  display: block;
+}
+
+.menu-uniq .submenu-uniq li a {
+  color: #333;
+  padding: 10px 10px;
+  display: block;
+  transition: background-color 0.3s ease;
+  font-size: 14px;
+  text-align: center;
+}
+.menu-uniq .submenu-uniq li:nth-last-child(odd) {
+  border-top: 1px solid #ddd;
+}
+.menu-uniq .submenu-uniq li a:hover {
+  background-color: #e5e5e5;
 }
 
 .header-right .logo img {
@@ -350,7 +424,7 @@ main.contentM {
 .header-left {
   width: 100%;
   height: auto;
-  margin-top: 20px;
+  margin-top: 10px;
   margin-bottom: 10px;
 }
 
@@ -383,8 +457,8 @@ main.contentM {
   padding: 0;
   border-radius: 8px;
   position: absolute;
-  left: 0;
-  top: 40px;
+  left: 20px;
+  top: 70px;
   text-align: right;
   background: #fff;
   z-index: 999;
@@ -409,20 +483,6 @@ main.contentM {
   transition: 0.2s;
   float: right;
   padding-top: 10px;
-}
-
-.dropdown-menu-login .header-profile-dropdown-account:hover {
-  transition: 0.2s;
-  background-color: #eeeeee;
-}
-
-.dropdown-menu-login
-  .header-profile-dropdown-account
-  .header-profile-dropdown-user {
-  align-items: center;
-  padding: 0 12px;
-  position: relative;
-  z-index: 1;
 }
 
 .dropdown-menu-login
@@ -465,6 +525,7 @@ main.contentM {
   display: block;
   color: #666666;
   font-size: 14px;
+  margin-bottom: 0;
 }
 
 .dropdown-menu-login
@@ -992,10 +1053,6 @@ td.order-code img {
 .header-cart-info-footer > div {
   float: left;
   width: 50%;
-}
-
-.responsive-header-left {
-  display: none;
 }
 
 /*Start menu----------------*/
@@ -4702,7 +4759,11 @@ input[type="number"] {
   transform: rotate(45deg);
   background: #f05662;
 }
-
+span.mdi.mdi-account {
+  border: 1px solid #797979;
+  border-radius: 50px;
+  padding: 0 10px;
+}
 .toggle-box-active > ul > li.has-sub.open > a::after {
   transform: rotate(45deg);
   background: #f05662;
@@ -6272,12 +6333,41 @@ ul.profile-menu-items li a.profile-menu-url span {
 .headline-profile {
   width: 100%;
   height: auto;
-  float: right;
   margin-top: 0;
-  display: block;
+  display: flex;
   font-size: 20px;
   color: #858585;
   padding: 10px 0;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.profile-stats-col p {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  gap: 10px;
+}
+.profile-stats-col div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 15px;
+}
+.box-detail {
+  display: flex;
+  flex-direction: column;
+  width: 70%;
+  align-items: flex-start !important;
+}
+.img-bo-product {
+  width: 30%;
+  justify-content: center !important;
+  flex-direction: row;
+}
+.img-bo-product img {
+  border-radius: 50%;
+  width: 60px;
 }
 
 .headline-profile i {
@@ -12403,6 +12493,43 @@ ul.faq-list li .footer em {
   width: 100%;
   float: right;
 }
+.responsive-header-left .btn-login-responsive {
+  background: #fff;
+  color: #616161;
+  outline: none;
+  cursor: pointer;
+  height: 40px;
+  font-size: 30px;
+  float: left;
+  padding-left: 50px;
+}
+
+.responsive-header-left .btn-login-responsive .cart-count {
+  font-size: 11px;
+  line-height: 17px;
+  color: #fff;
+  height: 20px;
+  width: 20px;
+  background-color: #ef394e;
+  text-align: center;
+  vertical-align: middle;
+  border-radius: 6px;
+  font-weight: 900;
+  border: 2px solid #fff;
+  position: absolute;
+  bottom: 5px;
+  left: 80px;
+}
+
+.responsive-header-left .btn-login-responsive a {
+  color: #424750;
+}
+
+.responsive-header-left .btn-login-responsive:hover .dropdown-menu-login {
+  opacity: 1;
+  visibility: visible;
+  transition: all 0.1s ease-in;
+}
 
 /*contact-us-------------------------------*/
 /*responsive---------------------*/
@@ -12792,43 +12919,6 @@ ul.faq-list li .footer em {
     font-size: 35px;
     padding-left: 0;
     top: 48px;
-  }
-
-  .responsive-header-left .btn-login-responsive {
-    background: #fff;
-    color: #616161;
-    outline: none;
-    cursor: pointer;
-    height: 40px;
-    font-size: 30px;
-    float: left;
-  }
-
-  .responsive-header-left .btn-login-responsive .cart-count {
-    font-size: 11px;
-    line-height: 17px;
-    color: #fff;
-    height: 20px;
-    width: 20px;
-    background-color: #ef394e;
-    text-align: center;
-    vertical-align: middle;
-    border-radius: 6px;
-    font-weight: 900;
-    border: 2px solid #fff;
-    position: absolute;
-    bottom: -5px;
-    right: -10px;
-  }
-
-  .responsive-header-left .btn-login-responsive a {
-    color: #424750;
-  }
-
-  .responsive-header-left .btn-login-responsive:hover .dropdown-menu-login {
-    opacity: 1;
-    visibility: visible;
-    transition: all 0.1s ease-in;
   }
 
   .responsive-header-left
