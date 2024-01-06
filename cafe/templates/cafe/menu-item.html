@@ -59,7 +59,7 @@
               <div class="offcanvas-body">
                 <ul class="list-unstyled pt-2 px-1">
                   <li class="py-2 border-top border-bottom">
-                    <a class="down-item text-dark" href="#">درباره ما</a>
+                    <a class="down-item text-dark" href="{% url "cafe:about" %}">درباره ما</a>
                   </li>
                   <li class="py-2 border-top border-bottom">
                     <a class="down-item text-dark" href="#">سوالات متداول</a>
@@ -68,7 +68,7 @@
                     <a class="down-item text-dark" href="#">قوانین و مقررات</a>
                   </li>
                   <li class="py-2 border-top border-bottom">
-                    <a class="down-item text-dark" href="#">تماس با ما</a>
+                    <a class="down-item text-dark" href="{% url "cafe:contact" %}">تماس با ما</a>
                   </li>
                 </ul>
               </div>
@@ -233,24 +233,26 @@
             <li><a href="#category-5">پیتزا</a></li>
             <li><a href="#category-6">برگر</a></li>
             <li><a href="#category-7">نوشیدنی</a></li>
+  
           </ul>
-
-          
-           <nav class="navbar bg-body-tertiary col-md-3"> {% comment %} added this navbar for search {% endcomment %}
-            <div class="container-fluid">
+            <div class="container-fluid">     {% comment %} added this navbar for search {% endcomment %}
               <form class="d-flex" role="search">
                 {{search_form.search}}
                 <button class="btn btn-outline-success" type="submit">Search</button>
               </form>
             </div>
-          </nav>
-
-
+           
         </nav>
+        {% if messages %}
+        {% for msg in messages %}
+        <p class="alert alert-{{msg.tags}} col-md-6">{{msg}}</p>
+        {% endfor %}
+        {% endif %}
+  
         <div class="main-item-section">
           <div id="category-1" class="food-main-group my-5">
             <h3 class="food-tab-title">
-              <span>محبوب ترین</span>
+              <span id="category-3">غذای اصلی </span>
             </h3>
             <div class="food-content">
               <div class="d-grid grid-card-food">
@@ -413,8 +415,7 @@
             class="addres-online border-top border-1 w-75 d-flex align-items-center justify-content-between"
           >
             <p>
-              کرمان بلوار جمهوری اسلامی- کوچه رئوف 1 - برج ماهان - طبقه همکف -
-              واحد 1290
+              {{cafe.address}}
             </p>
             <a
               target="_blank"
