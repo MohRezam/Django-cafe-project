@@ -55,6 +55,47 @@ class CafeMenuView(View):
             
             return HttpResponse("Form is not valid. Check form.errors for details.")
         
+# class CafeMenuView(View):
+#     data = {}
+
+#     def dispatch(self, request, category_name):
+#         category = Category.objects.filter(category_name=category_name).exists()
+#         if not category:
+#             return redirect("cafe:home")
+#         return super().dispatch(request, category_name)
+
+#     def get(self, request, category_name):
+#         cart_form = CartAddForm()
+#         cafe = get_object_or_404(Cafe)
+#         items = Item.objects.filter(category=category_name)
+#         search_form = SearchForm()
+#         if "search" in request.GET:
+#             search_form = SearchForm(request.GET)
+#             if search_form.is_valid():
+#                 cd = search_form.cleaned_data["search"]
+#                 items = Item.objects.filter(Q(name__icontains=cd) | Q(price__icontains=cd), category=category_name)
+#         return render(
+#             request,
+#             "cafe/menu-item.html",
+#             context={"items": items, "cart_form": cart_form, "cafe": cafe, "search_form": search_form},
+#         )
+
+#     def post(self, request, category_name):
+#         form = CartAddForm(request.POST)
+
+#         if form.is_valid():
+#             cd = form.cleaned_data
+#             self.data[cd["iditem"]] = cd['quantity']
+#             order = {"id": generate_random_id(), "item": self.data}
+#             request.session.setdefault("cart", {}).update(self.data)
+#             request.session["order"] = {"order": order, "status": ""}
+#             return redirect('orders:cart_page')
+#         else:
+#             # Print form errors to the console for debugging
+#             print("Form errors:", form.errors)
+
+#             return HttpResponse("Form is not valid. Check form.errors for details.")
+
 import uuid
 
 def generate_random_id():
