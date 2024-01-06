@@ -255,14 +255,16 @@
             <div class="food-content">
               <div class="d-grid grid-card-food">
                 {% for item in items %}
+                {% if item.item_status is True %}
                 <div
                   class="food-card col-lg-6 border-1 d-flex flex-column justify-content-between w-100"
                 >
                   <div class="food-info d-flex justify-content-between gap-1">
                     <div class="food-info-content w-50 pt-2">
                       <h2 class="food-info-title">{{item.name}}</h2>
+                      <hr>
                       <p class="food-info-description">
-                        {{item.description}}
+                        <i>{{item.description}}</i>
                       </p>
                     </div>
                     <div
@@ -311,6 +313,7 @@
                     </div>
                   </div>
                 </div>
+                {% endif %}
                 {% endfor %}
                 
               
