@@ -28,36 +28,6 @@ class UserForm(forms.ModelForm):
         # Additional email validation if necessary
         return email
 
-   
-# admin panel 
-class UserChangeForm(forms.ModelForm):    
-    class Meta:
-        model = User
-        fields = ('email', 'phone_number', 'full_name', 'address', 'national_id')
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['email'].label = 'ایمیل'
-        self.fields['phone_number'].label = 'شماره تلفن'
-        self.fields['full_name'].label = 'نام و نام خانوادگی'
-        self.fields['address'].label = 'آدرس'
-        self.fields['national_id'].label = 'کد ملی'
-        
-        
-
-# template 
-class UserLoginForm(forms.Form):
-    phone_number = forms.CharField(label="شماره موبایل :",max_length=11)
-    password = forms.CharField(label="رمز عبور :",widget=forms.PasswordInput)
-    def clean_phone_number(self):
-        phone_number = self.cleaned_data.get('phone_number')
-        if phone_number and len(phone_number) != 11:
-         raise forms.ValidationError('شماره تلفن باید یازده رقم باشد')
-        return phone_number
-        
-
-
-# admin panel
 class CategoryForm(forms.ModelForm):
 
     class Meta:
@@ -81,6 +51,33 @@ class ItemForm(forms.ModelForm):
             'ingredients': 'محتویات',
             'item_status': 'وضعیت موجودی',
         }
+
+class UserChangeForm(forms.ModelForm):    
+    class Meta:
+        model = User
+        fields = ('email', 'phone_number', 'full_name', 'address', 'national_id')
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['email'].label = 'ایمیل'
+        self.fields['phone_number'].label = 'شماره تلفن'
+        self.fields['full_name'].label = 'نام و نام خانوادگی'
+        self.fields['address'].label = 'آدرس'
+        self.fields['national_id'].label = 'کد ملی'
+class SortOrdersPhone(forms.Form):
+    search = forms.CharField(widget=forms.TextInput(attrs={"class":"form-control", "placeholder":"جست و جوی سفارش ها"}))        
+
+# template 
+class UserLoginForm(forms.Form):
+    phone_number = forms.CharField(label="شماره موبایل :",max_length=11)
+    password = forms.CharField(label="رمز عبور :",widget=forms.PasswordInput)
+    def clean_phone_number(self):
+        phone_number = self.cleaned_data.get('phone_number')
+        if phone_number and len(phone_number) != 11:
+         raise forms.ValidationError('شماره تلفن باید یازده رقم باشد')
+        return phone_number
+        
+
 
     
     

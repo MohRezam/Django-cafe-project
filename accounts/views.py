@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect , get_object_or_404
-from .forms import UserLoginForm,UserForm,UserChangeForm,CategoryForm,ItemForm
+from .forms import UserLoginForm,UserForm,UserChangeForm,CategoryForm,ItemForm,SortOrdersPhone
 from django.views import View
 from cafe.models import Item,Category
 from accounts.models import User
@@ -7,12 +7,11 @@ from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import login,authenticate,logout
 from django.views.generic import TemplateView
-from django.db.models import Count, Sum
+from django.db.models import Count, Sum,Q
 from django.utils import timezone
 from orders.models import Order
 import csv
 from django.http import HttpResponse
-# Create your views here.
 
 class StaffRegisterView(View):
     form_class = UserForm  
@@ -53,7 +52,6 @@ class StaffLoginView(View):
             user = authenticate(request, username=cd['phone_number'], password=cd['password'])
             if user is not None:
                 login(request, user)
-                messages.success(request, 'you logged in successfully', 'success')
                 return redirect('accounts:staff-profile')
             messages.error(request, 'این شماره تلفن یا رمز عبور درست نمی باشد', 'warning')
         return render(request, self.template_name, {'form': form})
@@ -69,10 +67,10 @@ class StffLogoutView(LoginRequiredMixin, View):
 
 
         
-class StffProfileView(LoginRequiredMixin,View):
-     def get(slef,request):
-          order = Order.objects.all()
-          return render(request,'accounts/profile.html',{"orders":order})
+class StffProfileView(LoginRequiredMixin, View):
+    def get(self, request):
+        last_five_orders = Order.objects.order_by('-created_at')[:5]
+        return render(request, 'accounts/profile.html', {"orders": last_five_orders})
      
 
 class StaffProfileInfoView(LoginRequiredMixin, View):
@@ -179,21 +177,106 @@ class StaffProfileUpdateItemView(LoginRequiredMixin,View):
 class StaffProfileAddItemView(LoginRequiredMixin,View):
      form_class = ItemForm
      template_name = "accounts/profile-add-item.html"
-     def get(self,request,id_item) :
-        item = get_object_or_404(Item, id=id_item)
-        form = self.form_class(instance=item)
+     def get(self,request,) :
+        form = self.form_class()
         return render(request, self.template_name, {'form': form})
      
-     def post(self,request,id_item):
-        item = get_object_or_404(Item, id=id_item)
-        form = self.form_class(request.POST, instance=item)
+     def post(self,request):
+        form = self.form_class(request.POST,request.FILES)
         if form.is_valid():
             form.save()
-            messages.success(request, 'آپدیت محصول با موفقیت انجام شد', 'success')
+            messages.success(request, 'آفزودن محصول با موفقیت انجام شد', 'success')
             return redirect('accounts:staff-items')
         else:
-            form = self.form_class(instance=item)
+            form = self.form_class()
             return render(request, self.template_name, {'form': form})  
+
+        if request.user.is_staff:
+            response = HttpResponse(content_type='text/csv')
+            response['Content-Disposition'] = 'attachment; filename="statistics.csv"'
+
+            writer = csv.writer(response)
+            writer.writerow(['Item Name', 'Total Quantity'])
+            for item in self.get_context_data()['most_ordered_items']:
+                writer.writerow([item['item__name'], item['total_quantity']])
+
+            writer.writerow([]) # Add an empty row for separation
+            writer.writerow(['Table Number', 'Total Reservations'])
+            for table in self.get_context_data()['most_reserved_tables']:
+                writer.writerow([table['table_number'], table['total_reservations']])
+
+            writer.writerow([])  
+            writer.writerow(['Order Hour', 'Total Orders'])
+            for hour in self.get_context_data()['peak_hours']:
+                writer.writerow([hour['order_date__hour'], hour['total_orders']])
+
+            writer.writerow([])  
+            writer.writerow(['Total Sales'])
+            writer.writerow([self.get_context_data()['total_sales']['total_sales']])
+
+            writer.writerow([])
+            writer.writerow(['Monthly Sales'])
+            writer.writerow(['Month', 'Total Sales'])
+            for month in monthly_sales:
+                writer.writerow([calendar.month_name[month['month']], month['total_sales']])
+
+            writer.writerow([])  
+            writer.writerow(['Yearly Sales'])
+            writer.writerow(['Year', 'Total Sales'])
+            for year in yearly_sales:
+                writer.writerow([year['year'], year['total_sales']])
+
+            writer.writerow([])  
+            writer.writerow(['Top Selling Items'])
+            writer.writerow(['Item Name', 'Total Quantity'])
+            for item in top_selling_items:
+                writer.writerow([item['item__name'], item['total_quantity']])
+
+            writer.writerow([]) 
+            writer.writerow(['Sales by Category'])
+            writer.writerow(['Category', 'Total Sales'])
+            for category in sales_by_category:
+                writer.writerow([category['item__category__name'], category['total_sales']])
+
+            writer.writerow([]) 
+            writer.writerow(['Sales by Customer'])
+            writer.writerow(['Customer', 'Total Sales'])
+            for customer in sales_by_customer:
+                writer.writerow([customer['customer__name'], customer['total_sales']])
+
+            writer.writerow([])  
+            writer.writerow(['Sales by Time of Day'])
+            writer.writerow(['Hour', 'Total Sales'])
+            for hour in sales_by_time_of_day:
+                writer.writerow([hour['hour'], hour['total_sales']])
+
+            writer.writerow([])  
+            writer.writerow(['Order Status Report'])
+            writer.writerow(['Status', 'Total Orders'])
+            for status in order_status_report:
+                writer.writerow([status['status'], status['total_orders']])
+
+            writer.writerow([])  
+            writer.writerow(['Daily Sales'])
+            writer.writerow(['Date', 'Total Sales'])
+            for day in daily_sales:
+                writer.writerow([day['date'], day['total_sales']])
+
+            writer.writerow([])
+            writer.writerow(['Sales by Employee Report'])
+            writer.writerow(['Employee', 'Total Sales'])
+            for employee in sales_by_employee_report:
+                writer.writerow([employee['employee__name'], employee['total_sales']])
+            
+            writer.writerow([])
+            writer.writerow(['Customer Order History Report'])
+            writer.writerow(['Customer', 'Total Orders'])
+            for customer in customer_order_history_report:
+                writer.writerow([customer['customer__name'], customer['total_orders']])
+
+            return response
+        else:
+            return HttpResponse("You are not authorized to download the statistics.", status=403)
 class StatisticsView(TemplateView):
     template_name = 'statistics.html' # Here, you can enter the template name you want to show the statestics
     model = Order
@@ -330,3 +413,43 @@ class StatisticsView(TemplateView):
             return response
         else:
             return HttpResponse("You are not authorized to download the statistics.", status=403)
+class StaffProfileOrdersView(LoginRequiredMixin, View):
+    form_class = SortOrdersPhone
+    template_name = 'accounts/orders.html'
+
+    def get(self, request):
+        form = self.form_class()
+        order = Order.objects.all()
+        
+        if "search" in request.GET:
+            form = self.form_class(request.GET)
+            if form.is_valid():  
+                cd = form.cleaned_data["search"]
+                order = Order.objects.filter(
+                    Q(customer_name__icontains=cd) |
+                    Q(phone_number__icontains=cd) |
+                    Q(table_number__exact=cd) |
+                    Q(staff_id__exact=cd) |
+                    Q(final_price__icontains=cd)
+                )
+        return render(request, self.template_name, {"orders": order, "form": form})
+
+        
+class StaffProfileOrderUncompleteView(LoginRequiredMixin,View):
+    def get(self,request):
+          order = Order.objects.filter(order_status=False)
+          return render(request,'accounts/orders-uncomplete.html',{"orders":order})
+class StaffProfileOrdercompleteView(LoginRequiredMixin,View):
+    def get(self,request):
+          order = Order.objects.filter(order_status=True)
+          return render(request,'accounts/orders-complete.html',{"orders":order})
+class StaffProfileOrderDetailView(LoginRequiredMixin,View):
+    def get(self,request,id_order):
+        order = Order.objects.get(id=id_order)
+        return render(request,'accounts/profile-order-details.html',{"order":order})
+    def get(self,request,id_order):
+        order = Order.objects.get(id=id_order)
+        return render(request,'accounts/profile-order-details.html',{"order":order})
+    def get(self,request,id_order):
+        order = Order.objects.get(id=id_order)
+        return render(request,'accounts/profile-order-details.html',{"order":order})

@@ -1,5 +1,5 @@
-{% extends "base-staff.html" %} {% load static %} {% block title %}اطلاعات
-شخصی{% endblock title %} {% block content %}
+{% extends "base-staff.html" %} {% load static %} {% block title %} سفارش جزئیات
+{% endblock title %} {% block content %}
 <main class="contentM">
   <div class="container">
     <div class="col-lg-3 col-md-4 col-xs-12 pull-right">
@@ -81,57 +81,101 @@
       </div>
    </div>
     <div class="col-lg-9 col-md-8 col-xs-12 pull-right">
-      <div class="col-lg-12 col-xs-12 pull-right">
-        <div class="headline-profile">
-          <span>اطلاعات شخصی</span>
+      <div class="profile-navbar">
+        <div class="profile-navbar-back-alignment">
+          <a href="#" class="profile-navbar-btn-back">بازگشت</a>
+          <h4>
+            سفارش {{order.order_number}}
+            <span>ثبت شده در تاریخ {{ order.created_at|date:"j F y" }}</span>
+          </h4>
         </div>
-        <div class="profile-stats">
-          <div class="profile-stats-row">
-            <div
-              class="col-lg-6 col-md-6 col-xs-12 pull-right"
-              style="padding: 0"
-            >
-              <div class="profile-stats-col">
-                <p>
-                  <span> نام و نام خانوادگی :</span>{{request.user.full_name}}
-                </p>
-              </div>
-            </div>
-            <div
-              class="col-lg-6 col-md-6 col-xs-12 pull-right"
-              style="padding: 0"
-            >
-              <div class="profile-stats-col">
-                <p><span>پست الکترونیک :</span>{{request.user.email}}</p>
-              </div>
-            </div>
-            <div
-              class="col-lg-6 col-md-6 col-xs-12 pull-right"
-              style="padding: 0"
-            >
-              <div class="profile-stats-col">
-                <p>
-                  <span>شماره تلفن همراه :</span>{{ request.user.phone_number }}
-                </p>
-              </div>
-            </div>
-            <div
-              class="col-lg-6 col-md-6 col-xs-12 pull-right"
-              style="padding: 0"
-            >
-              <div class="profile-stats-col">
-                <p><span>کد ملی :</span>{{ request.user.national_id }}</p>
-              </div>
-            </div>
-
-            <div class="profile-stats-action">
-              <a
-                href="{% url 'accounts:staff-profile-info' request.user.id %}"
-                class="link-spoiler-edit"
-                ><i class="fa fa-pencil"></i>ویرایش اطلاعات شخصی</a
-              >
+        <div class="profile-navbar-invoice">
+          <button class="profile-navbar-btn-invoice">مشاهده فاکتور</button>
+        </div>
+      </div>
+      <div class="profile-stats mt-3">
+        <div class="profile-stats-row">
+          <div
+            class="col-lg-6 col-md-6 col-xs-12 pull-right"
+            style="padding: 0"
+          >
+            <div class="profile-stats-col">
+              <p><span> نام و نام خانوادگی :</span>{{order.customer_name}}</p>
             </div>
           </div>
+          <div
+            class="col-lg-6 col-md-6 col-xs-12 pull-right"
+            style="padding: 0"
+          >
+            <div class="profile-stats-col">
+              <p>
+                <span>شماره تماس تحویل گیرنده: </span>{{order.phone_number}}
+              </p>
+            </div>
+          </div>
+          <div
+            class="col-lg-6 col-md-6 col-xs-12 pull-right"
+            style="padding: 0"
+          >
+            <div class="profile-stats-col">
+              <p>
+                <span>آیتم‌های سفارش:</span>
+                {% for food_item in order.order_detail.food_items %}
+                {{food_item.name }} {% endfor %}
+              </p>
+            </div>
+          </div>
+          <div
+            class="col-lg-6 col-md-6 col-xs-12 pull-right"
+            style="padding: 0"
+          >
+            <div class="profile-stats-col">
+              <p>
+                <span>تعداد آیتم های سفارش:</span>
+                {% for food_item in order.order_detail.food_items %}
+                ({{food_item.quantity }} عدد){% endfor %}
+              </p>
+            </div>
+          </div>
+          <div
+            class="col-lg-6 col-md-6 col-xs-12 pull-right"
+            style="padding: 0"
+          >
+            <div class="profile-stats-col">
+              <p>
+                <span>تعداد آیتم:</span
+                >{{order.order_detail.details_items.0.total_item}} آیتم
+              </p>
+            </div>
+          </div>
+          <div
+            class="col-lg-6 col-md-6 col-xs-12 pull-right"
+            style="padding: 0"
+          >
+            <div class="profile-stats-col">
+              <p>
+                <span>مبلغ قابل پرداخت:</span>
+                {{ order.order_detail.details_items.0.total_price }}
+              </p>
+            </div>
+          </div>
+          <div
+            class="col-lg-6 col-md-6 col-xs-12 pull-right"
+            style="padding: 0"
+          >
+            <div class="profile-stats-col">
+              <p><span>مبلغ کل:</span>۳,۴۲۰,۰۰۰</p>
+            </div>
+          </div>
+          <div
+            class="col-lg-6 col-md-6 col-xs-12 pull-right"
+            style="padding: 0"
+          >
+            <div class="profile-stats-col">
+              <p><span>وضعیت سفارش :</span>تحویل داده شده</p>
+            </div>
+          </div>
+          <!--                    <a href="#" class="link-spoiler-edit"></a>-->
         </div>
       </div>
     </div>
