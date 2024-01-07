@@ -9,6 +9,9 @@ from django.contrib.messages import get_messages
 from .models import User
 from django.test import TestCase
 from .forms import UserLoginForm, UserForm, CategoryForm, ItemForm, UserChangeForm, SortOrdersPhone
+from django.test import SimpleTestCase
+from django.urls import reverse, resolve
+from accounts import views
 #models test
 class UserModelTest(TestCase):
     def setUp(self):
@@ -121,3 +124,90 @@ class TestUserLoginForm(TestCase):
     # Test other scenarios (e.g., edge cases, different data combinations) similarly for comprehensive coverage
 
 # Additional tests for other forms (UserForm, CategoryForm, ItemForm, UserChangeForm, SortOrdersPhone) can be written similarly.
+
+#url test
+
+class TestUrls(SimpleTestCase):
+    def test_staff_register_url_resolves(self):
+        url = reverse('accounts:staff-register')
+        self.assertEqual(resolve(url).func.view_class, views.StaffRegisterView)
+
+    def test_staff_profile_url_resolves(self):
+        url = reverse('accounts:staff-profile')
+        self.assertEqual(resolve(url).func.view_class, views.StffProfileView)
+
+    def test_staff_login_url_resolves(self):
+        url = reverse('accounts:staff-login')
+        self.assertEqual(resolve(url).func.view_class, views.StaffLoginView)
+
+    def test_staff_logout_url_resolves(self):
+        url = reverse('accounts:staff-logout')
+        self.assertEqual(resolve(url).func.view_class, views.StffLogoutView)
+
+    def test_staff_profile_info_url_resolves(self):
+        url = reverse('accounts:staff-profile-info', args=[1])  # Replace 1 with an actual staff user ID for testing
+        self.assertEqual(resolve(url).func.view_class, views.StaffProfileInfoView)
+
+    def test_staff_personal_info_url_resolves(self):
+        url = reverse('accounts:staff-personal-info')
+        self.assertEqual(resolve(url).func.view_class, views.StaffProfilePersonalView)
+
+    # Continue adding similar test methods for the rest of your URLs
+    
+    def test_staff_reports_insights_url_resolves(self):
+        url = reverse('accounts:staff-reports-insights')
+        self.assertEqual(resolve(url).func.view_class, views.StaffReportsInsightsView)
+
+    def test_staff_orders_url_resolves(self):
+        url = reverse('accounts:staff-orders')
+        self.assertEqual(resolve(url).func.view_class, views.StaffProfileOrdersView)
+    def test_staff_profile_categories_url_resolves(self):
+        url = reverse('accounts:staff-categories')
+        self.assertEqual(resolve(url).func.view_class, views.StaffProfileCategoriesView)
+
+    def test_staff_category_delete_url_resolves(self):
+        url = reverse('accounts:staff-category-delete', args=[1])  # Replace 1 with an actual category ID for testing
+        self.assertEqual(resolve(url).func.view_class, views.StaffCategoryDeleteView)
+
+    def test_staff_category_update_url_resolves(self):
+        url = reverse('accounts:staff-category-update', args=[1])  # Replace 1 with an actual category ID for testing
+        self.assertEqual(resolve(url).func.view_class, views.StaffCategoryUpdateView)
+
+    def test_staff_add_category_url_resolves(self):
+        url = reverse('accounts:staff-add-category')
+        self.assertEqual(resolve(url).func.view_class, views.StaffAddCategoryView)
+
+    def test_staff_profile_items_url_resolves(self):
+        url = reverse('accounts:staff-items')
+        self.assertEqual(resolve(url).func.view_class, views.StaffProfileItemsView)
+
+    def test_staff_profile_delete_item_url_resolves(self):
+        url = reverse('accounts:staff-delete-item', args=[1])  # Replace 1 with an actual item ID for testing
+        self.assertEqual(resolve(url).func.view_class, views.StaffProfileDeleteItemView)
+
+    def test_staff_profile_update_item_url_resolves(self):
+        url = reverse('accounts:staff-update-item', args=[1])  # Replace 1 with an actual item ID for testing
+        self.assertEqual(resolve(url).func.view_class, views.StaffProfileUpdateItemView)
+
+    def test_staff_profile_add_item_url_resolves(self):
+        url = reverse('accounts:staff-add-item')
+        self.assertEqual(resolve(url).func.view_class, views.StaffProfileAddItemView)
+
+    def test_staff_order_uncomplete_url_resolves(self):
+        url = reverse('accounts:staff-orders-uncomplete')
+        self.assertEqual(resolve(url).func.view_class, views.StaffProfileOrderUncompleteView)
+
+    def test_staff_order_complete_url_resolves(self):
+        url = reverse('accounts:staff-orders-complete')
+        self.assertEqual(resolve(url).func.view_class, views.StaffProfileOrdercompleteView)
+
+    def test_staff_order_detail_url_resolves(self):
+        url = reverse('accounts:staff-order-detail', args=[1])  # Replace 1 with an actual order ID for testing
+        self.assertEqual(resolve(url).func.view_class, views.StaffProfileOrderDetailView)
+    def test_staff_orders_url_resolves(self):
+        url = reverse('accounts:staff-orders')
+        self.assertEqual(resolve(url).func.view_class, views.StaffProfileOrdersView)
+
+    def test_staff_reports_insights_url_resolves(self):
+        url = reverse('accounts:staff-reports-insights')
+        self.assertEqual(resolve(url).func.view_class, views.StaffReportsInsightsView)
