@@ -18,6 +18,8 @@ from django.contrib.auth.models import Group
 from django.contrib.auth import get_user_model
 from accounts.admin import UserAdmin
 from accounts.forms import UserForm, UserChangeForm
+from django.test import TestCase
+from django.contrib.auth import get_user_model
 #models test
 class UserModelTest(TestCase):
     def setUp(self):
@@ -251,7 +253,43 @@ class TestUserAdmin(TestCase):
             list(fieldsets[1][1]['fields']),
             ['is_active', 'is_admin', 'last_login']
         )  # Ensure permissions fields are included correctly
+#manager tests
+        
+User = get_user_model()
 
+class TestUserManager(TestCase):
+    def test_create_user(self):
+        # Ensure a valid 11-digit phone number is used for testing
+        valid_phone_number = '12345678901'  
+        user = User.objects.create_user(
+            phone_number=valid_phone_number,
+            email='test@example.com',
+            full_name='Test User',
+            password='testpassword'
+        )
+        self.assertIsNotNone(user)
+        self.assertFalse(user.is_admin)
+        self.assertEqual(user.phone_number, valid_phone_number)
+        self.assertEqual(user.email, 'test@example.com')
+        self.assertEqual(user.full_name, 'Test User')
+        self.assertEqual(user.address, None)
+        self.assertEqual(user.national_id, None)
+        self.assertTrue(user.check_password('testpassword'))
+    def test_create_superuser(self):
+        superuser = User.objects.create_superuser(
+            phone_number='12345678990',
+            email='admin@example.com',
+            full_name='Admin User',
+            password='adminpassword'
+        )
+        self.assertIsNotNone(superuser)
+        self.assertTrue(superuser.is_admin)
+        self.assertEqual(superuser.phone_number, '12345678990')
+        self.assertEqual(superuser.email, 'admin@example.com')
+        self.assertEqual(superuser.full_name, 'Admin User')
+        self.assertEqual(superuser.address, None)  # Assuming 'address' and 'national_id' default to None
+        self.assertEqual(superuser.national_id, None)
+        self.assertTrue(superuser.check_password('adminpassword'))
 
     # Add more test methods to verify add_fieldsets, search_fields, ordering, filter_horizontal, etc.
        
