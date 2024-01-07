@@ -7,6 +7,11 @@ from django.contrib.sessions.models import Session
 from accounts.models import TimeStampedModel
 from accounts.models import User
 from django.contrib.postgres.fields import JSONField
+# from django.contrib.sessions.models import Session
+
+# class CustomSession(models.Model):
+#     session = models.OneToOneField(Session, primary_key=True, on_delete=models.CASCADE)
+#     custom_data = models.TextField()
 
 
 class Order(TimeStampedModel):
@@ -40,17 +45,27 @@ class Order(TimeStampedModel):
 
 
 
-# class OrderItem(models.Model):
-#     order = models.ForeignKey(Order, on_delete=models.CASCADE)
-#     item = models.ForeignKey(Item, on_delete=models.CASCADE)
-#     quantity = models.IntegerField()
+
     
 
 
 
 
-class Discount (models.Model):
-    code = models.CharField()
-    amount= models.IntegerField()
-    expired_time= models.DateTimeField(auto_now_add=True)
+class Discount(models.Model):
+    code = models.CharField(max_length=20, unique=True)
+    percentage = models.PositiveIntegerField()
+    start_date = models.DateField()
+    end_date = models.DateField()
+
+    def is_valid(self):
+        from django.utils import timezone
+        today = timezone.now().date()
+        return self.start_date <= today <= self.end_date
+
+    def apply_discount(self, amount):
+        if self.is_valid():
+            discount_amount = (self.percentage / 100) * amount
+            return amount - discount_amount
+        else:
+            return amount
 

@@ -1,17 +1,28 @@
 from django import forms
-from .models import Order
+from .models import Order ,Discount
 
 class OrderForm(forms.ModelForm):
     class Meta:
         model = Order
-        fields = ['customer_name', 'phone_number', 'table_number', 'discount_code']
+        fields = ['description', 'table_number', 'customer_name', 'phone_number', 'discount_code']  
 
-class DiscountCodeForm(forms.Form):
-    discount_code = forms.CharField(max_length=255)
-    fields = ['phone_number', 'table_number', 'discount_code']
+class DiscountCodeForm(forms.ModelForm):
+    class Meta:
+        model = Discount
+        fields = ['code']
+
+
+
+
 
 class UserSessionForm(forms.Form):
     phone_number=forms.CharField(max_length=11)
+
+class CartAddForm(forms.Form):
+    quantity = forms.CharField()
+    item_id=forms.CharField()
+    action=forms.CharField()
+
 
 
 

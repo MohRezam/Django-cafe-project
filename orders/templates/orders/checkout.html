@@ -416,35 +416,29 @@
                 <div
                   class="order-item d-flex align-items-center justify-content-between py-3 border-bottom"
                 >
+                {% for item, qty, price in combined_items %}
                   <div class="order-name d-flex align-items-center gap-1">
-                    سنت اونوره (1 عدد )
+                    {{item.name}} ({{ qty }} عدد )
                   </div>
-                  <div class="order-price">۹۰,۰۰۰ تومان</div>
+                  <div class="order-price">{{ price }} تومان</div>
                 </div>
-                <div
-                  class="order-item d-flex align-items-center justify-content-between py-3 border-bottom"
-                >
-                  <div class="order-name d-flex align-items-center gap-1">
-                    سنت اونوره (1 عدد )
-                  </div>
-                  <div class="order-price">۹۰,۰۰۰ تومان</div>
-                </div>
+                {% endfor %}
                 <div class="order-review-footer my-4">
                   <div
                     class="order-item d-flex align-items-center justify-content-between border-bottom py-2"
                   >
                     <div class="order-name d-flex align-items-center gap-1">
-                      جمع غذاها (1 عدد )
+                      جمع غذاها ({{ total_quantity }} عدد )
                     </div>
-                    <div class="order-price">۲۰۰,۰۰۰ تومان</div>
+                    <div class="order-price">{{ total_price }} تومان</div>
                   </div>
                   <div
                     class="order-item d-flex align-items-center justify-content-between border-bottom py-2"
                   >
                     <div class="order-name d-flex align-items-center gap-1">
-                      مجموع
+                      قیمت نهایی
                     </div>
-                    <div class="order-price">۲۰۰,۰۰۰ تومان</div>
+                    <div class="order-price">{{ final_price }}</div>
                   </div>
                   <div class="my-3">
                     <label for="exampleFormControlTextarea1" class="form-label"
@@ -458,7 +452,7 @@
                     ></textarea>
                   </div>
                 </div>
-                <button class="btn btn-checkout w-100 py-3 px-3">پرداخت</button>
+                <button class="btn btn-checkout w-100 py-3 px-3"   >پرداخت</button>
               </div>
             </div>
           </div>

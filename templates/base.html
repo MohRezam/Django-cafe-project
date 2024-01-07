@@ -18,6 +18,71 @@
         crossorigin="anonymous"
         referrerpolicy="no-referrer"
       />
+      <script>
+        // Function to send an AJAX request to save the item and quantity
+        function saveCartItem(itemId, quantity) {
+            // Send AJAX request to the server to save the data using a custom endpoint
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', '{% url "cafe:save_custom_cart_item" %}', true);
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            xhr.send(`item_id=${itemId}&quantity=${quantity}`);
+        }
+
+        // Example: Adding an item when the button is clicked
+        document.getElementById('addButton').onclick = function () {
+            var itemId = this.getAttribute('data-item-id');
+            var quantity = this.getAttribute('data-quantity');
+
+            // Call your custom save function
+            saveCartItem(itemId, quantity);
+        };
+    </script>
+    <script>
+      document.getElementById('deleteButton').onclick = function () {
+        // Use AJAX to call the delete function
+        var xhr = new XMLHttpRequest();
+        xhr.open('DELETE', '{% url "orders:delete_cart_item" %}', true);
+    
+        // Include CSRF token in the request headers
+        xhr.setRequestHeader("X-CSRFToken", getCookie("csrftoken"));
+    
+        xhr.onload = function () {
+          if (xhr.status >= 200 && xhr.status < 400) {
+            // Success, handle the response if needed
+            console.log('Cart item deleted successfully!');
+            // Optionally, you may want to remove the HTML element representing the deleted item
+            var foodItem = document.querySelector('.food-item');
+            foodItem.parentNode.removeChild(foodItem);
+          } else {
+            // Error handling
+            console.error('Failed to delete cart item.');
+          }
+        };
+    
+        xhr.onerror = function () {
+          // Handle network errors
+          console.error('Network error while trying to delete cart item.');
+        };
+    
+        xhr.send();
+      };
+    
+      // Function to get CSRF token from cookies
+      function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+          var cookies = document.cookie.split(';');
+          for (var i = 0; i < cookies.length; i++) {
+            var cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+              cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+              break;
+            }
+          }
+        }
+        return cookieValue;
+      }
+    </script>
     </head>
     {% block content %} {% endblock content %}
   </html>

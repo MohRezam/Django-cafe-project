@@ -278,36 +278,24 @@
                       <p class="fw-bold">{{item.price}} تومان</p>
                     </div>
                     <div class="food-actions-button">
-                      <button
-                        class="btn food-button"
-                        onclick="increaseCartCount()"
-                        id="addButton"
-                      >
-                        افزودن
-                      </button>
-                      <form
-                        action=""
-                        method="post"
-                        class="form-quantity"
-                        id="quantitybutton"
-                      >
-                      {% csrf_token %}
-                        <div class="quantity">
-                          <button class="plus-btn" type="button" name="button">
-                            <img src="{% static 'images/plus.svg' %}" alt="" />
-                          </button>
-                          {{ cart_form.quantity }}
-                          <input type="hidden" name="iditem" value="{{item.id}}" />
-                          <button class="minus-btn" type="button" name="button">
-                            <img src="{% static 'images/minus.svg' %}" alt="-" />
-                          </button>
-                          
 
+                    <form action="" method="post" class="form-quantity" id="quantitybutton">
+                        {% csrf_token %}
+                        <div class="quantity">
+                            <button class="plus-btn" type="button" name="button">
+                                <img src="{% static 'images/plus.svg' %}" alt="" />
+                            </button>
+                            {{ cart_form.quantity }}
+                            <input type="hidden" name="item_id" value="{{ item.id }}" />
+                            <input type="hidden" name="action" value="save"/>
+                            <button class="minus-btn" type="button" name="button">
+                                <img src="{% static 'images/minus.svg' %}" alt="-" />
+                            </button>
+                            <button type="submit" class="btn food-button" onclick="increaseCartCount()" id="addButton" data-item-id="{{ item.id }}" data-quantity="{{ cart_form.quantity.value }}">
+                              افزودن
+                          </button>
                         </div>
-                        <button type="submit" id="submitButton" class="btn">
-                          ثبت سفارش
-                        </button>
-                      </form>
+                    </form>
                     </div>
                   </div>
                 </div>
@@ -559,26 +547,7 @@
         });
       });
     </script>
-      <script>
-        let cartCounter = 0;
-  
-        function increaseCartCount() {
-          showquantityButton();
-          showSubmitButton();
-        }
-  
-        function showSubmitButton() {
-          var submitButton = document.getElementById("submitButton");
-          submitButton.style.display = "flex";
-        }
-  
-        function showquantityButton() {
-          var addButton = document.getElementById("addButton");
-          var quantityButton = document.getElementById("quantitybutton");
-          addButton.style.display = "none";
-          quantityButton.style.display = "block";
-        }
-      </script>
+
       <script>
         document.querySelectorAll(".minus-btn").forEach(function (btn) {
           btn.addEventListener("click", function (e) {
@@ -612,6 +581,7 @@
           });
         });
       </script>
+ 
   </body>
   {% endblock %}
 </html>

@@ -1,197 +1,253 @@
-from django.http import HttpResponse
+from datetime import datetime, timedelta
+from itertools import zip_longest
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect, render
 from django.views import View
-from .forms import UserSessionForm  , OrderForm
+from .forms import UserSessionForm  , OrderForm ,CartAddForm , DiscountCodeForm
 from django.contrib import messages
 from cafe.models import Item
 import json
 from cafe.views import generate_random_id
-from.models import Order
-# from .models import Checkouts , Discount
+from.models import Order ,Discount
+from django.shortcuts import get_object_or_404
+from .models import Item
 
-# Create your views here.
+
 
 class CheckoutView(View):
-    template_name = 'orders/checkout.html'  #Replace with the actual template file path
-    model=Order    
+    template_name = 'orders/checkout.html'
+    model = Order
+    discount_model = Discount
+    discount_form = DiscountCodeForm
+    data = {}
+    final_price= 0
+    model_discount_code= None
+    total_price=0
+
+    def load_data_from_cookie(self, request):
+        cart_cookie = request.COOKIES.get('cart', '{}')
+        try:
+            self.data = json.loads(cart_cookie)
+        except json.JSONDecodeError:
+            self.data = {}
+
     def get(self, request, *args, **kwargs):
-        # Show the HTML form for GET requests
-        form = OrderForm()  # Assuming you have a form for your Order model
-        return render(request, self.template_name, {'form': form})
+        self.load_data_from_cookie(request)
+        form = OrderForm()
+        item_quantity_dict = self.data
+        total_price = self.calculate_total_price(item_quantity_dict)
+        self.model_total_price=total_price
+        cart_items = Item.objects.filter(id__in=self.data.keys())
+        values=(self.data.values())
+        prices=self.calculate_price(self.data)
+        combined_items = zip_longest(cart_items, values, prices, fillvalue=None)
+        total_quantity=self.calculate_total_quantity(item_quantity_dict)
+        if self.final_price == 0:
+            final_price=total_price
+        else:
+            final_price= self.final_price
+            
+        return render(request, self.template_name, {'form': form ,"combined_items":combined_items ,'total_price': total_price ,"total_quantity":total_quantity , "final_price":final_price})
 
     def post(self, request, *args, **kwargs):
-        # Process the form submission for POST requests
         form = OrderForm(request.POST)
-        
+
         if form.is_valid():
-            order_instance = form.cleaned_data
-            order_instance = form.cleaned_data
-            session_data = request.session.get("order", {})
-            order_dict = session_data.get("order", {})
-            discount_data = request.session.get('discount', {})
-            discount_price_reduction = discount_data.get('price_reduction', 0)
-            original_price=0 # it should be calculate
-            final_price = original_price - discount_price_reduction
-            Order.objects.create(
-                description=order_instance["description"],
-                table_number=order_instance["table_number"],
-                order_detail=order_dict.get("item", []),
-                customer_name=order_instance["Name"],
-                phone_number=order_instance["phone_number"],
-                discount_code=order_instance["discount_code"],
-                order_id=order_dict.get("id", []),
-                final_price= final_price 
-    )
-            # Redirect to a success page or any other desired page
-            return redirect('cafe:home')
+            discount_code = request.POST.get('discount_code')
+            action = request.POST.get('action')
+            describe= request.POST.get('describe')
+            table_number =request.POST.get('table_number')
+            customer_name= request.POST.get('name')
+            phone_number = request.POST.get('phone_number')
+            if action == 'discount':
+                return self.apply_discount(request, form, discount_code)
+
+            elif action == 'checkout':
+                print("checkout-----")
+                return self.process_checkout(request, form , describe , table_number , customer_name , phone_number)
+
+        return render(request, self.template_name, {'form': form})
+
+    def apply_discount(self, request, form, discount_code):
+        try:
+            discount = self.discount_model.objects.get(code=discount_code)
+        except Discount.DoesNotExist:
+            return render(request, self.template_name, {'form': form, 'error_message': 'Invalid discount code'})
+
+        if discount.is_valid():
+            self.model_discount_code= discount_code
+            amount = self.total_price
+            discounted_amount = discount.apply_discount(amount)
+            self.total_price = discounted_amount
+            return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
         else:
-            # Form data is invalid, render the form with errors
-            return render(request, self.template_name, {'form': form})
+            return render(request, self.template_name, {'form': form, 'error_message': 'Discount code has expired'})
 
-    def put(self, request, *args, **kwargs):
-        # Implement PUT logic if needed
-        pass
+        return render(request, self.template_name, {'form': form})
 
-    def delete(self, request, *args, **kwargs):
-        # Implement DELETE logic if needed
-        pass
+    def process_checkout(self, request, form , describe , table_number , customer_name , phone_number):
+        self.load_data_from_cookie(request)
+        session_data = request.session.get("order", {})
+        order_dict = session_data.get("order", {})
+        cart_items = Item.objects.filter(id__in=self.data.keys())
+        values=(self.data.values())
+        prices=self.calculate_price(self.data)
+        combined_items = zip_longest(cart_items, values, prices, fillvalue=None)
+        food_items = []
+        details_items = []
+        for cart_item, quantity, price in combined_items:
+            if cart_item is not None:
+                item_name = cart_item.name
+                item_price = cart_item.price
+
+                food_item = {"name": item_name, "price": item_price, "quantity": quantity}
+
+                food_items.append(food_item)
+        
+
+        total_items = sum([item["quantity"] for item in food_items])
+        total_price = sum([item["price"] * item["quantity"] for item in food_items])
+
+        details_item = {"total_item": total_items, "total_price": total_price}
+
+        details_items.append(details_item)
+
+        order_detail = {"food_items": food_items, "details_items": details_items}
+
+        
+
+        Order.objects.create(
+            description=describe,
+            table_number=table_number,
+            order_detail=order_detail,
+            customer_name=customer_name,
+            phone_number=phone_number,
+            discount_code=self.model_discount_code,
+            order_id=order_dict.get("id", []),
+            final_price=self.final_price,
+        )
+        return redirect('cafe:home')
     
+    def calculate_price(self,item_quantity_dict):
+        total_price = 0
+        price_list=[]
+
+        for item_id, quantity in item_quantity_dict.items():
+            item = get_object_or_404(Item, id=item_id)
+            item_price = item.price
+            total_price = item_price * int(quantity)
+            price_list.append(total_price)
+
+        return price_list
+    
+    def calculate_total_price(self,item_quantity_dict):
+        total_price = 0
+
+        for item_id, quantity in item_quantity_dict.items():
+            item = get_object_or_404(Item, id=item_id)
+            item_price = item.price
+            total_price += item_price * int(quantity)
+
+        return total_price
+    
+    def calculate_total_quantity(self , item_quantity_dict):
+        total_quantity=0
+
+        for _, quantity in item_quantity_dict.items():
+            total_quantity +=int(quantity)
+
+        return total_quantity
+
 
 class ViewCartView(View):
+    template_name='orders/cart.html'
+    data = {}
+
+    def load_data_from_cookie(self, request):
+        cart_cookie = request.COOKIES.get('cart', '{}')
+        try:
+            self.data = json.loads(cart_cookie)
+        except json.JSONDecodeError:
+            self.data = {}
+
+    def save_data_to_cookie(self, response):
+        expiration_date = datetime.now() + timedelta(days=365)
+        response.set_cookie("cart", json.dumps(self.data), expires=expiration_date)
+
+    def save_data_to_session(self, request):
+        request.session['cart'] = self.data
+
     def get(self, request):
-        cart_item_ids = request.COOKIES.get('cart')
-        cart_item_ids=eval(cart_item_ids)
-        cart_items = Item.objects.filter(id__in=cart_item_ids.keys())
-        value=(cart_item_ids.values())
-        values=(*value,)
-        # def cart_summary(request):
-        #     # Get the cart
-        #     cart = Cart(request)
-        #     cart_products = cart.get_quants
-        #     totals = cart.cart_total()
-        #     return render(request, "cart_summary.html", { 'cart_products':cart.get_quants, 'quantities':quantities, 'totals':totals})
-        # def cart_total(self):
-        #     # Get product IDS
-        #         product_ids = self.cart.keys()
-        #         # lookup those keys in our products database model
-        #         products = Product.objects.filter(id__in=product_id)
-        #         # Get quantities
-        #         quantites = self.cart_total
-        #         # start counting at 0
-        #         total = 0
-        #         for key, values in quantities.items():
-        #             # Convert key string into int so we can do math
-        #             key = int(key)
-        #             for product in products:
-        #                 if product.id == key:
-        #                 total = total + (product.price * value)
-                        # else:
-                        #     total = total + (product.price * value)
+        self.load_data_from_cookie(request)
+        cart_items = Item.objects.filter(id__in=self.data.keys())
+        values=(self.data.values())
+        prices=self.calculate_price(self.data)
+        combined_items = zip_longest(cart_items, values, prices, fillvalue=None)
+
+        return render(request, self.template_name, {'combined_items': combined_items})
+    
+    def post(self, request, category_name, *args, **kwargs):
+        self.load_data_from_cookie(request)
+        form = CartAddForm(request.POST)
+        if form.is_valid():
+            item_id = request.POST.get('item_id')
+            quantity = request.POST.get('quantity')
+            action = request.POST.get('action')
+
+            if action == 'delete':
+
+                self.data.pop(item_id)
+
+                self.save_data_to_session()   
+
+                response = HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))   
+
+                self.save_data_to_cookie(response)
+
+                return response
+            
+            elif action == 'save':
+                self.save(item_id, quantity)
+                
+                response = HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+                
+                self.save_data_to_cookie(response)
+
+                
+                return response
+        else:
+            print("Form errors:", form.errors)
+            return HttpResponse("Form is not valid. Check form.errors for details.")
+
+
+    def save(self,item_id, quantity ):
+        self.data[item_id] += quantity
+        order = {"id": generate_random_id(), "item": self.data}
+        self.request.session["order"] = {"order": order, "status": ""}
+        print(f"Saving item {item_id} with quantity {quantity}")
         
-        return render(request, 'orders/cart.html', {'cart_items': cart_items, "quantity":values[0]})
+    def calculate_price(self,item_quantity_dict):
+        total_price = 0
+        price_list=[]
 
+        for item_id, quantity in item_quantity_dict.items():
+            item = get_object_or_404(Item, id=item_id)
+            item_price = item.price
+            total_price = item_price * int(quantity)
+            price_list.append(total_price)
+
+        return price_list
 
         
 
-# Create your views here.
-
-# def add_order(request):
-#     if request.method == "GET":
-#         return render(request, "", context={})
-    
-    
-# def checkout(request):
-#     if request.method == "GET":
-#         return render(request, "", context={})
-    
-
-# def cart(request):
-#     if request.method == "GET":
-#         return render(request, "", context={})
-    
-
-# from django.shortcuts import render
-# from .models import Order
-# def order_status(request, status):
-#     try:
-#         context = {
-#         'order': status,
-#             }   
-#         request.session["order_status"]=context
-#     except Order.DoesNotExist:
-#         messages.error(request,'status doesnt confirm',"danger")
-#         return None #change if need
 
 
 
 
-# def order_status(request, order_id , status):
-#     try:
-#         order = Order.objects.get(id=order_id)
-#         if order.is_completed:
-#            status = "Completed"
-#         else:
-#             status = "In shopping cart"
-#         context = {
-#             'order': order,
-#             'status':status
-#         }
-#         return render(request, 'order_status.html', context)
-#     except Order.DoesNotExist:
-#         return render(request, 'order_not_found.html')
+
+
             
-# Mehdi Sadeghi was here and wrote this block of code
-from django.shortcuts import render
-from .models import Order
-def order_status(request, order_id , status):
-    try:
-        order = Order.objects.get(id=order_id)
-        context = {
-        'order': order,
-        'status':status
-        }
-        return render(request, 'order_status.html', context)
-    except Order.DoesNotExist:
-        return render(request, 'order_not_found.html')
+
             
 
 
-# class EditCookieView(View):
-#     template_name = 'orders/edit_cart.html'
-
-#     def get(self, request):
-#             # Retrieve the cart data from the cookie
-#             cart_data = request.COOKIES.get('cart', '{}')
-
-#             # Process cart_data as needed
-#             # ...
-
-#             return render(request, self.template_name, {'cart_data': cart_data})
-
-#     def post(self, request, category_name):
-#         form = CartEditForm(request.POST)
-
-#         if form.is_valid():
-#             cd = form.cleaned_data
-
-#             # Delete the previous cookie
-#             response = HttpResponse()
-#             response.delete_cookie('cart')
-
-#             # Set new cookie
-#             self.data[cd["iditem"]] = cd['quantity']
-#             response.set_cookie("cart", f"{self.data}", expires=9)
-
-#             # Delete previous session and add a new one
-#             order = {"id": generate_random_id(), "item": self.data}
-#             request.session.pop("order", None)
-#             request.session["order"] = {"order": order, "status": ""}
-            
-#             # Redirect to the cart page
-#             return redirect('orders:cart_page')
-
-#         else:
-#             # Print form errors to the console for debugging
-#             print("Form errors:", form.errors)
-
-#             return HttpResponse("Form is not valid. Check form.errors for details.")

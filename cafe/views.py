@@ -1,4 +1,6 @@
-from django.http import HttpResponse
+import datetime
+import json
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Category, Item, Cafe
 from django.views import View
@@ -17,43 +19,76 @@ class HomeView(View):
         all_categories = Category.objects.all()        
         return render(request, "cafe/index.html", context={"all_categories":all_categories, "cafe":cafe})
 
+
+from datetime import datetime, timedelta
+from django.shortcuts import render, get_object_or_404, redirect
+from django.http import JsonResponse, HttpResponse
+from django.views import View
+from django.db.models import Q
+from .models import Cafe, Item, Category
+from .forms import CartAddForm, SearchForm
 class CafeMenuView(View):
     data = {}
 
-    def dispatch(self, request, category_name):
-        category = Category.objects.filter(category_name=category_name).exists()
-        if not category:
-            return redirect("cafe:home")
-        return super().dispatch(request, category_name)
+    # def dispatch(self, request, category_name):
+    #     category = Category.objects.filter(category_name=category_name).exists()
+    #     if not category:
+    #         return redirect("cafe:home")
+    #     return super().dispatch(request, category_name)
+
+    def load_data_from_cookie(self, request):
+        cart_cookie = request.COOKIES.get('cart', '{}')
+        try:
+            self.data = json.loads(cart_cookie)
+        except json.JSONDecodeError:
+            self.data = {}
+
+    def save_data_to_cookie(self, response):
+        expiration_date = datetime.now() + timedelta(days=365)
+        response.set_cookie("cart", json.dumps(self.data), expires=expiration_date)
 
     def get(self, request, category_name):
+        self.load_data_from_cookie(request)
         cart_form = CartAddForm()
         cafe = get_object_or_404(Cafe)
         items = Item.objects.filter(category=category_name)
         search_form = SearchForm()
+
         if "search" in request.GET:
             search_form = SearchForm(request.GET)
             if search_form.is_valid():
                 cd = search_form.cleaned_data["search"]
                 items = Item.objects.filter(Q(name__icontains=cd) | Q(price__icontains=cd), category=category_name)
-        return render(request, "cafe/menu-item.html", context={"items": items, "cart_form": cart_form, "cafe":cafe, "search_form":search_form})
 
-    def post(self, request, category_name):
+        return render(request, "cafe/menu-item.html", context={"items": items, "cart_form": cart_form, "cafe": cafe, "search_form": search_form})
+
+    def post(self, request, category_name, *args, **kwargs):
+        self.load_data_from_cookie(request)
         form = CartAddForm(request.POST)
-        
         if form.is_valid():
-            cd = form.cleaned_data
-            self.data[cd["iditem"]] = cd['quantity']  
-            order = {"id": generate_random_id(), "item": self.data}
-            response = redirect('orders:cart_page')
-            response.set_cookie("cart", f"{self.data}", expires=9)
-            request.session["order"] = {"order": order, "status": ""}
-            return response
+            item_id = request.POST.get('item_id')
+            quantity = request.POST.get('quantity')
+            action = request.POST.get('action')
+            if action == 'save':
+                self.save(item_id, quantity)
+                
+                response = HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+                
+                self.save_data_to_cookie(response)
+
+                
+                return response
+            else:
+                return JsonResponse({'status': 'error', 'message': 'Invalid action'})
         else:
-            # Print form errors to the console for debugging
             print("Form errors:", form.errors)
-            
             return HttpResponse("Form is not valid. Check form.errors for details.")
+    def save(self,item_id, quantity ):
+        self.data[item_id] = quantity
+        order = {"id": generate_random_id(), "item": self.data}
+        self.request.session["order"] = {"order": order, "status": ""}
+        print(f"Saving item {item_id} with quantity {quantity}")
+
         
 import uuid
 

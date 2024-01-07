@@ -146,3 +146,5 @@ AUTHENTICATION_BACKENDS = [
     "django.contrib.auth.backends.ModelBackend",
     "accounts.authenticate.PhoneBackend",
 ]
+
+# SESSION_ENGINE = 'orders.apps.OrdersConfig.custom_session.CustomSessionStore'
