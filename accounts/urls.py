@@ -19,4 +19,9 @@ urlpatterns = [
     path('profile-item-delete/<int:id_item>/',views.StaffProfileDeleteItemView.as_view(),name="staff-delete-item"),
     path('profile-item-update/<int:id_item>/',views.StaffProfileUpdateItemView.as_view(),name="staff-update-item"),
     path('profile-add-item/',views.StaffProfileAddItemView.as_view(),name="staff-add-item"),
+    path('profile-orders/',views.StaffProfileOrdersView.as_view(),name="staff-orders"),
+    path('profile-order-uncomplete/',views.StaffProfileOrderUncompleteView.as_view(),name="staff-orders-uncomplete"),
+    path('profile-order-complete/',views.StaffProfileOrdercompleteView.as_view(),name="staff-orders-complete"),
+    path('profile-order-details/<int:id_order>/',views.StaffProfileOrderDetailView.as_view(),name="staff-order-detail"),
+    path('profile-reports-and-insights/',views.StaffReportsInsightsView.as_view(),name="staff-reports-insights")
 ]

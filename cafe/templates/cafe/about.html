@@ -19,7 +19,7 @@
             </span>
             <ul id="myDropdown" class="dropdown-content pt-2 px-1">
               <li class="py-2">
-                <a class="down-item text-white" href="#">درباره ما</a>
+                <a class="down-item text-white" href="{% url "cafe:about" %}">درباره ما</a>
               </li>
               <li class="py-2">
                 <a class="down-item text-white" href="#">سوالات متداول</a>
@@ -28,7 +28,7 @@
                 <a class="down-item text-white" href="#">قوانین و مقررات</a>
               </li>
               <li class="py-2">
-                <a class="down-item text-white" href="#">تماس با ما</a>
+                <a class="down-item text-white" href="{% url "cafe:contact" %}">تماس با ما</a>
               </li>
             </ul>
             <a
@@ -59,7 +59,7 @@
               <div class="offcanvas-body">
                 <ul class="list-unstyled pt-2 px-1">
                   <li class="py-2 border-top border-bottom">
-                    <a class="down-item text-dark" href="#">درباره ما</a>
+                    <a class="down-item text-dark" href="{% url "cafe:about" %}">درباره ما</a>
                   </li>
                   <li class="py-2 border-top border-bottom">
                     <a class="down-item text-dark" href="#">سوالات متداول</a>
@@ -68,7 +68,7 @@
                     <a class="down-item text-dark" href="#">قوانین و مقررات</a>
                   </li>
                   <li class="py-2 border-top border-bottom">
-                    <a class="down-item text-dark" href="#">تماس با ما</a>
+                    <a class="down-item text-dark" href="{% url "cafe:contact" %}">تماس با ما</a>
                   </li>
                 </ul>
               </div>
@@ -323,8 +323,7 @@
             class="addres-online border-top border-1 w-75 d-flex align-items-center justify-content-between"
           >
             <p>
-              کرمان بلوار جمهوری اسلامی- کوچه رئوف 1 - برج ماهان - طبقه همکف -
-              واحد 1290
+              {{ cafe.address }}
             </p>
             <a
               target="_blank"
@@ -403,7 +402,7 @@
                     stroke="white"
                   ></path>
                 </svg>
-                <p>03432611100</p></a
+                <p>{{cafe.phone_number}}</p></a
               >
             </div>
           </div>

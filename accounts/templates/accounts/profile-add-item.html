@@ -31,14 +31,13 @@
               </a>
             </li>
             <li>
-              <a href="profile-order.html" class="profile-menu-url">
+              <a href="{% url 'accounts:staff-orders' %}" class="profile-menu-url">
                 <span class="mdi mdi-basket"></span> همه سفارش ها
                 <i class="fa-solid fa-chevron-left"></i>
               </a>
               <ul class="profile-menu-items-children">
-                <li><a href="#">سفارش های باز</a></li>
-                <li><a href="#">سفارش های کامل شده</a></li>
-                <li><a href="#">سفارش های لغو شده</a></li>
+                <li><a href="{% url 'accounts:staff-orders-complete' %}">سفارش های پرداخت شده</a></li>
+                <li><a href="{% url 'accounts:staff-orders-uncomplete' %}">سفارش های پرداخت نشده</a></li>
               </ul>
             </li>
             <li>

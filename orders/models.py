@@ -34,14 +34,7 @@ class Order(TimeStampedModel):
 
     def __str__(self) -> str:
         return f"{self.description[:20]}..."
-
-    def save(self, *args, **kwargs):
-        if not self.order_number:
-            self.order_number = self.generate_order_number()
-        super().save(*args, **kwargs)
-
-    def generate_order_number(self):
-        return ''.join(random.choices('0123456789', k=10))  
+  
 
 
 

@@ -5,18 +5,1104 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{% block title %} {% endblock title %}</title>
-    <link rel="icon" type="image/png" href="{% static 'staff/images/logo.png' %}" />
+    <link
+      rel="icon"
+      type="image/png"
+      href="{% static 'staff/images/logo.png' %}"
+    />
     <!--    font-->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />    <link rel="stylesheet" href="{% static 'staff/css/materialdesignicons.css' %}" /> 
-    <link rel="stylesheet" href="{% static 'staff/css/materialdesignicons.css.map' %}" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+      integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+
+    <link
+      rel="stylesheet"
+      href="{% static 'staff/css/materialdesignicons.css' %}"
+    />
+    <link
+      rel="stylesheet"
+      href="{% static 'staff/css/materialdesignicons.css.map' %}"
+    />
     <!--    font-->
     <link rel="stylesheet" href="{% static 'staff/css/bootstrap.css' %}" />
     <link rel="stylesheet" href="{% static 'staff/css/style.css' %}" />
   </head>
 
   <body>
+    {% if request.resolver_match.url_name == 'staff-login' %} {% else %}
+    <header class="header-main-page">
+      <div class="d-block">
+        <div class="row align-items-center">
+          <div class="col-lg-3 col-md-3 col-xs-12 pull-right">
+            <div class="header-right">
+              <div class="logo">
+                <a href="{% url 'accounts:staff-profile' %}"
+                  ><img
+                    src="{% static 'staff/images/logo-login.png' %}"
+                    alt="logo"
+                /></a>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-6 col-md-6 col-xs-12 pull-right">
+            <div class="menu-box">
+              <ul class="menu-uniq">
+                <li>
+                  <a href="{% url 'accounts:staff-profile' %}">پروفایل</a>
+                </li>
+                <li>
+                  <a href="{% url 'accounts:staff-orders' %}">سفارش ها</a>
+                  <ul class="submenu-uniq">
+                    <li>
+                      <a href="{% url 'accounts:staff-orders-complete' %}"
+                        >سفارش های پرداخت شده</a
+                      >
+                    </li>
+                    <li>
+                      <a href="{% url 'accounts:staff-orders-uncomplete' %}"
+                        >سفارش های پرداخت نشده</a
+                      >
+                    </li>
+                  </ul>
+                </li>
+                <li>
+                  <a href="{% url 'accounts:staff-items' %}">آیتم ها</a>
+                  <ul class="submenu-uniq">
+                    <li>
+                      <a href="{% url 'accounts:staff-add-item' %}"
+                        >افزودن آیتم</a
+                      >
+                    </li>
+                  </ul>
+                </li>
+                <li>
+                  <a href="{% url 'accounts:staff-categories' %}"
+                    >دسته بندی ها</a
+                  >
+                  <ul class="submenu-uniq">
+                    <li>
+                      <a href="{% url 'accounts:staff-add-category' %}"
+                        >افزودن دسته بندی</a
+                      >
+                    </li>
+                  </ul>
+                </li>
+                <li>
+                  <a href="{% url 'accounts:staff-reports-insights' %}"
+                    >تحلیل عملکرد</a
+                  >
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-3 col-xs-12 pull-left pb-3">
+            <div class="header-left">
+              <!-- Example single danger button -->
+              <!-- responsive header-->
+              <div class="responsive-header-left">
+                <div class="btn-login-responsive">
+                  <span class="mdi mdi-account"></span>
+                  <div class="dropdown-menu-login">
+                    <div class="header-profile-dropdown-account">
+                      <div class="header-profile-dropdown-user">
+                        <div class="header-profile-dropdown-user-img">
+                          <img
+                            src="{% static 'staff/images/logo-login.png' %}"
+                            alt="profile"
+                          />
+                        </div>
+                        <div class="header-profile-dropdown-user-info">
+                          <p class="header-profile-dropdown-user-name">
+                            {{request.user.full_name}}
+                            <a
+                              href="{% url 'accounts:staff-personal-info' %}"
+                              class="header-profile-dropdown-user-profile-link"
+                              >مشاهده اطلاعات شخصی</a
+                            >
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="header-profile-dropdown-actions">
+                      <div class="header-profile-dropdown-action-container">
+                        <a
+                          href="{% url 'accounts:staff-logout' %}"
+                          class="header-profile-dropdown-action-link"
+                          >خروج</a
+                        >
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- responsive header-->
+            </div>
+          </div>
+        </div>
+      </div>
+      <!--        End megamenu------------------->
+
+      <!--    responsive-megamenu-mobile----------------->
+      <nav class="sidebar">
+        <div class="nav-header">
+          <div class="header-cover"></div>
+          <div class="logo-wrap">
+            <a class="logo-icon" href="#"
+              ><img alt="logo-icon" src="{}" width="40"
+            /></a>
+          </div>
+        </div>
+        <ul class="nav-categories ul-base">
+          <li class="has-sub">
+            <a href="#">کالای دیجیتال</a>
+            <ul>
+              <li class="has-sub">
+                <a href="#" class="category-level-2">لوازم جانبی گوشی</a>
+                <ul>
+                  <li>
+                    <a href="#" class="category-level-3">کیف و کاور گوشی</a>
+                  </li>
+                  <li>
+                    <a href="#" class="category-level-3"
+                      >پاور بانک(شارژر همراه)</a
+                    >
+                  </li>
+                  <li>
+                    <a href="#" class="category-level-3">پایه نگهدارنده گوشی</a>
+                  </li>
+                  <li>
+                    <a href="#" class="category-level-3">همه موارد این دسته</a>
+                  </li>
+                </ul>
+              </li>
+              <li class="has-sub">
+                <a href="#" class="category-level-2">گوشی موبایل</a>
+                <ul>
+                  <li><a href="#" class="category-level-3">سامسونگ</a></li>
+                  <li><a href="#" class="category-level-3">هوآوی</a></li>
+                  <li><a href="#" class="category-level-3">اپل</a></li>
+                  <li><a href="#" class="category-level-3">شیائومی</a></li>
+                  <li><a href="#" class="category-level-3">آنر</a></li>
+                  <li><a href="#" class="category-level-3">نوکیا</a></li>
+                  <li>
+                    <a href="#" class="category-level-3">همه موارد این دسته</a>
+                  </li>
+                </ul>
+              </li>
+              <li class="has-sub">
+                <a href="#" class="category-level-2">دوربین</a>
+                <ul>
+                  <li>
+                    <a href="#" class="category-level-3"
+                      >دوربین عکاسی دیجیتال</a
+                    >
+                  </li>
+                  <li>
+                    <a href="#" class="category-level-3"
+                      >دوربین ورزشی و فیلم برداری</a
+                    >
+                  </li>
+                  <li>
+                    <a href="#" class="category-level-3">دوربین چاپ سریع</a>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+          <li class="has-sub">
+            <a href="#">آرایشی، بهداشتی و سلامت</a>
+            <ul>
+              <li class="has-sub">
+                <a href="#" class="category-level-2">لوازم جانبی گوشی</a>
+                <ul>
+                  <li>
+                    <a href="#" class="category-level-3">کیف و کاور گوشی</a>
+                  </li>
+                  <li>
+                    <a href="#" class="category-level-3"
+                      >پاور بانک(شارژر همراه)</a
+                    >
+                  </li>
+                  <li>
+                    <a href="#" class="category-level-3">پایه نگهدارنده گوشی</a>
+                  </li>
+                  <li>
+                    <a href="#" class="category-level-3">همه موارد این دسته</a>
+                  </li>
+                </ul>
+              </li>
+              <li class="has-sub">
+                <a href="#" class="category-level-2">گوشی موبایل</a>
+                <ul>
+                  <li><a href="#" class="category-level-3">سامسونگ</a></li>
+                  <li><a href="#" class="category-level-3">هوآوی</a></li>
+                  <li><a href="#" class="category-level-3">اپل</a></li>
+                  <li><a href="#" class="category-level-3">شیائومی</a></li>
+                  <li><a href="#" class="category-level-3">آنر</a></li>
+                  <li><a href="#" class="category-level-3">نوکیا</a></li>
+                  <li>
+                    <a href="#" class="category-level-3">همه موارد این دسته</a>
+                  </li>
+                </ul>
+              </li>
+              <li class="has-sub">
+                <a href="#" class="category-level-2">دوربین</a>
+                <ul>
+                  <li>
+                    <a href="#" class="category-level-3"
+                      >دوربین عکاسی دیجیتال</a
+                    >
+                  </li>
+                  <li>
+                    <a href="#" class="category-level-3"
+                      >دوربین ورزشی و فیلم برداری</a
+                    >
+                  </li>
+                  <li>
+                    <a href="#" class="category-level-3">دوربین چاپ سریع</a>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+          <li class="has-sub">
+            <a href="#">خودرو ، ابزار اداری</a>
+            <ul>
+              <li class="has-sub">
+                <a href="#" class="category-level-2">لوازم جانبی گوشی</a>
+                <ul>
+                  <li>
+                    <a href="#" class="category-level-3">کیف و کاور گوشی</a>
+                  </li>
+                  <li>
+                    <a href="#" class="category-level-3"
+                      >پاور بانک(شارژر همراه)</a
+                    >
+                  </li>
+                  <li>
+                    <a href="#" class="category-level-3">پایه نگهدارنده گوشی</a>
+                  </li>
+                  <li>
+                    <a href="#" class="category-level-3">همه موارد این دسته</a>
+                  </li>
+                </ul>
+              </li>
+              <li class="has-sub">
+                <a href="#" class="category-level-2">گوشی موبایل</a>
+                <ul>
+                  <li><a href="#" class="category-level-3">سامسونگ</a></li>
+                  <li><a href="#" class="category-level-3">هوآوی</a></li>
+                  <li><a href="#" class="category-level-3">اپل</a></li>
+                  <li><a href="#" class="category-level-3">شیائومی</a></li>
+                  <li><a href="#" class="category-level-3">آنر</a></li>
+                  <li><a href="#" class="category-level-3">نوکیا</a></li>
+                  <li>
+                    <a href="#" class="category-level-3">همه موارد این دسته</a>
+                  </li>
+                </ul>
+              </li>
+              <li class="has-sub">
+                <a href="#" class="category-level-2">دوربین</a>
+                <ul>
+                  <li>
+                    <a href="#" class="category-level-3"
+                      >دوربین عکاسی دیجیتال</a
+                    >
+                  </li>
+                  <li>
+                    <a href="#" class="category-level-3"
+                      >دوربین ورزشی و فیلم برداری</a
+                    >
+                  </li>
+                  <li>
+                    <a href="#" class="category-level-3">دوربین چاپ سریع</a>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+          <li class="has-sub">
+            <a href="#">مد پوشاک</a>
+            <ul>
+              <li class="has-sub">
+                <a href="#" class="category-level-2">لوازم جانبی گوشی</a>
+                <ul>
+                  <li>
+                    <a href="#" class="category-level-3">کیف و کاور گوشی</a>
+                  </li>
+                  <li>
+                    <a href="#" class="category-level-3"
+                      >پاور بانک(شارژر همراه)</a
+                    >
+                  </li>
+                  <li>
+                    <a href="#" class="category-level-3">پایه نگهدارنده گوشی</a>
+                  </li>
+                  <li>
+                    <a href="#" class="category-level-3">همه موارد این دسته</a>
+                  </li>
+                </ul>
+              </li>
+              <li class="has-sub">
+                <a href="#" class="category-level-2">گوشی موبایل</a>
+                <ul>
+                  <li><a href="#" class="category-level-3">سامسونگ</a></li>
+                  <li><a href="#" class="category-level-3">هوآوی</a></li>
+                  <li><a href="#" class="category-level-3">اپل</a></li>
+                  <li><a href="#" class="category-level-3">شیائومی</a></li>
+                  <li><a href="#" class="category-level-3">آنر</a></li>
+                  <li><a href="#" class="category-level-3">نوکیا</a></li>
+                  <li>
+                    <a href="#" class="category-level-3">همه موارد این دسته</a>
+                  </li>
+                </ul>
+              </li>
+              <li class="has-sub">
+                <a href="#" class="category-level-2">دوربین</a>
+                <ul>
+                  <li>
+                    <a href="#" class="category-level-3"
+                      >دوربین عکاسی دیجیتال</a
+                    >
+                  </li>
+                  <li>
+                    <a href="#" class="category-level-3"
+                      >دوربین ورزشی و فیلم برداری</a
+                    >
+                  </li>
+                  <li>
+                    <a href="#" class="category-level-3">دوربین چاپ سریع</a>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+          <li class="has-sub">
+            <a href="#">خانه آشپزخانه</a>
+            <ul>
+              <li class="has-sub">
+                <a href="#" class="category-level-2">لوازم جانبی گوشی</a>
+                <ul>
+                  <li>
+                    <a href="#" class="category-level-3">کیف و کاور گوشی</a>
+                  </li>
+                  <li>
+                    <a href="#" class="category-level-3"
+                      >پاور بانک(شارژر همراه)</a
+                    >
+                  </li>
+                  <li>
+                    <a href="#" class="category-level-3">پایه نگهدارنده گوشی</a>
+                  </li>
+                  <li>
+                    <a href="#" class="category-level-3">همه موارد این دسته</a>
+                  </li>
+                </ul>
+              </li>
+              <li class="has-sub">
+                <a href="#" class="category-level-2">گوشی موبایل</a>
+                <ul>
+                  <li><a href="#" class="category-level-3">سامسونگ</a></li>
+                  <li><a href="#" class="category-level-3">هوآوی</a></li>
+                  <li><a href="#" class="category-level-3">اپل</a></li>
+                  <li><a href="#" class="category-level-3">شیائومی</a></li>
+                  <li><a href="#" class="category-level-3">آنر</a></li>
+                  <li><a href="#" class="category-level-3">نوکیا</a></li>
+                  <li>
+                    <a href="#" class="category-level-3">همه موارد این دسته</a>
+                  </li>
+                </ul>
+              </li>
+              <li class="has-sub">
+                <a href="#" class="category-level-2">دوربین</a>
+                <ul>
+                  <li>
+                    <a href="#" class="category-level-3"
+                      >دوربین عکاسی دیجیتال</a
+                    >
+                  </li>
+                  <li>
+                    <a href="#" class="category-level-3"
+                      >دوربین ورزشی و فیلم برداری</a
+                    >
+                  </li>
+                  <li>
+                    <a href="#" class="category-level-3">دوربین چاپ سریع</a>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+          <li class="has-sub">
+            <a href="#">کتاب، لوازم تحریر</a>
+            <ul>
+              <li class="has-sub">
+                <a href="#" class="category-level-2">لوازم جانبی گوشی</a>
+                <ul>
+                  <li>
+                    <a href="#" class="category-level-3">کیف و کاور گوشی</a>
+                  </li>
+                  <li>
+                    <a href="#" class="category-level-3"
+                      >پاور بانک(شارژر همراه)</a
+                    >
+                  </li>
+                  <li>
+                    <a href="#" class="category-level-3">پایه نگهدارنده گوشی</a>
+                  </li>
+                  <li>
+                    <a href="#" class="category-level-3">همه موارد این دسته</a>
+                  </li>
+                </ul>
+              </li>
+              <li class="has-sub">
+                <a href="#" class="category-level-2">گوشی موبایل</a>
+                <ul>
+                  <li><a href="#" class="category-level-3">سامسونگ</a></li>
+                  <li><a href="#" class="category-level-3">هوآوی</a></li>
+                  <li><a href="#" class="category-level-3">اپل</a></li>
+                  <li><a href="#" class="category-level-3">شیائومی</a></li>
+                  <li><a href="#" class="category-level-3">آنر</a></li>
+                  <li><a href="#" class="category-level-3">نوکیا</a></li>
+                  <li>
+                    <a href="#" class="category-level-3">همه موارد این دسته</a>
+                  </li>
+                </ul>
+              </li>
+              <li class="has-sub">
+                <a href="#" class="category-level-2">دوربین</a>
+                <ul>
+                  <li>
+                    <a href="#" class="category-level-3"
+                      >دوربین عکاسی دیجیتال</a
+                    >
+                  </li>
+                  <li>
+                    <a href="#" class="category-level-3"
+                      >دوربین ورزشی و فیلم برداری</a
+                    >
+                  </li>
+                  <li>
+                    <a href="#" class="category-level-3">دوربین چاپ سریع</a>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+
+          <li class="has-sub">
+            <a href="#">اسباب بازی ، کودک نوزاد</a>
+            <ul>
+              <li class="has-sub">
+                <a href="#" class="category-level-2">لوازم جانبی گوشی</a>
+                <ul>
+                  <li>
+                    <a href="#" class="category-level-3">کیف و کاور گوشی</a>
+                  </li>
+                  <li>
+                    <a href="#" class="category-level-3"
+                      >پاور بانک(شارژر همراه)</a
+                    >
+                  </li>
+                  <li>
+                    <a href="#" class="category-level-3">پایه نگهدارنده گوشی</a>
+                  </li>
+                  <li>
+                    <a href="#" class="category-level-3">همه موارد این دسته</a>
+                  </li>
+                </ul>
+              </li>
+              <li class="has-sub">
+                <a href="#" class="category-level-2">گوشی موبایل</a>
+                <ul>
+                  <li><a href="#" class="category-level-3">سامسونگ</a></li>
+                  <li><a href="#" class="category-level-3">هوآوی</a></li>
+                  <li><a href="#" class="category-level-3">اپل</a></li>
+                  <li><a href="#" class="category-level-3">شیائومی</a></li>
+                  <li><a href="#" class="category-level-3">آنر</a></li>
+                  <li><a href="#" class="category-level-3">نوکیا</a></li>
+                  <li>
+                    <a href="#" class="category-level-3">همه موارد این دسته</a>
+                  </li>
+                </ul>
+              </li>
+              <li class="has-sub">
+                <a href="#" class="category-level-2">دوربین</a>
+                <ul>
+                  <li>
+                    <a href="#" class="category-level-3"
+                      >دوربین عکاسی دیجیتال</a
+                    >
+                  </li>
+                  <li>
+                    <a href="#" class="category-level-3"
+                      >دوربین ورزشی و فیلم برداری</a
+                    >
+                  </li>
+                  <li>
+                    <a href="#" class="category-level-3">دوربین چاپ سریع</a>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+          <li class="has-sub">
+            <a href="#">ورزش و سفر</a>
+            <ul>
+              <li class="has-sub">
+                <a href="#" class="category-level-2">لوازم جانبی گوشی</a>
+                <ul>
+                  <li>
+                    <a href="#" class="category-level-3">کیف و کاور گوشی</a>
+                  </li>
+                  <li>
+                    <a href="#" class="category-level-3"
+                      >پاور بانک(شارژر همراه)</a
+                    >
+                  </li>
+                  <li>
+                    <a href="#" class="category-level-3">پایه نگهدارنده گوشی</a>
+                  </li>
+                  <li>
+                    <a href="#" class="category-level-3">همه موارد این دسته</a>
+                  </li>
+                </ul>
+              </li>
+              <li class="has-sub">
+                <a href="#" class="category-level-2">گوشی موبایل</a>
+                <ul>
+                  <li><a href="#" class="category-level-3">سامسونگ</a></li>
+                  <li><a href="#" class="category-level-3">هوآوی</a></li>
+                  <li><a href="#" class="category-level-3">اپل</a></li>
+                  <li><a href="#" class="category-level-3">شیائومی</a></li>
+                  <li><a href="#" class="category-level-3">آنر</a></li>
+                  <li><a href="#" class="category-level-3">نوکیا</a></li>
+                  <li>
+                    <a href="#" class="category-level-3">همه موارد این دسته</a>
+                  </li>
+                </ul>
+              </li>
+              <li class="has-sub">
+                <a href="#" class="category-level-2">دوربین</a>
+                <ul>
+                  <li>
+                    <a href="#" class="category-level-3"
+                      >دوربین عکاسی دیجیتال</a
+                    >
+                  </li>
+                  <li>
+                    <a href="#" class="category-level-3"
+                      >دوربین ورزشی و فیلم برداری</a
+                    >
+                  </li>
+                  <li>
+                    <a href="#" class="category-level-3">دوربین چاپ سریع</a>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+          <li class="has-sub">
+            <a href="#">خوردنی و آشامیدنی</a>
+            <ul>
+              <li class="has-sub">
+                <a href="#" class="category-level-2">لوازم جانبی گوشی</a>
+                <ul>
+                  <li>
+                    <a href="#" class="category-level-3">کیف و کاور گوشی</a>
+                  </li>
+                  <li>
+                    <a href="#" class="category-level-3"
+                      >پاور بانک(شارژر همراه)</a
+                    >
+                  </li>
+                  <li>
+                    <a href="#" class="category-level-3">پایه نگهدارنده گوشی</a>
+                  </li>
+                  <li>
+                    <a href="#" class="category-level-3">همه موارد این دسته</a>
+                  </li>
+                </ul>
+              </li>
+              <li class="has-sub">
+                <a href="#" class="category-level-2">گوشی موبایل</a>
+                <ul>
+                  <li><a href="#" class="category-level-3">سامسونگ</a></li>
+                  <li><a href="#" class="category-level-3">هوآوی</a></li>
+                  <li><a href="#" class="category-level-3">اپل</a></li>
+                  <li><a href="#" class="category-level-3">شیائومی</a></li>
+                  <li><a href="#" class="category-level-3">آنر</a></li>
+                  <li><a href="#" class="category-level-3">نوکیا</a></li>
+                  <li>
+                    <a href="#" class="category-level-3">همه موارد این دسته</a>
+                  </li>
+                </ul>
+              </li>
+              <li class="has-sub">
+                <a href="#" class="category-level-2">دوربین</a>
+                <ul>
+                  <li>
+                    <a href="#" class="category-level-3"
+                      >دوربین عکاسی دیجیتال</a
+                    >
+                  </li>
+                  <li>
+                    <a href="#" class="category-level-3"
+                      >دوربین ورزشی و فیلم برداری</a
+                    >
+                  </li>
+                  <li>
+                    <a href="#" class="category-level-3">دوربین چاپ سریع</a>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+          <li class="has-sub">
+            <a href="#">پیشنهاد ها و تخفیف ها</a>
+            <ul>
+              <li>
+                <a href="#" class="category-level-2">کالاهای شگفت انگیز</a>
+              </li>
+              <li><a href="#" class="category-level-2">فروش ویژه</a></li>
+              <li>
+                <a href="#" class="category-level-2">با هر خرید هدیه بگیرید</a>
+              </li>
+              <li><a href="#" class="category-level-2">تخفیف پایان فصل</a></li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <div class="nav-btn">
+        <span class="linee1"></span>
+        <span class="linee2"></span>
+        <span class="linee3"></span>
+      </div>
+      <div class="overlay"></div>
+      <!--    responsive-megamenu-mobile----------------->
+    </header>
+    {% endif %}
+    <div class="nav-categories-overlay"></div>
+    <div class="overlay-search-box"></div>
     {% block content %}{% endblock %}
-    <script src="{% static "staff/js/jquery-3.2.1.min.js" %}"></script>
-    <script src="{% static "staff/js/bootstrap.js" %}"></script>
+    <script src="{% static 'staff/js/jquery-3.2.1.min.js' %}"></script>
+    <script src="{% static 'staff/js/bootstrap.js' %}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+      var ctx = document.getElementById("salesgrossyearChart").getContext("2d");
+      Chart.defaults.font.family = "iranyekan";
+      Chart.defaults.font.size = 12;
+      Chart.defaults.color = "#797979";
+      var myChart = new Chart(ctx, {
+        type: "line",
+        data: {
+          labels: [
+            "0",
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "7",
+            "8",
+            "9",
+            "10",
+            "11",
+            "12",
+          ],
+          datasets: [
+            {
+              label: "درآمد ناخالصی",
+              data: [30, 50, 20, 80, 40, 12, 23, 60, 30, 45, 70, 30],
+              borderColor: "#1ab1d4",
+              backgroundColor: "#1ab1d4",
+              borderWidth: 3,
+              fill: false,
+            },
+          ],
+        },
+        options: {
+          scales: {
+            yAxes: [
+              {
+                ticks: {
+                  beginAtZero: true,
+                  fontFamily: "iranyekan",
+                },
+              },
+            ],
+            xAxes: [
+              {
+                ticks: {
+                  fontFamily: "iranyekan",
+                },
+              },
+            ],
+          },
+        },
+      });
+    </script>
+    <script>
+      var ctx = document.getElementById("salesyearChart").getContext("2d");
+      Chart.defaults.font.family = "iranyekan";
+      Chart.defaults.font.size = 12;
+      Chart.defaults.color = "#797979";
+      var myChart = new Chart(ctx, {
+        type: "line",
+        data: {
+          labels: [
+            "0",
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "7",
+            "8",
+            "9",
+            "10",
+            "11",
+            "12",
+          ],
+          datasets: [
+            {
+              label: "سفارشات",
+              data: [30, 50, 20, 80, 40, 12, 23, 60, 30, 45, 70, 30],
+              borderColor: "#1ab1d4",
+              backgroundColor: "#1ab1d4",
+              borderWidth: 3,
+              fill: false,
+            },
+          ],
+        },
+        options: {
+          scales: {
+            yAxes: [
+              {
+                ticks: {
+                  beginAtZero: true,
+                  fontFamily: "iranyekan",
+                },
+              },
+            ],
+            xAxes: [
+              {
+                ticks: {
+                  fontFamily: "iranyekan",
+                },
+              },
+            ],
+          },
+        },
+      });
+    </script>
+    <script>
+      var ctx = document.getElementById("salesChart").getContext("2d");
+      Chart.defaults.font.family = "iranyekan";
+      Chart.defaults.font.size = 12;
+      Chart.defaults.color = "#797979";
+      var myChart = new Chart(ctx, {
+        type: "line",
+        data: {
+          labels: [
+            "0",
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "7",
+            "8",
+            "9",
+            "10",
+            "11",
+            "12",
+            "13",
+            "14",
+            "15",
+            "16",
+            "17",
+            "18",
+            "19",
+            "20",
+            "21",
+            "22",
+            "23",
+          ],
+          datasets: [
+            {
+              label: "سفارشات روزانه",
+              data: [
+                30, 50, 20, 80, 40, 12, 23, 60, 30, 45, 70, 30, 60, 20, 45, 34,
+                55, 70, 85, 90, 100, 70, 40, 60,
+              ],
+              borderColor: "#1ab1d4",
+              backgroundColor: "#1ab1d4",
+              borderWidth: 3,
+              fill: false,
+            },
+          ],
+        },
+        options: {
+          scales: {
+            yAxes: [
+              {
+                ticks: {
+                  beginAtZero: true,
+                  fontFamily: "iranyekan",
+                },
+              },
+            ],
+            xAxes: [
+              {
+                ticks: {
+                  fontFamily: "iranyekan",
+                },
+              },
+            ],
+          },
+        },
+      });
+    </script>
+    <script>
+      var ctx = document.getElementById("salesmonthChart").getContext("2d");
+      Chart.defaults.font.family = "iranyekan";
+      Chart.defaults.font.size = 12;
+      Chart.defaults.color = "#797979";
+      var myChart = new Chart(ctx, {
+        type: "line",
+        data: {
+          labels: [
+            "0",
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "7",
+            "8",
+            "9",
+            "10",
+            "11",
+            "12",
+            "13",
+            "14",
+            "15",
+            "16",
+            "17",
+            "18",
+            "19",
+            "20",
+            "21",
+            "22",
+            "23",
+            "24",
+            "25",
+            "26",
+            "27",
+            "28",
+            "29",
+            "30",
+          ],
+          datasets: [
+            {
+              label: "سفارشات",
+              data: [
+                30, 50, 20, 80, 40, 12, 23, 60, 30, 45, 70, 30, 60, 20, 45, 34,
+                55, 70, 85, 90, 100, 70, 40, 60, 45, 77, 88, 99, 150, 22, 45,
+              ],
+              borderColor: "#1ab1d4",
+              backgroundColor: "#1ab1d4",
+              borderWidth: 3,
+              fill: false,
+            },
+          ],
+        },
+        options: {
+          scales: {
+            yAxes: [
+              {
+                ticks: {
+                  beginAtZero: true,
+                  fontFamily: "iranyekan",
+                },
+              },
+            ],
+            xAxes: [
+              {
+                ticks: {
+                  fontFamily: "iranyekan",
+                },
+              },
+            ],
+          },
+        },
+      });
+    </script>
+    <script>
+      var ctx = document
+        .getElementById("salesgrossmonthChart")
+        .getContext("2d");
+      Chart.defaults.font.family = "iranyekan";
+      Chart.defaults.font.size = 12;
+      Chart.defaults.color = "#797979";
+      var myChart = new Chart(ctx, {
+        type: "line",
+        data: {
+          labels: [
+            "0",
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "7",
+            "8",
+            "9",
+            "10",
+            "11",
+            "12",
+            "13",
+            "14",
+            "15",
+            "16",
+            "17",
+            "18",
+            "19",
+            "20",
+            "21",
+            "22",
+            "23",
+            "24",
+            "25",
+            "26",
+            "27",
+            "28",
+            "29",
+            "30",
+          ],
+          datasets: [
+            {
+              label: "فروش ناخالص",
+              data: [
+                30, 50, 20, 80, 40, 12, 23, 60, 30, 45, 70, 30, 60, 20, 45, 34,
+                55, 70, 85, 90, 100, 70, 40, 60, 45, 77, 88, 99, 150, 22, 45,
+              ],
+              borderColor: "#1ab1d4",
+              backgroundColor: "#1ab1d4",
+              borderWidth: 3,
+              fill: false,
+            },
+          ],
+        },
+        options: {
+          scales: {
+            yAxes: [
+              {
+                ticks: {
+                  beginAtZero: true,
+                  fontFamily: "iranyekan",
+                },
+              },
+            ],
+            xAxes: [
+              {
+                ticks: {
+                  fontFamily: "iranyekan",
+                },
+              },
+            ],
+          },
+        },
+      });
+    </script>
+    <script>
+      var grossSalesData = [
+        30, 50, 20, 80, 40, 12, 23, 60, 30, 45, 70, 30, 60, 20, 45, 34, 55, 70,
+        85, 90, 100, 70, 40, 60,
+      ];
+
+      var labels = [
+        "0",
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "10",
+        "11",
+        "12",
+        "13",
+        "14",
+        "15",
+        "16",
+        "17",
+        "18",
+        "19",
+        "20",
+        "21",
+        "22",
+        "23",
+      ];
+
+      var ctx = document.getElementById("grosssaleChart").getContext("2d");
+      var myChart = new Chart(ctx, {
+        type: "line",
+        data: {
+          labels: labels,
+          datasets: [
+            {
+              label: "فروش ناخالص",
+              data: grossSalesData,
+              backgroundColor: "#1ab1d4",
+              borderColor: "#1ab1d4",
+              borderWidth: 3,
+            },
+          ],
+        },
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true,
+            },
+          },
+        },
+      });
+    </script>
+    <script>
+      function openCity(evt, cityName) {
+        // Declare all variables
+        var i, tabcontent, tablinks;
+
+        // Get all elements with class="tabcontent" and hide them
+        tabcontent = document.getElementsByClassName("tabcontent");
+        for (i = 0; i < tabcontent.length; i++) {
+          tabcontent[i].style.display = "none";
+        }
+
+        // Get all elements with class="tablinks" and remove the class "active"
+        tablinks = document.getElementsByClassName("tablinks");
+        for (i = 0; i < tablinks.length; i++) {
+          tablinks[i].className = tablinks[i].className.replace(" active", "");
+        }
+
+        // Show the current tab, and add an "active" class to the button that opened the tab
+        document.getElementById(cityName).style.display = "flex";
+        evt.currentTarget.className += " active";
+      }
+    </script>
   </body>
 </html>
