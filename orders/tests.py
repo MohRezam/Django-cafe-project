@@ -1,6 +1,8 @@
 from django.test import TestCase
 from datetime import date, timedelta
 from orders.models import Order, Discount
+from .forms import OrderForm, DiscountCodeForm, UserSessionForm, CartAddForm
+from .models import Order, Discount
 
 class OrderModelTestCase(TestCase):
     def setUp(self):
@@ -53,3 +55,57 @@ class OrderModelTestCase(TestCase):
     #     discounts = order.discounts.all()
     #     self.assertEqual(discounts.count(), 1)
     #     self.assertEqual(discounts[0].code, 'TESTCODE')
+
+#forms test
+class TestOrderForms(TestCase):
+    def test_order_form_valid(self):
+        form_data = {
+            'description': 'Test Order',
+            'table_number': 1,
+            'customer_name': 'Test Customer',
+            'phone_number': '1234567890',
+            'discount_code': 'TESTCODE'
+        }
+        form = OrderForm(data=form_data)
+        self.assertTrue(form.is_valid())
+
+    def test_discount_code_form_valid(self):
+        form_data = {
+            'code': 'TESTCODE'
+        }
+        form = DiscountCodeForm(data=form_data)
+        self.assertTrue(form.is_valid())
+
+    def test_user_session_form_valid(self):
+        form_data = {
+            'phone_number': '1234567890'
+        }
+        form = UserSessionForm(data=form_data)
+        self.assertTrue(form.is_valid())
+
+    def test_cart_add_form_valid(self):
+        form_data = {
+            'quantity': '2',
+            'item_id': '1',
+            'action': 'add'
+        }
+        form = CartAddForm(data=form_data)
+        self.assertTrue(form.is_valid())
+
+    # def test_order_form_invalid(self):
+    #     # Testing invalid data for OrderForm
+    #     form_data = {
+    #         'description': '',
+    #         'table_number': 1,
+    #         'customer_name': 'Test Customer',
+    #         'phone_number': '1234567890',
+    #         'discount_code': 'INVALIDCODE'  # Assuming 'INVALIDCODE' is an invalid code
+    #     }
+    #     form = OrderForm(data=form_data)
+        
+    #     self.assertFalse(form.is_valid())  # Check if the form is invalid
+
+    #     # Check for specific errors in individual fields
+    #     self.assertIn('description', form.errors)  # Check if 'description' field has an error
+    #     self.assertNotIn('discount_code', form.errors)  # Check if 'discount_code' field has no error
+    #     # Add similar assertions for other fields that are expected to be invalid or valid
