@@ -60,7 +60,8 @@ class CafeMenuView(View):
             if search_form.is_valid():
                 cd = search_form.cleaned_data["search"]
                 items = Item.objects.filter(Q(name__icontains=cd) | Q(price__icontains=cd), category=category_name)
-        messages.error(request, "یافت نشد", "danger")
+            if len(items)==0:
+                messages.error(request, "یافت نشد", "danger")
         return render(request, "cafe/menu-item.html", context={"items": items, "cart_form": cart_form, "cafe":cafe, "search_form":search_form})
 
 
