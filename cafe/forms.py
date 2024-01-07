@@ -3,7 +3,8 @@ from django import forms
 
 class CartAddForm(forms.Form):
     quantity = forms.CharField()
-    iditem=forms.CharField()
+    item_id=forms.CharField()
+    action=forms.CharField()
     
 
 class SearchForm(forms.Form):
