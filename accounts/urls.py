@@ -22,5 +22,6 @@ urlpatterns = [
     path('profile-orders/',views.StaffProfileOrdersView.as_view(),name="staff-orders"),
     path('profile-order-uncomplete/',views.StaffProfileOrderUncompleteView.as_view(),name="staff-orders-uncomplete"),
     path('profile-order-complete/',views.StaffProfileOrdercompleteView.as_view(),name="staff-orders-complete"),
-    path('profile-order-details/<int:id_order>/',views.StaffProfileOrderDetailView.as_view(),name="staff-order-detail")
+    path('profile-order-details/<int:id_order>/',views.StaffProfileOrderDetailView.as_view(),name="staff-order-detail"),
+    path('profile-reports-and-insights/',views.StaffReportsInsightsView.as_view(),name="staff-reports-insights")
 ]

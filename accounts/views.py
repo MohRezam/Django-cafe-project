@@ -193,94 +193,6 @@ class StaffProfileAddItemView(LoginRequiredMixin,View):
             form = self.form_class()
             return render(request, self.template_name, {'form': form})  
 
-        if request.user.is_staff:
-            response = HttpResponse(content_type='text/csv')
-            response['Content-Disposition'] = 'attachment; filename="statistics.csv"'
-
-            writer = csv.writer(response)
-            writer.writerow(['Item Name', 'Total Quantity'])
-            for item in self.get_context_data()['most_ordered_items']:
-                writer.writerow([item['item__name'], item['total_quantity']])
-
-            writer.writerow([]) # Add an empty row for separation
-            writer.writerow(['Table Number', 'Total Reservations'])
-            for table in self.get_context_data()['most_reserved_tables']:
-                writer.writerow([table['table_number'], table['total_reservations']])
-
-            writer.writerow([])  
-            writer.writerow(['Order Hour', 'Total Orders'])
-            for hour in self.get_context_data()['peak_hours']:
-                writer.writerow([hour['order_date__hour'], hour['total_orders']])
-
-            writer.writerow([])  
-            writer.writerow(['Total Sales'])
-            writer.writerow([self.get_context_data()['total_sales']['total_sales']])
-
-            writer.writerow([])
-            writer.writerow(['Monthly Sales'])
-            writer.writerow(['Month', 'Total Sales'])
-            for month in monthly_sales:
-                writer.writerow([calendar.month_name[month['month']], month['total_sales']])
-
-            writer.writerow([])  
-            writer.writerow(['Yearly Sales'])
-            writer.writerow(['Year', 'Total Sales'])
-            for year in yearly_sales:
-                writer.writerow([year['year'], year['total_sales']])
-
-            writer.writerow([])  
-            writer.writerow(['Top Selling Items'])
-            writer.writerow(['Item Name', 'Total Quantity'])
-            for item in top_selling_items:
-                writer.writerow([item['item__name'], item['total_quantity']])
-
-            writer.writerow([]) 
-            writer.writerow(['Sales by Category'])
-            writer.writerow(['Category', 'Total Sales'])
-            for category in sales_by_category:
-                writer.writerow([category['item__category__name'], category['total_sales']])
-
-            writer.writerow([]) 
-            writer.writerow(['Sales by Customer'])
-            writer.writerow(['Customer', 'Total Sales'])
-            for customer in sales_by_customer:
-                writer.writerow([customer['customer__name'], customer['total_sales']])
-
-            writer.writerow([])  
-            writer.writerow(['Sales by Time of Day'])
-            writer.writerow(['Hour', 'Total Sales'])
-            for hour in sales_by_time_of_day:
-                writer.writerow([hour['hour'], hour['total_sales']])
-
-            writer.writerow([])  
-            writer.writerow(['Order Status Report'])
-            writer.writerow(['Status', 'Total Orders'])
-            for status in order_status_report:
-                writer.writerow([status['status'], status['total_orders']])
-
-            writer.writerow([])  
-            writer.writerow(['Daily Sales'])
-            writer.writerow(['Date', 'Total Sales'])
-            for day in daily_sales:
-                writer.writerow([day['date'], day['total_sales']])
-
-            writer.writerow([])
-            writer.writerow(['Sales by Employee Report'])
-            writer.writerow(['Employee', 'Total Sales'])
-            for employee in sales_by_employee_report:
-                writer.writerow([employee['employee__name'], employee['total_sales']])
-            
-            writer.writerow([])
-            writer.writerow(['Customer Order History Report'])
-            writer.writerow(['Customer', 'Total Orders'])
-            for customer in customer_order_history_report:
-                writer.writerow([customer['customer__name'], customer['total_orders']])
-
-            return response
-        else:
-            return HttpResponse("You are not authorized to download the statistics.", status=403)
-
-
 class StatisticsView(TemplateView):
     template_name = 'statistics.html'
     model = Order
@@ -432,7 +344,6 @@ class StatisticsView(TemplateView):
         for customer in context['customer_order_history_report']:
             writer.writerow([customer['customer__name'], customer['total_orders']])
             return response
-
 class StaffProfileOrdersView(LoginRequiredMixin, View):
     form_class = SortOrdersPhone
     template_name = 'accounts/orders.html'
@@ -452,9 +363,7 @@ class StaffProfileOrdersView(LoginRequiredMixin, View):
                     Q(staff_id__exact=cd) |
                     Q(final_price__icontains=cd)
                 )
-        return render(request, self.template_name, {"orders": order, "form": form})
-
-        
+        return render(request, self.template_name, {"orders": order, "form": form})  
 class StaffProfileOrderUncompleteView(LoginRequiredMixin,View):
     def get(self,request):
           order = Order.objects.filter(order_status=False)
@@ -467,9 +376,6 @@ class StaffProfileOrderDetailView(LoginRequiredMixin,View):
     def get(self,request,id_order):
         order = Order.objects.get(id=id_order)
         return render(request,'accounts/profile-order-details.html',{"order":order})
-    def get(self,request,id_order):
-        order = Order.objects.get(id=id_order)
-        return render(request,'accounts/profile-order-details.html',{"order":order})
-    def get(self,request,id_order):
-        order = Order.objects.get(id=id_order)
-        return render(request,'accounts/profile-order-details.html',{"order":order})
+class StaffReportsInsightsView(LoginRequiredMixin,View):
+    def get(self,request):
+        return render(request,'accounts/profile-reports-insight.html')

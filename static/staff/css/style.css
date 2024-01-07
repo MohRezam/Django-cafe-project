@@ -6,7 +6,7 @@
 }
 
 body {
-  background: #fff;
+  background-color: #f5f7fa;
   direction: rtl;
   overflow-x: hidden;
   font-family: iranyekan;
@@ -124,6 +124,16 @@ main.contentM {
   margin-top: 60px;
   display: inline-block;
   margin-top: 100px;
+  background-color: #f5f7fa;
+}
+.tab-filter {
+  background-color: #fff;
+  padding: 15px 20px;
+  border-radius: 16px;
+  margin: 20px 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 .headline-profile::before {
   content: "";
@@ -139,6 +149,19 @@ main.contentM {
 
 .container {
   max-width: 1440px;
+}
+.dow-csv {
+  background-color: inherit;
+  cursor: pointer;
+  padding: 14px 16px;
+  transition: 0.3s;
+  border: 1px solid #1ab1d4;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  color: #1ab1d4 !important;
+  justify-content: space-between;
+  gap: 5px;
 }
 
 /* .adplacement-top-header {
@@ -426,6 +449,53 @@ main.contentM {
   height: auto;
   margin-top: 10px;
   margin-bottom: 10px;
+}
+/* Style the tab */
+.tab {
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  gap: 10px;
+}
+
+/* Style the buttons that are used to open the tab content */
+.tab button {
+  background-color: inherit;
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  transition: 0.3s;
+  border: 1px solid #797979;
+  border-radius: 8px;
+}
+
+.tab button:hover {
+  background-color: #ddd;
+}
+
+/* Create an active/current tablink class */
+.tab button.active {
+  background-color: #1ab1d4;
+  color: #fff;
+  border-color: #1ab1d4;
+}
+
+/* Style the tab content */
+.tabcontent {
+  display: none;
+  padding: 6px 12px;
+  border-top: none;
+  justify-content: center;
+}
+.chart-item {
+  width: 100%;
+  background-color: #fff;
+  border-radius: 14px;
+  padding: 25px 25px;
+  margin-bottom: 35px;
 }
 
 .header-left .btn-login {
