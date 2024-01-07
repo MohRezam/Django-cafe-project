@@ -7,7 +7,9 @@ from django.urls import reverse
 from django.contrib.auth import get_user_model
 from django.contrib.messages import get_messages
 from .models import User
-
+from django.test import TestCase
+from .forms import UserLoginForm, UserForm, CategoryForm, ItemForm, UserChangeForm, SortOrdersPhone
+#models test
 class UserModelTest(TestCase):
     def setUp(self):
         # Create a User object for testing
@@ -42,7 +44,7 @@ class UserModelTest(TestCase):
             cleaned_phone_number = self.user.clean_phone_number('۱۲۳۴۵۶۷۸۹')
         self.assertEqual(str(context.exception), 'Phone number should be 11 digits long.')
 
-
+#views test
 class AccountsViewsTestCase(TestCase):
     def setUp(self):
         self.client = Client()
@@ -70,3 +72,52 @@ class AccountsViewsTestCase(TestCase):
         self.client.login(email='test@example.com', password='testpassword')
         response = self.client.get(reverse('accounts:staff-logout'))
         self.assertEqual(response.status_code, 302)  # Check if the redirection after logout is successful
+#forms test
+class TestUserLoginForm(TestCase):
+    def test_valid_phone_number(self):
+        # Test with valid phone number
+        form_data = {
+            'phone_number': '12345678901',
+            'password': 'some_valid_password',
+        }
+        form = UserLoginForm(data=form_data)
+        self.assertTrue(form.is_valid())
+        
+    def test_invalid_phone_number(self):
+        # Test with invalid phone number (less than 11 digits)
+        form_data = {
+            'phone_number': '12345',
+            'password': 'some_valid_password',
+        }
+        form = UserLoginForm(data=form_data)
+        self.assertFalse(form.is_valid())
+        
+    def test_missing_phone_number(self):
+        # Test with missing phone number
+        form_data = {
+            'password': 'some_valid_password',
+        }
+        form = UserLoginForm(data=form_data)
+        self.assertFalse(form.is_valid())
+
+    def test_valid_password(self):
+        # Test with valid password
+        form_data = {
+            'phone_number': '12345678901',
+            'password': 'some_valid_password',
+        }
+        form = UserLoginForm(data=form_data)
+        self.assertTrue(form.is_valid())
+
+    def test_invalid_password(self):
+        # Test with invalid password (empty string)
+        form_data = {
+            'phone_number': '12345678901',
+            'password': '',
+        }
+        form = UserLoginForm(data=form_data)
+        self.assertFalse(form.is_valid())
+        
+    # Test other scenarios (e.g., edge cases, different data combinations) similarly for comprehensive coverage
+
+# Additional tests for other forms (UserForm, CategoryForm, ItemForm, UserChangeForm, SortOrdersPhone) can be written similarly.
