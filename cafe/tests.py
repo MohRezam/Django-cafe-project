@@ -1,12 +1,24 @@
-from django.test import TestCase
+from django.test import TestCase , Client
 from .models import Menu, Category, Item, Table, Cafe
 from django.core.exceptions import ValidationError
 from django.test import TestCase, RequestFactory
 from django.urls import reverse
+from cafe.forms import CartAddForm, SearchForm
 from django.contrib.messages.storage.fallback import FallbackStorage
 from django.contrib.messages import get_messages
+from cafe.views import (
+    AboutUsView,
+    ContactUsView,
+    SetCartCookieView,
+    AddToCartView,
+    ViewCartView,
+    CheckoutView
+)
 from .models import Cafe, Item
 from .views import *
+from cafe.views import CafeMenuView
+from . import views
+from . import urls
 #models test
 class MenuModelTestCase(TestCase):
     def test_menu_model_fields(self):
@@ -81,4 +93,52 @@ class CafeModelTestCase(TestCase):
             Cafe.objects.create(name='Duplicate Cafe', logo_image='path/to/logo.jpg',
                                 about_page_image='path/to/about.jpg', about_page_description='Duplicate cafe description',
                                 address='Duplicate Cafe Address', phone_number='12345678901')
+#urls test
+# class TestURLPatterns(TestCase):
 
+#     def test_home_url(self):
+#         url = reverse('home')
+#         self.assertEqual(url, '/')
+
+#     def test_about_url(self):
+#         url = reverse('about')
+#         self.assertEqual(url, '/about/')
+
+#     def test_contact_url(self):
+#         url = reverse('contact')
+#         self.assertEqual(url, '/contact/')
+
+#     def test_cafe_menu_url(self):
+#         # Replace 'some-category' with an actual category slug
+#         url = reverse('cafe_menu', kwargs={'category_name': 'some-category'})
+#         self.assertEqual(url, '/some-category/')
+
+#     def test_save_custom_cart_item_url(self):
+#         url = reverse('save_custom_cart_item')
+#         self.assertEqual(url, '/save-custom-cart-item/')
+#form test
+class TestCartAddForm(TestCase):
+    def test_valid_form_data(self):
+        form = CartAddForm(data={
+            'quantity': '5',
+            'item_id': '123',
+            'action': 'add'
+        })
+        self.assertTrue(form.is_valid())
+
+    def test_invalid_form_data(self):
+        # Test with missing required fields
+        form = CartAddForm(data={})
+        self.assertFalse(form.is_valid())
+        self.assertEqual(len(form.errors), 3)  # There should be errors for all fields
+
+class TestSearchForm(TestCase):
+    def test_valid_search_data(self):
+        form = SearchForm(data={'search': 'test'})
+        self.assertTrue(form.is_valid())
+
+    def test_invalid_search_data(self):
+        # Test with missing search field
+        form = SearchForm(data={})
+        self.assertFalse(form.is_valid())
+        self.assertEqual(len(form.errors), 1)  # There should be an error for the search field
