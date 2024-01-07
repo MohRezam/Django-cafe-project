@@ -86,7 +86,7 @@ class CafeMenuView(View):
             print("Form errors:", form.errors)
             return HttpResponse("Form is not valid. Check form.errors for details.")
     def save(self,item_id, quantity ):
-        self.data[item_id] = quantity
+        self.data[item_id] = int(quantity)
         order = {"id": generate_random_id(), "item": self.data}
         self.request.session["order"] = {"order": order, "status": ""}
         print(f"Saving item {item_id} with quantity {quantity}")

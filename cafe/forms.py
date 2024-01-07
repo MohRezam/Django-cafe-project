@@ -2,7 +2,7 @@ from django import forms
 
 
 class CartAddForm(forms.Form):
-    quantity = forms.CharField()
+    quantity = forms.CharField(initial=0)
     item_id=forms.CharField()
     action=forms.CharField()
     

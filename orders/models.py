@@ -18,7 +18,7 @@ class Order(TimeStampedModel):
     description= models.CharField(verbose_name="توضیحات", max_length=500, null=True , blank=True)
     order_date = models.DateTimeField(verbose_name="زمان ثبت سفارش", auto_now_add=True ,null=True)
     table_number = models.IntegerField(verbose_name="شماره میز", null = True)
-    staff_id= models.ForeignKey(User , on_delete=models.CASCADE)
+    staff_id= models.CharField(verbose_name="شماره کارمند",null=True,blank=True)
     order_detail= models.JSONField(default=dict) #save like dictionary
     order_id= models.CharField(max_length=255)
     customer_name= models.CharField(verbose_name="نام مشتری",blank = True , null = True , max_length=255) 

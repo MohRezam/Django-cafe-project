@@ -17,7 +17,6 @@ from .models import Item
 class CheckoutView(View):
     template_name = 'orders/checkout.html'
     model = Order
-    discount_model = Discount
     discount_form = DiscountCodeForm
     data = {}
     final_price= 0
@@ -32,8 +31,14 @@ class CheckoutView(View):
             self.data = {}
 
     def get(self, request, *args, **kwargs):
+        # if "code" in request.GET:
+        #     discount_code = request.GET.get('discount_code')
+        #     discount_form = DiscountCodeForm(request.GET)
+        #     if discount_form.is_valid():
+        #         return self.apply_discount(request, discount_code)
         self.load_data_from_cookie(request)
         form = OrderForm()
+        cuppon_form = self.discount_form
         item_quantity_dict = self.data
         total_price = self.calculate_total_price(item_quantity_dict)
         self.model_total_price=total_price
@@ -47,30 +52,28 @@ class CheckoutView(View):
         else:
             final_price= self.final_price
             
-        return render(request, self.template_name, {'form': form ,"combined_items":combined_items ,'total_price': total_price ,"total_quantity":total_quantity , "final_price":final_price})
+        return render(request, self.template_name, {'form': form ,"combined_items":combined_items ,'total_price': total_price ,"total_quantity":total_quantity , "final_price":final_price,"discount":cuppon_form})
 
     def post(self, request, *args, **kwargs):
         form = OrderForm(request.POST)
 
         if form.is_valid():
-            discount_code = request.POST.get('discount_code')
+            # discount_code = request.POST.get('discount_code')
             action = request.POST.get('action')
             describe= request.POST.get('describe')
             table_number =request.POST.get('table_number')
             customer_name= request.POST.get('name')
             phone_number = request.POST.get('phone_number')
-            if action == 'discount':
-                return self.apply_discount(request, form, discount_code)
-
-            elif action == 'checkout':
+            if action == 'checkout':
                 print("checkout-----")
                 return self.process_checkout(request, form , describe , table_number , customer_name , phone_number)
 
         return render(request, self.template_name, {'form': form})
 
-    def apply_discount(self, request, form, discount_code):
+    def apply_discount(self, request, discount_code):
+        form = self.discount_form
         try:
-            discount = self.discount_model.objects.get(code=discount_code)
+            discount =  Discount.objects.get(code=discount_code)
         except Discount.DoesNotExist:
             return render(request, self.template_name, {'form': form, 'error_message': 'Invalid discount code'})
 
@@ -83,7 +86,6 @@ class CheckoutView(View):
         else:
             return render(request, self.template_name, {'form': form, 'error_message': 'Discount code has expired'})
 
-        return render(request, self.template_name, {'form': form})
 
     def process_checkout(self, request, form , describe , table_number , customer_name , phone_number):
         self.load_data_from_cookie(request)
@@ -179,26 +181,27 @@ class ViewCartView(View):
 
     def get(self, request):
         self.load_data_from_cookie(request)
+        cart_form = CartAddForm()
         cart_items = Item.objects.filter(id__in=self.data.keys())
         values=(self.data.values())
         prices=self.calculate_price(self.data)
         combined_items = zip_longest(cart_items, values, prices, fillvalue=None)
 
-        return render(request, self.template_name, {'combined_items': combined_items})
+        return render(request, self.template_name, {'combined_items': combined_items,'cart_form':cart_form})
     
-    def post(self, request, category_name, *args, **kwargs):
+    def post(self, request, *args, **kwargs):
         self.load_data_from_cookie(request)
         form = CartAddForm(request.POST)
         if form.is_valid():
             item_id = request.POST.get('item_id')
             quantity = request.POST.get('quantity')
             action = request.POST.get('action')
-
+            print(action)
             if action == 'delete':
 
                 self.data.pop(item_id)
 
-                self.save_data_to_session()   
+                self.save_data_to_session(request)   
 
                 response = HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))   
 
@@ -221,7 +224,7 @@ class ViewCartView(View):
 
 
     def save(self,item_id, quantity ):
-        self.data[item_id] += quantity
+        self.data[item_id] += int(quantity)
         order = {"id": generate_random_id(), "item": self.data}
         self.request.session["order"] = {"order": order, "status": ""}
         print(f"Saving item {item_id} with quantity {quantity}")

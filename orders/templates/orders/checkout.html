@@ -227,11 +227,12 @@
       <div class="main col-lg-9 col-sm-12 py-4">
         <h1 class="px-2 title-page">پرداخت</h1>
         <div class="checkout-coupon">
-          <from
+          <form
             class="field-checkout w-100 d-flex align-items-center justify-content-between"
             action=""
-            method="post"
+            method="get"
           >
+            {% csrf_token %}
             <svg
               width="28"
               height="28"
@@ -275,25 +276,14 @@
                 </clipPath>
               </defs>
             </svg>
-            <input
-              type="text"
-              name="coupon_code"
-              class="input-coupon w-75"
-              placeholder="افزودن کد تخفیف"
-              id="coupon_code"
-              value=""
-            />
-            <button
-              type="submit"
-              class="button btn-cupon-checkout"
-              name="apply_coupon"
-              value="اعمال کدتخفیف"
-            >
-              اعمال
-            </button>
-          </from>
+             {{discount}}
+             <button type="submit">
+              اعمال کد
+             </button>
+          </form>
         </div>
-        <form>
+        <form action="" method="post">
+          {% csrf_token %}
           <div
             class="group-checkout-item d-flex flex-md-row justify-content-between gap-3 mt-4 flex-column"
           >
@@ -307,31 +297,19 @@
                   <label for="exampleInputnameandfamily" class="form-label"
                     >نام و نام خانوادگی</label
                   >
-                  <input type="text" class="form-control" id="nameandfamily" />
+                  {{form.customer_name}}
                 </div>
                 <div class="mb-3">
                   <label for="exampleInputPassword1" class="form-label"
                     >شماره تلفن</label
                   >
-                  <input
-                    type="text"
-                    class="form-control"
-                    id="exampleInputphone"
-                  />
+                  {{form.phone_number}}
                 </div>
                 <div class="mb-3">
                   <label for="exampleInputPassword1" class="form-label"
                     >شماره میز</label
                   >
-                  <select
-                    class="form-select"
-                    aria-label="Default select example"
-                  >
-                    <option selected>شماره میز خود را انتخاب کنید</option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                  </select>
+                  {{form.table_number}}
                 </div>
 
                 <h3 class="shipping-title my-3">روش تحویل را انتخاب کنید</h3>
@@ -372,7 +350,7 @@
                   </div>
                 </div>
               </div>
-              <div class="pay-box mt-3 border-1 rounded-3 py-3 px-3">
+              <!-- <div class="pay-box mt-3 border-1 rounded-3 py-3 px-3">
                 <h3 class="shipping-title my-3">روش پرداخت را انتخاب کنید</h3>
                 <ul
                   class="d-flex flex-column align-items-start justify-content-between p-0 gap-4"
@@ -409,7 +387,7 @@
                     </label>
                   </li>
                 </ul>
-              </div>
+              </div> -->
             </div>
             <div class="checkout-left-section">
               <div class="order-review border-1 rounded-3 py-3 px-3">
@@ -444,15 +422,11 @@
                     <label for="exampleFormControlTextarea1" class="form-label"
                       >توضیحات</label
                     >
-                    <textarea
-                      class="form-control"
-                      id="exampleFormControlTextarea1"
-                      rows="3"
-                      placeholder="توضیحات خاصی برای آماده‌سازی و ارسال سفارش مد نظرتان است؟ اینجا بنویسید."
-                    ></textarea>
+                    {{form.description}}
+                    <input type="hidden" name="action" value="checkout"/>
                   </div>
                 </div>
-                <button class="btn btn-checkout w-100 py-3 px-3"   >پرداخت</button>
+                <button type="submit" class="btn btn-checkout w-100 py-3 px-3"   >ثبت سفارش</button>
               </div>
             </div>
           </div>
