@@ -4,6 +4,8 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser
 from django.core.validators import EmailValidator
 from .managers import UserManager
+from django.db import models
+from jdatetime import datetime as jdatetime_datetime
 import re
 # from orders import models as orders_models
 # role_list=(("Barista","Barista") ,('manager', 'Manager') , ("Cashier","Cashier"), ('waiter', 'Waiter'), ("Kitchen Staff","Kitchen Staff"))
@@ -89,16 +91,32 @@ class User(AbstractBaseUser):
         return self.is_admin
    
 
-class TimeStampedModel(models.Model):
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+# class TimeStampedModel(models.Model):
+#     created_at = models.DateTimeField(auto_now_add=True)
+#     updated_at = models.DateTimeField(auto_now=True)
 
+
+#     class Meta:
+#         abstract = True
+#     def save(self, *args, **kwargs):
+#     # Update the 'updated_at' timestamp before saving
+#         self.updated_at = timezone.now()
+#         super(TimeStampedModel, self).save(*args, **kwargs)
+
+class TimeStampedModel(models.Model):
+    created_at = models.CharField(max_length=20, editable=False)
+    updated_at = models.CharField(max_length=20, editable=False)
 
     class Meta:
         abstract = True
+
     def save(self, *args, **kwargs):
-    # Update the 'updated_at' timestamp before saving
-        self.updated_at = timezone.now()
+        # Update the 'updated_at' timestamp before saving
+        self.updated_at = str(jdatetime_datetime.now().strftime('%Y/%m/%d %H:%M:%S'))
+
+        if not self.created_at:
+            self.created_at = str(jdatetime_datetime.now().strftime('%Y/%m/%d %H:%M:%S'))
+
         super(TimeStampedModel, self).save(*args, **kwargs)
 
 # This is an idea, it may add later
