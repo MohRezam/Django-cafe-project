@@ -3,6 +3,17 @@ from datetime import date, timedelta
 from orders.models import Order, Discount
 from .forms import OrderForm, DiscountCodeForm, UserSessionForm, CartAddForm
 from .models import Order, Discount
+from django.test import TestCase, Client
+from django.urls import reverse
+from .models import Item
+from django.test import TestCase, Client
+from django.test import TestCase, Client
+from orders.models import Order, Discount  # Import your models here
+import json
+# from django.contrib.sessions.backends.db import SessionStore
+# from orders.custom_session import CustomSession 
+
+
 
 class OrderModelTestCase(TestCase):
     def setUp(self):
@@ -109,3 +120,94 @@ class TestOrderForms(TestCase):
     #     self.assertIn('description', form.errors)  # Check if 'description' field has an error
     #     self.assertNotIn('discount_code', form.errors)  # Check if 'discount_code' field has no error
     #     # Add similar assertions for other fields that are expected to be invalid or valid
+
+#view test
+
+
+
+
+# class TestCheckoutView(TestCase):
+#     def setUp(self):
+#         # Create test data if needed (e.g., Discount objects)
+#         self.discount = Discount.objects.create(code='TESTCODE', percentage=10)
+
+#     def test_checkout_view_get(self):
+#         client = Client()
+#         response = client.get(reverse('checkout'))
+
+#         self.assertEqual(response.status_code, 200)
+#         self.assertTemplateUsed(response, 'orders/checkout.html')
+#         self.assertContains(response, 'Your checkout content')  # Check for specific content in the HTML
+#         # Add more assertions to validate the context, form, etc.
+
+#     def test_checkout_view_post(self):
+#         client = Client()
+#         data = {
+#             # Add form data for the POST request
+#         }
+#         response = client.post(reverse('checkout'), data)
+
+#         self.assertEqual(response.status_code, 200)
+#         # Add more assertions to check the behavior after a POST request to checkout
+
+#     # Add more test cases for CheckoutView as needed
+
+
+# class TestViewCartView(TestCase):
+#     def setUp(self):
+#         # Create test data if needed (e.g., Order objects)
+#         self.order = Order.objects.create(description='Test Order', table_number=1)
+
+#     def test_view_cart_view_get(self):
+#         client = Client()
+#         response = client.get(reverse('cart_page'))
+
+#         self.assertEqual(response.status_code, 200)
+#         self.assertTemplateUsed(response, 'orders/cart.html')
+#         self.assertContains(response, 'Your cart content')  # Check for specific content in the HTML
+#         # Add more assertions to validate the context, form, etc.
+
+#     def test_view_cart_view_post(self):
+#         client = Client()
+#         data = {
+#             # Add form data for the POST request
+#         }
+#         response = client.post(reverse('cart_page'), data)
+
+#         self.assertEqual(response.status_code, 200)
+#         # Add more assertions to check the behavior after a POST request to cart_page
+
+#     def test_delete_cart_item_view(self):
+#         client = Client()
+#         data = {
+#             # Add data for the POST request to delete a cart item
+#         }
+#         response = client.post(reverse('delete_cart_item'), data)
+
+#         self.assertEqual(response.status_code, 200)
+#         # Add assertions to check the behavior after a POST request to delete_cart_item
+
+#     # Add more test cases for ViewCartView as needed
+
+#custom session test
+
+
+# class TestCustomSessionStore(TestCase):
+#     def test_custom_session_store(self):
+#         # Create a session store
+#         session = SessionStore()
+#         session['cart'] = {'item_id': 1, 'quantity': 2}  # Simulating 'cart' data
+        
+#         # Save the session
+#         session.save()
+
+#         # Retrieve or create CustomSession object
+#         custom_session = CustomSession.objects.get(session_key=session.session_key)
+        
+#         # Assertions to check if the CustomSession object has been created correctly
+#         self.assertEqual(custom_session.session_key, session.session_key)
+#         self.assertEqual(custom_session.custom_data, str(session['cart']))
+#         # Add more assertions as needed based on your CustomSession model
+        
+#         # Clean up: Delete the created CustomSession object
+#         custom_session.delete()
