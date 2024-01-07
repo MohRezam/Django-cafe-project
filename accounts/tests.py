@@ -12,6 +12,12 @@ from .forms import UserLoginForm, UserForm, CategoryForm, ItemForm, UserChangeFo
 from django.test import SimpleTestCase
 from django.urls import reverse, resolve
 from accounts import views
+from django.test import TestCase
+from django.contrib.admin.sites import AdminSite
+from django.contrib.auth.models import Group
+from django.contrib.auth import get_user_model
+from accounts.admin import UserAdmin
+from accounts.forms import UserForm, UserChangeForm
 #models test
 class UserModelTest(TestCase):
     def setUp(self):
@@ -211,3 +217,41 @@ class TestUrls(SimpleTestCase):
     def test_staff_reports_insights_url_resolves(self):
         url = reverse('accounts:staff-reports-insights')
         self.assertEqual(resolve(url).func.view_class, views.StaffReportsInsightsView)
+#admin test
+        
+User = get_user_model()
+
+class TestUserAdmin(TestCase):
+    def setUp(self):
+        self.site = AdminSite()
+        self.admin = UserAdmin(User, self.site)
+
+    def test_admin_instantiation(self):
+        self.assertIsInstance(self.admin, UserAdmin)
+
+    def test_list_display(self):
+        self.assertEqual(self.admin.list_display, ('email', 'phone_number', 'is_admin'))
+
+    def test_list_filter(self):
+        self.assertEqual(self.admin.list_filter, ('is_admin',))
+
+    def test_fieldsets(self):
+        fieldsets = self.admin.fieldsets
+        self.assertEqual(len(fieldsets), 2)  # Ensure there are two fieldsets defined
+
+        # Test the content of fieldsets
+        self.assertEqual(fieldsets[0][0], None)  # First fieldset should have a title 'None'
+        self.assertListEqual(
+            list(fieldsets[0][1]['fields']),
+            ['email', 'phone_number', 'full_name', 'password', 'address', 'national_id']
+        )  # Ensure fields are included correctly
+
+        self.assertEqual(fieldsets[1][0], 'Permissions')  # Second fieldset should have a title 'Permissions'
+        self.assertListEqual(
+            list(fieldsets[1][1]['fields']),
+            ['is_active', 'is_admin', 'last_login']
+        )  # Ensure permissions fields are included correctly
+
+
+    # Add more test methods to verify add_fieldsets, search_fields, ordering, filter_horizontal, etc.
+       
