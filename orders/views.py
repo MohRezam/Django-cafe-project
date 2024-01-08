@@ -1,6 +1,8 @@
 from datetime import datetime, timedelta
 from itertools import zip_longest
-from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
+from typing import Any
+from django.http import HttpRequest, HttpResponse, HttpResponseRedirect, JsonResponse
+from django.http.response import HttpResponse as HttpResponse
 from django.shortcuts import redirect, render
 from django.views import View
 from .forms import UserSessionForm  , OrderForm ,CartAddForm , DiscountCodeForm
@@ -11,7 +13,6 @@ from cafe.views import generate_random_id
 from .models import Order ,Discount
 from django.shortcuts import get_object_or_404
 from .models import Item
-
 
 
 class CheckoutView(View):
@@ -44,7 +45,12 @@ class CheckoutView(View):
     final_price= 0
     model_discount_code= None
     total_price=0
-
+    
+    def dispatch(self, request: HttpRequest, *args: Any, **kwargs: Any) -> HttpResponse:
+        if len(self.load_data_from_cookie(request)) == 0:
+            return redirect("cafe:home")
+        return super().dispatch(request, *args, **kwargs)
+    
     def load_data_from_cookie(self, request):
         """
         Loads cart data from cookies.
@@ -60,6 +66,8 @@ class CheckoutView(View):
             self.data = json.loads(cart_cookie)
         except json.JSONDecodeError:
             self.data = {}
+        
+        return self.data
 
     def get(self, request, *args, **kwargs):
         """
@@ -89,13 +97,12 @@ class CheckoutView(View):
         prices=self.calculate_price(self.data)
         combined_items = zip_longest(cart_items, values, prices, fillvalue=None)
         total_quantity=self.calculate_total_quantity(item_quantity_dict)
-        cafe = get_object_or_404(Cafe)
         if self.final_price == 0:
             final_price=total_price
         else:
             final_price= self.final_price
             
-        return render(request, self.template_name, {'form': form ,"combined_items":combined_items ,'total_price': total_price ,"total_quantity":total_quantity , "final_price":final_price,"discount":cuppon_form, "cafe":cafe})
+        return render(request, self.template_name, {'form': form ,"combined_items":combined_items ,'total_price': total_price ,"total_quantity":total_quantity , "final_price":final_price,"discount":cuppon_form})
 
     def post(self, request, *args, **kwargs):
         """
@@ -183,6 +190,7 @@ class CheckoutView(View):
                 food_item = {"name": item_name, "price": item_price, "quantity": quantity}
 
                 food_items.append(food_item)
+              
         
 
         total_items = sum([item["quantity"] for item in food_items])
