@@ -89,12 +89,13 @@ class CheckoutView(View):
         prices=self.calculate_price(self.data)
         combined_items = zip_longest(cart_items, values, prices, fillvalue=None)
         total_quantity=self.calculate_total_quantity(item_quantity_dict)
+        cafe = get_object_or_404(Cafe)
         if self.final_price == 0:
             final_price=total_price
         else:
             final_price= self.final_price
             
-        return render(request, self.template_name, {'form': form ,"combined_items":combined_items ,'total_price': total_price ,"total_quantity":total_quantity , "final_price":final_price,"discount":cuppon_form})
+        return render(request, self.template_name, {'form': form ,"combined_items":combined_items ,'total_price': total_price ,"total_quantity":total_quantity , "final_price":final_price,"discount":cuppon_form, "cafe":cafe})
 
     def post(self, request, *args, **kwargs):
         """
