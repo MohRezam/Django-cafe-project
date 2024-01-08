@@ -2,6 +2,23 @@ from django.contrib.auth.models import BaseUserManager
 
 class UserManager(BaseUserManager):
     def create_user(self, phone_number, email, full_name, password, address=None, national_id=None):
+        """
+        Create a new user with the given information.
+
+        Args:
+            phone_number (str): The user's phone number.
+            email (str): The user's email address.
+            full_name (str): The user's full name.
+            password (str): The user's password.
+            address (str, optional): The user's address. Defaults to None.
+            national_id (str, optional): The user's national ID. Defaults to None.
+
+        Returns:
+            User: The newly created user.
+        
+        Raises:
+            ValueError: If any of the required fields are missing.
+        """
         if not phone_number:
             raise ValueError("User must have a phone number")
         
@@ -23,6 +40,20 @@ class UserManager(BaseUserManager):
         return user
     
     def create_superuser(self, phone_number, email, full_name, password, address=None, national_id=None):
+        """
+        Create a new superuser with the given information.
+
+        Args:
+            phone_number (str): The user's phone number.
+            email (str): The user's email address.
+            full_name (str): The user's full name.
+            password (str): The user's password.
+            address (str, optional): The user's address. Defaults to None.
+            national_id (str, optional): The user's national ID. Defaults to None.
+
+        Returns:
+            User: The newly created superuser.
+        """
         user = self.create_user(
             phone_number=phone_number,
             email=email,

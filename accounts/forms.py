@@ -14,6 +14,15 @@ class UserForm(forms.ModelForm):
         fields = ['email', 'phone_number', 'full_name', 'address', 'national_id', 'is_active', 'is_admin','password']
     
     def clean_phone_number(self):
+        """
+        Clean the phone number field and convert it to English numbers.
+
+        Returns:
+            str: The cleaned phone number in English numbers.
+        
+        Raises:
+            forms.ValidationError: If the phone number length is not equal to 11.
+        """
         phone_number = self.cleaned_data.get('phone_number')
         cleaned_phone_number = User().convert_to_english_numbers(phone_number)
         # Additional validation (e.g., ensuring the length or format of the phone number)
@@ -24,6 +33,12 @@ class UserForm(forms.ModelForm):
         return cleaned_phone_number
 
     def clean_email(self):
+        """
+        Clean the email field.
+
+        Returns:
+            str: The cleaned email.
+        """
         email = self.cleaned_data.get('email')
         # Additional email validation if necessary
         return email
@@ -72,9 +87,18 @@ class UserLoginForm(forms.Form):
     phone_number = forms.CharField(label="شماره موبایل :",max_length=11)
     password = forms.CharField(label="رمز عبور :",widget=forms.PasswordInput)
     def clean_phone_number(self):
+        """
+        Clean the phone number field.
+
+        Returns:
+            str: The cleaned phone number.
+
+        Raises:
+            forms.ValidationError: If the phone number length is not equal to 11.
+        """
         phone_number = self.cleaned_data.get('phone_number')
         if phone_number and len(phone_number) != 11:
-         raise forms.ValidationError('شماره تلفن باید یازده رقم باشد')
+            raise forms.ValidationError('شماره تلفن باید یازده رقم باشد')
         return phone_number
         
 

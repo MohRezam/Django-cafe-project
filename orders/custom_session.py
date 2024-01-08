@@ -3,6 +3,15 @@ from .models import CustomSession
 
 class CustomSessionStore(DbSessionStore):
     def save(self, must_create=False):
+        """
+        Save the session data and update the CustomSession model if 'cart' exists in the session data.
+
+        Args:
+            must_create (bool): If True, the session will be created if it doesn't exist.
+
+        Returns:
+            None
+        """
         super().save(must_create)
 
         # If 'cart' exists in the session data, save it in the CustomSession model

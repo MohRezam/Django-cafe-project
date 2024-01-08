@@ -9,7 +9,7 @@
       >
         <header class="d-flex flex-column align-items-center gap-2 w-100">
           <img
-            src="./images/clipart2415024.png"
+            src="{{cafe.logo_image.url}}"
             alt="logo"
             class="logo img-fluid"
           />
@@ -19,7 +19,7 @@
             </span>
             <ul id="myDropdown" class="dropdown-content pt-2 px-1">
               <li class="py-2">
-                <a class="down-item text-white" href="#">درباره ما</a>
+                <a class="down-item text-white" href="{% url "cafe:about" %}">درباره ما</a>
               </li>
               <li class="py-2">
                 <a class="down-item text-white" href="#">سوالات متداول</a>
@@ -28,7 +28,7 @@
                 <a class="down-item text-white" href="#">قوانین و مقررات</a>
               </li>
               <li class="py-2">
-                <a class="down-item text-white" href="#">تماس با ما</a>
+                <a class="down-item text-white" href="{% url "cafe:contact" %}">تماس با ما</a>
               </li>
             </ul>
             <a
@@ -59,7 +59,7 @@
               <div class="offcanvas-body">
                 <ul class="list-unstyled pt-2 px-1">
                   <li class="py-2 border-top border-bottom">
-                    <a class="down-item text-dark" href="#">درباره ما</a>
+                    <a class="down-item text-dark" href="{% url "cafe:about" %}">درباره ما</a>
                   </li>
                   <li class="py-2 border-top border-bottom">
                     <a class="down-item text-dark" href="#">سوالات متداول</a>
@@ -68,7 +68,7 @@
                     <a class="down-item text-dark" href="#">قوانین و مقررات</a>
                   </li>
                   <li class="py-2 border-top border-bottom">
-                    <a class="down-item text-dark" href="#">تماس با ما</a>
+                    <a class="down-item text-dark" href="{% url "cafe:contact" %}">تماس با ما</a>
                   </li>
                 </ul>
               </div>
@@ -76,7 +76,7 @@
           </div>
           <div class="d-flex justify-content-between align-items-center w-75">
             <div class="name-resturan text-center">
-              <p>کافه و رستوران استارباکس</p>
+              <p>{{ cafe.name }}</p>
             </div>
             <div
               class="online-ordianry d-flex flex-column align-items-center justify-content-center gap-1"
@@ -135,8 +135,7 @@
             class="addres-online border-top border-1 w-75 d-flex align-items-center justify-content-between"
           >
             <p>
-              کرمان بلوار جمهوری اسلامی- کوچه رئوف 1 - برج ماهان - طبقه همکف -
-              واحد 1290
+              {{cafe.address}}
             </p>
             <a
               target="_blank"
@@ -156,10 +155,10 @@
             </div>
             <div class="list-footer">
               <ul class="list-group-footer">
+                <li class="list-group-item"><a href="{% url "cafe:about" %}">درباره ما</a></li>
                 <li class="list-group-item"><a href="#">درباره ما</a></li>
                 <li class="list-group-item"><a href="#">درباره ما</a></li>
-                <li class="list-group-item"><a href="#">درباره ما</a></li>
-                <li class="list-group-item"><a href="#">درباره ما</a></li>
+                <li class="list-group-item"><a href="{% url "cafe:contact" %}">درباره ما</a></li>
               </ul>
             </div>
             <div class="phone">
@@ -241,7 +240,7 @@
             <tr>
               <td>
                 <div class="food-thumbnail">
-                  <img src="./images/پومودور-300x300.png" alt="{{ item.name }}" />
+                  <img src="{{item.image.url}}" alt="{{ item.name }}" />
                 </div>
                 <div class="food-title">
                   <p>{{ item.name }}</p>
@@ -251,7 +250,35 @@
               <td>{{ qty }}</td>
               <td>{{ price }}</td>
               <td>
-                <a href="javascript:void(0)" id="deleteButton">حذف</a>
+                <form action="" method="post" class="form-quantity" id="quantitybutton" novalidate>
+                  {% csrf_token %}
+                  <div class="quantity">
+                      <button class="plus-btn" type="button" name="button">
+                          <img src="{% static 'images/plus.svg' %}" alt="" />
+                      </button>
+                      <input type="text" name="quantity" value="0" />
+                      <input type="hidden" name="item_id" value="{{ item.id }}" />
+                      <input type="hidden" name="action" id="actionvalue" value="save"/>
+                      <button class="minus-btn" type="button" name="button">
+                          <img src="{% static 'images/minus.svg' %}" alt="-" />
+                      </button>
+                      <button type="submit" class="btn food-button" onclick="increaseCartCount()" id="addButton" data-item-id="{{ item.id }}" data-quantity="{{ cart_form.quantity.value }}">
+                        افزودن
+                      </button>
+
+                  </div>
+                </form>
+                <form action="" method="post" class="form-quantity" id="quantitybutton" novalidate>
+                  {% csrf_token %}
+                  <div class="quantity">
+                      <input type="hidden" name="quantity" value="0" />
+                      <input type="hidden" name="item_id" value="{{ item.id }}" />
+                      <input type="hidden" name="action" id="actionvalue" value="delete"/>
+                      <button type="submit" class="btn food-button" onclick="changeaction()" id="deletebutton" data-item-id="{{ item.id }}" data-quantity="{{ cart_form.quantity.value }}">
+                       حذف
+                      </button>
+                  </div>
+                </form>
               </td>
             </tr>
             {% endfor %}
@@ -260,11 +287,11 @@
         <div
           class="food-cart-box d-flex align-items-center justify-content-between"
         >
-          <div class="food-remove">
+          {% comment %} <div class="food-remove">
             <a href="#">×</a>
 
-          </div>
-          <div class="food-thumbnail">
+          </div> {% endcomment %}
+          {% comment %} <div class="food-thumbnail">
             <img src="./images/پومودور-300x300.png" />
           </div>
           <div class="food-title">
@@ -346,12 +373,12 @@
           </div>
           <div class="food-amount">
             <p class="amount-price">6,900 تومان</p>
-          </div>
+          </div> {% endcomment %}
         </div>
         <div
           class="navigation-card w-100 d-flex py-3 px-2 align-items-center justify-content-between"
         >
-        <a href="{% url 'cafe:home' %}"><button class="update-cart"> از سر گیری  سفارش </button>
+        <a href="{% url 'cafe:home' %}"><button class="update-cart"> از سرگیری سفارش </button>
         </a>
           <a
             href="{% url 'orders:checkout' %}"
@@ -454,8 +481,7 @@
             class="addres-online border-top border-1 w-75 d-flex align-items-center justify-content-between"
           >
             <p>
-              کرمان بلوار جمهوری اسلامی- کوچه رئوف 1 - برج ماهان - طبقه همکف -
-              واحد 1290
+              {{cafe.address}}
             </p>
             <a
               target="_blank"
@@ -475,10 +501,10 @@
             </div>
             <div class="list-footer">
               <ul class="list-group-footer">
+                <li class="list-group-item"><a href="{% url "cafe:about" %}">درباره ما</a></li>
                 <li class="list-group-item"><a href="#">درباره ما</a></li>
                 <li class="list-group-item"><a href="#">درباره ما</a></li>
-                <li class="list-group-item"><a href="#">درباره ما</a></li>
-                <li class="list-group-item"><a href="#">درباره ما</a></li>
+                <li class="list-group-item"><a href="{% url "cafe:contact" %}">ارتباط با ما</a></li>
               </ul>
             </div>
             <div class="phone">
@@ -534,7 +560,7 @@
                     stroke="white"
                   ></path>
                 </svg>
-                <p>03432611100</p></a
+                <p>{{cafe.phone_number}}</p></a
               >
             </div>
           </div>
