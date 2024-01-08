@@ -16,14 +16,23 @@ import calendar
 from calendar import month_name
 
 class StaffRegisterView(View):
+    """
+    View for registring staff members. 
+    """
     form_class = UserForm  
     template_name = 'accounts/register.html'
 
     def get(self, request):
+        """
+        Handle GET request for registration form.
+        """
         form = self.form_class()
         return render(request, self.template_name, {'form': form})
 
     def post(self, request):
+        """
+        Handle POST request for registration form.
+        """
         form = self.form_class(request.POST)
         if form.is_valid():
             cd = form.cleaned_data
@@ -40,14 +49,23 @@ class StaffRegisterView(View):
 
     
 class StaffLoginView(View):
+    """
+    View for staff login. 
+    """
     form_class = UserLoginForm
     template_name = 'accounts/login.html'
 
     def get(self, request):
+        """
+        Handle GET request for login form.
+        """
         form = self.form_class
         return render(request, self.template_name, {'form': form})
 
     def post(self, request):
+        """
+        Handle POST request for login form.
+        """
         form = self.form_class(request.POST)
         if form.is_valid():
             cd = form.cleaned_data
@@ -59,10 +77,16 @@ class StaffLoginView(View):
         return render(request, self.template_name, {'form': form})
     
 class StffLogoutView(LoginRequiredMixin, View):
-	def get(self, request):
-		logout(request)
-		messages.success(request, 'خروج موفقیت آمیز انجام شد', 'success')
-		return redirect('accounts:staff-login')
+    """
+    View for staff logout.
+    """
+    def get(self, request):
+        """
+        Handle GET request for logout.
+        """
+	    logout(request)
+	    messages.success(request, 'خروج موفقیت آمیز انجام شد', 'success')
+	    return redirect('accounts:staff-login')
 
 
 
@@ -70,21 +94,36 @@ class StffLogoutView(LoginRequiredMixin, View):
 
         
 class StffProfileView(LoginRequiredMixin, View):
+    """
+    View for staff profile.
+    """
     def get(self, request):
+        """
+        Handle GET request for staff profile.
+        """
         last_five_orders = Order.objects.order_by('-created_at')[:5]
         return render(request, 'accounts/profile.html', {"orders": last_five_orders})
      
 
 class StaffProfileInfoView(LoginRequiredMixin, View):
+    """
+    View for staff profile information.
+    """
     form_class = UserChangeForm
     template_name = "accounts/profile-info.html"
 
     def get(self, request, staff_user_id):
+        """
+        Handle GET request for staff profile information.
+        """
         user = User.objects.get(id=staff_user_id)
         form = self.form_class(instance=user)
         return render(request, self.template_name, {'form': form})
 
     def post(self, request, staff_user_id):
+        """
+        Handle POST request for staff profile information.
+        """
         user = User.objects.get(id=staff_user_id)
         form = self.form_class(request.POST, instance=user)
         if form.is_valid():
@@ -95,28 +134,55 @@ class StaffProfileInfoView(LoginRequiredMixin, View):
             form = self.form_class(instance=user)
             return render(request, self.template_name, {'form': form})
 class StaffProfilePersonalView(LoginRequiredMixin, View):
-     def get(self,request):
-          return render(request,'accounts/profile-personal-info.html')
+    """
+    View for staff personal information.
+    """
+    def get(self,request):
+        """
+        Handle GET request for staff categories.
+        """
+        return render(request,'accounts/profile-personal-info.html')
 class StaffProfileCategoriesView(LoginRequiredMixin,View):
-     def get(self,request):
-          category = Category.objects.all()
-          return render(request,'accounts/categories.html',{'category':category})
+    """
+    View for staff categories.
+    """
+    def get(self,request):
+        """
+        Handle GET request for staff categories.
+        """
+        category = Category.objects.all()
+        return render(request,'accounts/categories.html',{'category':category})
 class StaffCategoryDeleteView(LoginRequiredMixin,View):
-     def get(self,request,id_category):
-          category = get_object_or_404(Category, pk=id_category)
-          category.delete()
-          messages.success(request,"دسته بندی با موفقیت حذف شد","success")
-          return redirect("accounts:staff-categories")
+    """
+    View for deleting a category.
+    """
+    def get(self,request,id_category):
+        """
+        Handle GET request for deleting a category.
+        """
+        category = get_object_or_404(Category, pk=id_category)
+        category.delete()
+        messages.success(request,"دسته بندی با موفقیت حذف شد","success")
+        return redirect("accounts:staff-categories")
 class StaffCategoryUpdateView(LoginRequiredMixin, View):
+    """
+    View for updating a category.
+    """
     form_class = CategoryForm
     template_name = "accounts/profile-update-category.html"
     
     def get(self, request, id_category):
+        """
+        Handle GET request for updating a category.
+        """
         category = get_object_or_404(Category, id=id_category)
         form = self.form_class(instance=category)
         return render(request, self.template_name, {'form': form})
         
     def post(self, request, id_category):
+        """
+        Handle POST request for updating a category.
+        """
         category = get_object_or_404(Category, id=id_category)
         form = self.form_class(request.POST, instance=category)
         
@@ -127,14 +193,23 @@ class StaffCategoryUpdateView(LoginRequiredMixin, View):
         
         return render(request, self.template_name, {'form': form})   
 class StaffAddCategoryView(LoginRequiredMixin, View):
+    """
+    View for adding a category.
+    """
     form_class = CategoryForm
     template_name = "accounts/profile-add-category.html"
     
     def get(self, request):
+        """
+        Handle GET request for adding a category.
+        """
         form = self.form_class()
         return render(request, self.template_name, {'form': form})
     
     def post(self, request):
+        """
+        Handle POST request for adding a category.
+        """
         form = self.form_class(request.POST, request.FILES)
         
         if form.is_valid():
@@ -149,24 +224,45 @@ class StaffAddCategoryView(LoginRequiredMixin, View):
         
         return render(request, self.template_name, {'form': form})
 class StaffProfileItemsView(LoginRequiredMixin,View):
+    """
+    View for staff items.
+    """
     def get(self,request):
+        """
+        Handle GET request for staff items.
+        """
         items = Item.objects.all()
         return render(request,'accounts/items.html',{'items':items})
 class StaffProfileDeleteItemView(LoginRequiredMixin,View):
-     def get(self,request,id_item):
-          item = get_object_or_404(Item, pk=id_item)
-          item.delete()
-          messages.success(request,"محصول با موفقیت حذف شد","success")
-          return redirect("accounts:staff-items")
+    """
+    View for deleting an item.
+    """
+    def get(self,request,id_item):
+        """
+        Handle GET request for deleting an item.
+        """
+        item = get_object_or_404(Item, pk=id_item)
+        item.delete()
+        messages.success(request,"محصول با موفقیت حذف شد","success")
+        return redirect("accounts:staff-items")
 class StaffProfileUpdateItemView(LoginRequiredMixin,View):
-     form_class = ItemForm
-     template_name = "accounts/profile-update-item.html"
-     def get(self,request,id_item) :
+    """
+    View for updating an item.
+    """
+    form_class = ItemForm
+    template_name = "accounts/profile-update-item.html"
+    def get(self,request,id_item) :
+        """
+        Handle GET request for updating an item.
+        """
         item = get_object_or_404(Item, id=id_item)
         form = self.form_class(instance=item)
         return render(request, self.template_name, {'form': form})
      
-     def post(self,request,id_item):
+    def post(self,request,id_item):
+        """
+        Handle POST request for updating an item.
+        """
         item = get_object_or_404(Item, id=id_item)
         form = self.form_class(request.POST,request.FILES,instance=item)
         if form.is_valid():
@@ -177,13 +273,22 @@ class StaffProfileUpdateItemView(LoginRequiredMixin,View):
             form = self.form_class(instance=item)
             return render(request, self.template_name, {'form': form})  
 class StaffProfileAddItemView(LoginRequiredMixin,View):
-     form_class = ItemForm
-     template_name = "accounts/profile-add-item.html"
-     def get(self,request,) :
+    """
+    View for adding an item.
+    """
+    form_class = ItemForm
+    template_name = "accounts/profile-add-item.html"
+    def get(self,request,) :
+        """
+        Handle GET request for adding an item.
+        """
         form = self.form_class()
         return render(request, self.template_name, {'form': form})
-     
-     def post(self,request):
+    
+    def post(self,request):
+        """
+        Handle POST request for adding an item.
+        """
         form = self.form_class(request.POST,request.FILES)
         if form.is_valid():
             form.save()
@@ -194,10 +299,16 @@ class StaffProfileAddItemView(LoginRequiredMixin,View):
             return render(request, self.template_name, {'form': form})  
 
 class StatisticsView(TemplateView):
+    """
+    View for generating statistics.
+    """
     template_name = 'statistics.html'
     model = Order
     
     def get(self, request, *args, **kwargs):
+        """
+        Handle GET request for generating statistics.
+        """
         if request.user.is_staff:
             response = HttpResponse(content_type='text/csv')
             response['Content-Disposition'] = 'attachment; filename="statistics.csv"'
@@ -252,6 +363,9 @@ class StatisticsView(TemplateView):
             return HttpResponse("You are not authorized to download the statistics.", status=403)
 
     def write_to_csv(self, response, context):
+        """
+        Write statistics data to a CSV file.
+        """
         writer = csv.writer(response)
 
         writer.writerow(['Item Name', 'Total Quantity'])
@@ -345,10 +459,16 @@ class StatisticsView(TemplateView):
             writer.writerow([customer['customer__name'], customer['total_orders']])
             return response
 class StaffProfileOrdersView(LoginRequiredMixin, View):
+    """
+    View for staff orders.
+    """
     form_class = SortOrdersPhone
     template_name = 'accounts/orders.html'
 
     def get(self, request):
+        """
+        Handle GET request for staff orders.
+        """
         form = self.form_class()
         order = Order.objects.all()
         
@@ -365,17 +485,38 @@ class StaffProfileOrdersView(LoginRequiredMixin, View):
                 )
         return render(request, self.template_name, {"orders": order, "form": form})  
 class StaffProfileOrderUncompleteView(LoginRequiredMixin,View):
+    """
+    View for uncompleted staff orders.
+    """
     def get(self,request):
-          order = Order.objects.filter(order_status=False)
-          return render(request,'accounts/orders-uncomplete.html',{"orders":order})
+        """
+        Handle GET request for uncompleted staff orders.
+        """
+        order = Order.objects.filter(order_status=False)
+        return render(request,'accounts/orders-uncomplete.html',{"orders":order})
 class StaffProfileOrdercompleteView(LoginRequiredMixin,View):
+    """
+    View for completed staff orders.
+    """
     def get(self,request):
-          order = Order.objects.filter(order_status=True)
-          return render(request,'accounts/orders-complete.html',{"orders":order})
+        """
+        Handle GET request for completed staff orders.
+        """
+        order = Order.objects.filter(order_status=True)
+        return render(request,'accounts/orders-complete.html',{"orders":order})
 class StaffProfileOrderDetailView(LoginRequiredMixin,View):
+    """
+    View for staff order details.
+    """
     def get(self,request,id_order):
+        """
+        Handle GET request for staff order details.
+        """
         order = Order.objects.get(id=id_order)
         return render(request,'accounts/profile-order-details.html',{"order":order})
 class StaffReportsInsightsView(LoginRequiredMixin,View):
+    """
+    View for staff reports and insights.
+    """
     def get(self,request):
         return render(request,'accounts/profile-reports-insight.html')
