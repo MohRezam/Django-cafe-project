@@ -19,17 +19,26 @@ from cafe.models import Category, Item
 #models test
 class MenuModelTestCase(TestCase):
     def test_menu_model_fields(self):
+        """
+        Test the fields of the Menu model.
+        """
         menu = Menu.objects.create(menu_name='Breakfast Menu', description='A selection of breakfast items')
         self.assertEqual(menu.menu_name, 'Breakfast Menu')
         self.assertEqual(menu.description, 'A selection of breakfast items')
 
 class CategoryModelTestCase(TestCase):
     def test_category_model_fields(self):
+        """
+        Test the fields of the Category model.
+        """
         category = Category.objects.create(category_name='Drinks', image='path/to/image.jpg')
         self.assertEqual(category.category_name, 'Drinks')
         self.assertEqual(category.image, 'path/to/image.jpg')
 
     def test_category_str_representation(self):
+        """
+        Test the string representation of the Category model.
+        """
         category = Category.objects.create(category_name='Desserts', image='path/to/image.jpg')
         self.assertEqual(str(category), 'دسته بندی: Desserts')
 
@@ -38,6 +47,9 @@ class ItemModelTestCase(TestCase):
         self.category = Category.objects.create(category_name='Drinks', image='path/to/image.jpg')
 
     def test_item_model_fields(self):
+        """
+        Test the fields of the Item model.
+        """
         item = Item.objects.create(name='Coffee', price=5, image='path/to/image.jpg',
                                    description='Freshly brewed coffee', category=self.category,
                                    ingredients='Coffee beans, water', item_status=True)
@@ -49,6 +61,9 @@ class ItemModelTestCase(TestCase):
         self.assertTrue(item.item_status)
 
     def test_item_str_representation(self):
+        """
+        Test the string representation of the Item model.
+        """
         item = Item.objects.create(name='Tea', price=3, image='path/to/image.jpg',
                                    description='A cup of tea', category=self.category,
                                    ingredients='Tea leaves, hot water', item_status=True)
@@ -56,16 +71,25 @@ class ItemModelTestCase(TestCase):
 
 class TableModelTestCase(TestCase):
     def test_table_model_fields(self):
+        """
+        Test the fields of the Table model.
+        """
         table = Table.objects.create(table_number=1, is_available=True)
         self.assertEqual(table.table_number, 1)
         self.assertTrue(table.is_available)
 
     def test_table_str_representation(self):
+        """
+        Test the string representation of the Table model.
+        """
         table = Table.objects.create(table_number=2, is_available=False)
         self.assertEqual(str(table), 'Table 2 - Not Available')
 
 class CafeModelTestCase(TestCase):
     def test_cafe_model_fields(self):
+        """
+        Test the fields of the Cafe model.
+        """
         cafe = Cafe.objects.create(name='Cafe Name', logo_image='path/to/logo.jpg',
                                    about_page_image='path/to/about.jpg', about_page_description='About the cafe',
                                    address='Cafe Address', phone_number='12345678901')
@@ -77,12 +101,18 @@ class CafeModelTestCase(TestCase):
         self.assertEqual(cafe.phone_number, '12345678901')
 
     def test_cafe_str_representation(self):
+        """
+        Test the string representation of the Cafe model.
+        """
         cafe = Cafe.objects.create(name='Test Cafe', logo_image='path/to/logo.jpg',
                                    about_page_image='path/to/about.jpg', about_page_description='About the test cafe',
                                    address='Test Cafe Address', phone_number='12345678901')
         self.assertEqual(str(cafe), 'Test Cafe')
 
     def test_single_cafe_instance(self):
+        """
+        Test that only one instance of the Cafe model can be created.
+        """
         Cafe.objects.create(name='Unique Cafe', logo_image='path/to/logo.jpg',
                             about_page_image='path/to/about.jpg', about_page_description='Unique cafe description',
                             address='Unique Cafe Address', phone_number='12345678901')
@@ -116,6 +146,9 @@ class CafeModelTestCase(TestCase):
 #form test
 class TestCartAddForm(TestCase):
     def test_valid_form_data(self):
+        """
+        Test the CartAddForm with valid form data.
+        """
         form = CartAddForm(data={
             'quantity': '5',
             'item_id': '123',
@@ -124,6 +157,9 @@ class TestCartAddForm(TestCase):
         self.assertTrue(form.is_valid())
 
     def test_invalid_form_data(self):
+        """
+        Test the CartAddForm with invalid form data.
+        """
         # Test with missing required fields
         form = CartAddForm(data={})
         self.assertFalse(form.is_valid())
@@ -131,10 +167,16 @@ class TestCartAddForm(TestCase):
 
 class TestSearchForm(TestCase):
     def test_valid_search_data(self):
+        """
+        Test the SearchForm with valid search data.
+        """
         form = SearchForm(data={'search': 'test'})
         self.assertTrue(form.is_valid())
 
     def test_invalid_search_data(self):
+        """
+        Test the SearchForm with invalid search data.
+        """
         # Test with missing search field
         form = SearchForm(data={})
         self.assertFalse(form.is_valid())
