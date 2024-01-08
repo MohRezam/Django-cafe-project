@@ -17,6 +17,9 @@ import json
 
 class OrderModelTestCase(TestCase):
     def setUp(self):
+        """
+        Set up the test data for Order model.
+        """
         self.test_order = Order.objects.create(
             description='Test Order',
             order_date=date.today(),
@@ -37,6 +40,9 @@ class OrderModelTestCase(TestCase):
             end_date=date.today() + timedelta(days=1)
         )
     def test_order_fields(self):
+        """
+        Test the fields of the Order model.
+        """
         order = Order.objects.get(description='Test Order')
 
         self.assertEqual(order.order_date.date(), date.today())
@@ -51,6 +57,9 @@ class OrderModelTestCase(TestCase):
 
 
     def test_discount_methods(self):
+        """
+        Test the methods of the Discount model.
+        """
         discount = Discount.objects.get(code='TESTCODE')
         self.assertTrue(discount.is_valid())
 
@@ -70,6 +79,9 @@ class OrderModelTestCase(TestCase):
 #forms test
 class TestOrderForms(TestCase):
     def test_order_form_valid(self):
+        """
+        Test the validity of the OrderForm.
+        """
         form_data = {
             'description': 'Test Order',
             'table_number': 1,
@@ -81,6 +93,9 @@ class TestOrderForms(TestCase):
         self.assertTrue(form.is_valid())
 
     def test_discount_code_form_valid(self):
+        """
+        Test the validity of the DiscountCodeForm.
+        """
         form_data = {
             'code': 'TESTCODE'
         }
@@ -88,6 +103,9 @@ class TestOrderForms(TestCase):
         self.assertTrue(form.is_valid())
 
     def test_user_session_form_valid(self):
+        """
+        Test the validity of the UserSessionForm.
+        """
         form_data = {
             'phone_number': '1234567890'
         }
@@ -95,6 +113,9 @@ class TestOrderForms(TestCase):
         self.assertTrue(form.is_valid())
 
     def test_cart_add_form_valid(self):
+        """
+        Test the validity of the CartAddForm.
+        """
         form_data = {
             'quantity': '2',
             'item_id': '1',
