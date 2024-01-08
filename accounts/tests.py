@@ -22,6 +22,9 @@ from django.test import TestCase
 from django.contrib.auth import get_user_model
 #models test
 class UserModelTest(TestCase):
+    """
+    Set up the test environment by creating a User object for testing.
+    """
     def setUp(self):
         # Create a User object for testing
         self.user = User.objects.create(
