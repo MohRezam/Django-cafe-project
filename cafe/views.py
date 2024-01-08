@@ -15,7 +15,19 @@ from django.contrib import messages
 
 
 class HomeView(View):
+    """
+    View class for rendering the home page of the cafe application.
+    """
     def get(self, request):
+        """
+        Handle GET requests for the home page.
+
+        Args:
+            request (HttpRequest): The HTTP request object.
+
+        Returns:
+            HttpResponse: The HTTP response object containing the rendered HTML template.
+        """
         cafe = get_object_or_404(Cafe)
         all_categories = Category.objects.all()        
         return render(request, "cafe/index.html", context={"all_categories":all_categories, "cafe":cafe})
@@ -29,6 +41,9 @@ from django.db.models import Q
 from .models import Cafe, Item, Category
 from .forms import CartAddForm, SearchForm
 class CafeMenuView(View):
+    """
+    View class for rendering the menu page of the cafe application.
+    """
     data = {}
 
     # def dispatch(self, request, category_name):
@@ -38,6 +53,15 @@ class CafeMenuView(View):
     #     return super().dispatch(request, category_name)
 
     def load_data_from_cookie(self, request):
+        """
+        Load cart data from the request's cookies.
+
+        Args:
+            request (HttpRequest): The HTTP request object.
+
+        Returns:
+            None
+        """
         cart_cookie = request.COOKIES.get('cart', '{}')
         try:
             self.data = json.loads(cart_cookie)
@@ -45,10 +69,29 @@ class CafeMenuView(View):
             self.data = {}
 
     def save_data_to_cookie(self, response):
+        """
+        Save cart data to the response's cookies.
+
+        Args:
+            response (HttpResponse): The HTTP response object.
+
+        Returns:
+            None
+        """
         expiration_date = datetime.now() + timedelta(days=365)
         response.set_cookie("cart", json.dumps(self.data), expires=expiration_date)
 
     def get(self, request, category_name):
+        """
+        Handle GET requests for the menu page.
+
+        Args:
+            request (HttpRequest): The HTTP request object.
+            category_name (str): The name of the category.
+
+        Returns:
+            HttpResponse: The HTTP response object containing the rendered HTML template.
+        """
         self.load_data_from_cookie(request)
         cart_form = CartAddForm()
         cafe = get_object_or_404(Cafe)
@@ -65,6 +108,16 @@ class CafeMenuView(View):
 
 
     def post(self, request, category_name, *args, **kwargs):
+        """
+        Handle POST requests for adding items to the cart.
+
+        Args:
+            request (HttpRequest): The HTTP request object.
+            category_name (str): The name of the category.
+
+        Returns:
+            HttpResponse or JsonResponse: The HTTP response object.
+        """
         self.load_data_from_cookie(request)
         form = CartAddForm(request.POST)
         if form.is_valid():
@@ -86,6 +139,16 @@ class CafeMenuView(View):
             print("Form errors:", form.errors)
             return HttpResponse("Form is not valid. Check form.errors for details.")
     def save(self,item_id, quantity ):
+        """
+        Save the item and its quantity to the cart data.
+
+        Args:
+            item_id (str): The ID of the item.
+            quantity (int): The quantity of the item.
+
+        Returns:
+            None
+        """
         self.data[item_id] = int(quantity)
         order = {"id": generate_random_id(), "item": self.data}
         self.request.session["order"] = {"order": order, "status": ""}
@@ -144,18 +207,54 @@ def generate_random_id():
 
 
 class AboutUsView(View):
+    """
+    View class for rendering the about us page of the cafe application.
+    """
     def get(self, request):
+        """
+        Handle GET requests for the cart page.
+
+        Args:
+            request (HttpRequest): The HTTP request object.
+
+        Returns:
+            HttpResponse: The HTTP response object containing the rendered HTML template.
+        """
         cafe = get_object_or_404(Cafe)
         return render(request, "cafe/about.html", {"cafe":cafe})
 
 
 class ContactUsView(View):
+    """
+    View class for rendering the contact us page of the cafe application.
+    """
     def get(self, request):
+        """
+        Handle GET requests for the contact us page.
+
+        Args:
+            request (HttpRequest): The HTTP request object.
+
+        Returns:
+            HttpResponse: The HTTP response object containing the rendered HTML template.
+        """
         cafe = get_object_or_404(Cafe)
         return render(request, "cafe/contact-us.html", {"cafe":cafe})
 #in zir
 class SetCartCookieView(View):
+    """
+    View class for setting the cart cookie.
+    """
     def get(self, request):
+        """
+        Handle GET requests for setting the cart cookie.
+
+        Args:
+            request (HttpRequest): The HTTP request object.
+
+        Returns:
+            HttpResponse: The HTTP response object.
+        """
         cart_data = "your_cart_data_here"  # Replace this with your actual cart data
         response = HttpResponse("Cookie set successfully")
         response.set_cookie('cart', cart_data, max_age=3600)  # 'max_age' sets the cookie's expiration time in seconds
@@ -165,7 +264,20 @@ class SetCartCookieView(View):
 
         return response
 class AddToCartView(View):
+    """
+    View class for adding items to the cart.
+    """
     def get(self, request, item_id):
+        """
+        Handle GET requests for adding items to the cart.
+
+        Args:
+            request (HttpRequest): The HTTP request object.
+            item_id (int): The ID of the item.
+
+        Returns:
+            HttpResponse: The HTTP response object.
+        """
         cart = request.COOKIES.get('cart', '').split(',')  # Get cart data from cookies
         cart.append(str(item_id))  # Add the new item to the cart
         response = redirect('menu')
@@ -176,7 +288,19 @@ class AddToCartView(View):
         return response
 
 class ViewCartView(View):
+    """
+    View class for rendering the cart page.
+    """
     def get(self, request):
+        """
+        Handle GET requests for the cart page.
+
+        Args:
+            request (HttpRequest): The HTTP request object.
+
+        Returns:
+            HttpResponse: The HTTP response object containing the rendered HTML template.
+        """
         cart_item_ids = request.COOKIES.get('cart')
         print("print",cart_item_ids)
         cart_items = Item.objects.filter(id__in=cart_item_ids.keys())
@@ -184,7 +308,19 @@ class ViewCartView(View):
 
 
 class CheckoutView(View):
+    """
+    View class for handling the checkout process.
+    """
     def get(self, request):
+        """
+        Handle GET requests for the checkout page.
+
+        Args:
+            request (HttpRequest): The HTTP request object.
+
+        Returns:
+            HttpResponse: The HTTP response object.
+        """
         cart_item_ids = request.session.get('cart', [])  # Get cart data from session
         # Fetch cart items from the database using cart_item_ids
         cart_items = Item.objects.filter(id__in=cart_item_ids)
