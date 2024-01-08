@@ -9,7 +9,7 @@
       >
         <header class="d-flex flex-column align-items-center gap-2 w-100">
           <img
-            src="{{cafe.logo_image.url}}"
+            src="./images/clipart2415024.png"
             alt="logo"
             class="logo img-fluid"
           />
@@ -214,7 +214,7 @@
                     stroke="white"
                   ></path>
                 </svg>
-                <p>{{cafe.phone_number}}</p></a
+                <p>03432611100</p></a
               >
             </div>
           </div>
@@ -543,10 +543,10 @@
             </div>
             <div class="list-footer">
               <ul class="list-group-footer">
+                <li class="list-group-item"><a href="{% url "cafe:about" %}">درباره ما</a></li>
                 <li class="list-group-item"><a href="#">درباره ما</a></li>
                 <li class="list-group-item"><a href="#">درباره ما</a></li>
-                <li class="list-group-item"><a href="#">درباره ما</a></li>
-                <li class="list-group-item"><a href="#">درباره ما</a></li>
+                <li class="list-group-item"><a href="{% url "cafe:contact" %}">ارتباط با ما</a></li>
               </ul>
             </div>
             <div class="phone">
@@ -602,7 +602,7 @@
                     stroke="white"
                   ></path>
                 </svg>
-                <p>{{cafe.phone_number}}</p></a
+                <p>03432611100</p></a
               >
             </div>
           </div>
