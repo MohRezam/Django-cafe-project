@@ -14,7 +14,7 @@
               style="padding: 0"
             >
               <div class="profile-stats-col">
-                <p><span> سفارشات امروز :</span>352 سفارش</p>
+                <p><span> سفارشات امروز :</span>{{orders_tody.0}} سفارش</p>
               </div>
             </div>
 
@@ -23,7 +23,7 @@
               style="padding: 0"
             >
               <div class="profile-stats-col">
-                <p><span>سفارشات پرداخت شده :</span>150 سفارش</p>
+                <p><span>سفارشات پرداخت شده :</span>{{orders_tody.2}} سفارش</p>
               </div>
             </div>
             <div
@@ -31,7 +31,7 @@
               style="padding: 0"
             >
               <div class="profile-stats-col">
-                <p><span>سفارشات پرداخت نشده :</span>100 سفارش</p>
+                <p><span>سفارشات پرداخت نشده :</span>{{orders_tody.1}} سفارش</p>
               </div>
             </div>
           </div>
@@ -48,7 +48,7 @@
               style="padding: 0"
             >
               <div class="profile-stats-col">
-                <p><span>فروش امروز :</span>360,000 تومان</p>
+                <p><span>فروش امروز :</span>{{salse_report.0.total}} تومان</p>
               </div>
             </div>
 
@@ -140,7 +140,6 @@
                 <th scope="col">#</th>
                 <th scope="col">شماره سفارش</th>
                 <th scope="col">تاریخ ثبت سفارش</th>
-                <th scope="col">ساعت ثبت سفارش</th>
                 <th scope="col">مبلغ قابل پرداخت</th>
                 <th scope="col">آیتم</th>
                 <th scope="col">عملیات پرداخت</th>
@@ -152,9 +151,8 @@
               <tr>
                 <td>{{ forloop.counter }}</td>
                 <td class="order-code">{{ order.order_id }}</td>
-                <td>{{ order.created_at|date:"j F y" }}</td>
-                <td>{{ order.created_at|time:"H:i" }}</td>
-                <td>{{order.order_detail.details_items.0.total_price}}</td>
+                <td>{{ order.created_at }}</td>
+                <td>{{order.final_price}}</td>
                 <td>
                   {% for food_item in order.order_detail.food_items %}
                   <p>{{ forloop.counter }}-{{ food_item.name }}</p>
