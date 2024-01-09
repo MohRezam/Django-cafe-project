@@ -44,13 +44,30 @@ class Table(models.Model):
     """
     Represents a table in the cafe.
     """
-    table_number = models.IntegerField(verbose_name="شماره میز", unique=True)
+    CHOICES = (
+         ("1", "1"), 
+    ("2", "2"), 
+    ("3", "3"), 
+    ("4", "4"), 
+    ("5", "5"), 
+    ("6", "6"), 
+    ("7", "7"), 
+    ("8", "8"),
+    ("9", "9"),
+    ("10", "10") 
+    )
+    table_number = models.CharField(verbose_name="شماره میز",choices=CHOICES, unique=True)
     is_available = models.BooleanField(verbose_name="موجود", default=True)
 
     def __str__(self):
-        return f"Table {self.table_number} - {'Available' if self.is_available else 'Not Available'}"
+        # return f"Table {self.table_number} - {'Available' if self.is_available else 'Not Available'}"
+        return f"{self.table_number} {'' if self.is_available else 'رزرو شده'}"
 
 
+    class Meta:
+        
+        verbose_name_plural = 'میز'
+    
 class Cafe(models.Model):
     """
     Represents a cafe.
