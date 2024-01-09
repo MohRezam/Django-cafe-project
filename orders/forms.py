@@ -1,6 +1,6 @@
 from django import forms
 from .models import Order ,Discount
-
+from cafe.models import Table
 class OrderForm(forms.ModelForm):
     """
     A form for creating or updating an Order object.
@@ -8,6 +8,22 @@ class OrderForm(forms.ModelForm):
     class Meta:
         model = Order
         fields = ['description', 'table_number', 'customer_name', 'phone_number', 'discount_code']  
+    
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.fields['table_number'].queryset = Table.objects.filter(is_available=True)
+    
+    def clean(self):
+        cleaned_data = super().clean()
+        chosen_item = cleaned_data.get('table_number')
+
+        if chosen_item:
+            chosen_item.is_available = False
+            chosen_item.save()
+
+        return cleaned_data
 
 class DiscountCodeForm(forms.ModelForm):
     """
