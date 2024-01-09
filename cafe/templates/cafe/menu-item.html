@@ -19,7 +19,7 @@
             </span>
             <ul id="myDropdown" class="dropdown-content pt-2 px-1">
               <li class="py-2">
-                <a class="down-item text-white" href="{% url "cafe:about" %}">درباره ما</a>
+                <a class="down-item text-white" href="{% url 'cafe:about' %}">درباره ما</a>
               </li>
               <li class="py-2">
                 <a class="down-item text-white" href="#">سوالات متداول</a>
@@ -28,7 +28,7 @@
                 <a class="down-item text-white" href="#">قوانین و مقررات</a>
               </li>
               <li class="py-2">
-                <a class="down-item text-white" href="{% url "cafe:contact" %}">تماس با ما</a>
+                <a class="down-item text-white" href="{% url 'cafe:contact' %}">تماس با ما</a>
               </li>
             </ul>
             <a
@@ -59,7 +59,7 @@
               <div class="offcanvas-body">
                 <ul class="list-unstyled pt-2 px-1">
                   <li class="py-2 border-top border-bottom">
-                    <a class="down-item text-dark" href="{% url "cafe:about" %}">درباره ما</a>
+                    <a class="down-item text-dark" href="{% url 'cafe:about' %}">درباره ما</a>
                   </li>
                   <li class="py-2 border-top border-bottom">
                     <a class="down-item text-dark" href="#">سوالات متداول</a>
@@ -68,7 +68,7 @@
                     <a class="down-item text-dark" href="#">قوانین و مقررات</a>
                   </li>
                   <li class="py-2 border-top border-bottom">
-                    <a class="down-item text-dark" href="{% url "cafe:contact" %}">تماس با ما</a>
+                    <a class="down-item text-dark" href="{% url 'cafe:contact' %}">تماس با ما</a>
                   </li>
                 </ul>
               </div>
@@ -127,9 +127,15 @@
               <p class="status-order-accept">سفارش می پذیریم.</p>
             </div>
           </div>
+          <div class="box-search w-75">
+            <form class="d-flex" action="" method="get">
+              {{search_form.search}}
+              <button class="btn btn-outline-success btn-search" type="submit"><i class="fas fa-search"></i></button>
+            </form>
+          </div>
         </header>
         <footer
-          class="footer d-flex flex-column justify-content-center align-items-center gap-2"
+          class="footer w-100 d-flex flex-column justify-content-center align-items-center gap-2"
         >
           <div
             class="addres-online border-top border-1 w-75 d-flex align-items-center justify-content-between"
@@ -235,20 +241,18 @@
             <li><a href="#category-7">نوشیدنی</a></li>
   
           </ul>
-            <div class="container-fluid">     {% comment %} added this navbar for search {% endcomment %}
-              <form class="d-flex" role="search">
-                {{search_form.search}}
-                <button class="btn btn-outline-success" type="submit">Search</button>
-              </form>
-            </div>
+          {% comment %} added this navbar for search {% endcomment %}
+
            
         </nav>
-        {% if messages %}
+        <!-- {% if messages %}
         {% for msg in messages %}
         <p class="alert alert-{{msg.tags}} col-md-6">{{msg}}</p>
         {% endfor %}
-        {% endif %}
-  
+        {% endif %} -->
+        {% if messages %}
+        <p>چیزی یافت نشود</p>
+        {% else %}
         <div class="main-item-section">
           <div id="category-1" class="food-main-group my-5">
             <h3 class="food-tab-title">
@@ -264,9 +268,8 @@
                   <div class="food-info d-flex justify-content-between gap-1">
                     <div class="food-info-content w-50 pt-2">
                       <h2 class="food-info-title">{{item.name}}</h2>
-                      <hr>
                       <p class="food-info-description">
-                        <i>{{item.description}}</i>
+                        {{item.description}}
                       </p>
                     </div>
                     <div
@@ -284,12 +287,14 @@
                     <div class="food-actions-button">
 
                     <form action="" method="post" class="form-quantity" id="quantitybutton">
-                        {% csrf_token %}
+                      {% csrf_token %}
+                       
                         <div class="quantity">
                             <button class="plus-btn" type="button" name="button">
                                 <img src="{% static 'images/plus.svg' %}" alt="" />
                             </button>
-                            {{ cart_form.quantity }}
+                            <input type="text" name="quantity" value="0" class="quantity-button" required id="id_quantity">
+                        
                             <input type="hidden" name="item_id" value="{{ item.id }}" />
                             <input type="hidden" name="action" value="save"/>
                             <button class="minus-btn" type="button" name="button">
@@ -310,6 +315,8 @@
             </div>
           </div>
         </div>
+        {% endif %}
+
       </div>
       <div class="toolbar col-12">
         <div class="ryn-toolbar">
@@ -585,6 +592,7 @@
           });
         });
       </script>
+      
  
   </body>
   {% endblock %}

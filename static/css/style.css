@@ -295,7 +295,29 @@ form.form-info-edit {
 .navbar li:last-child a {
   border-radius: 12px 0 0 12px;
 }
-
+.btn-search {
+  border-radius: 5px 0 0 5px !important;
+}
+.form-search {
+  border-radius: 0 5px 5px 0 !important;
+}
+.form-search:focus {
+  box-shadow: none !important;
+  border: 0 !important;
+}
+.food-button {
+  width: 100% !important;
+  margin-top: 5px;
+}
+.plus-btn {
+  width: 30% !important;
+}
+.minus-btn {
+  width: 30% !important;
+}
+.quantity-button {
+  width: 35% !important;
+}
 .active-nav::before {
   content: "";
   width: 14px;
@@ -359,16 +381,16 @@ form.form-info-edit {
   margin: 0;
   display: block;
   width: 100px;
-  height: auto !important;
+  height: 100px;
   max-width: none !important;
   position: relative;
   z-index: 2;
+  object-fit: cover;
 }
 .food-price {
-  padding: 0 16px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: end;
 }
 .food-price p {
   font-size: 18px;
@@ -684,6 +706,7 @@ a.checkout-button {
     rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
     rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
 }
+
 @media screen and (max-width: 768px) {
   .container-responsive {
     max-width: 100% !important;

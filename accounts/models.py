@@ -24,11 +24,8 @@ import re
 #     phone_number = models.CharField(max_length=11)
 
 
-# Define the role choices for the Staff model
+# custom user
 class User(AbstractBaseUser):
-    """
-    Custom user model.
-    """
     email = models.EmailField(max_length=255, unique=True,validators=[EmailValidator()])
     phone_number = models.CharField(max_length=11, unique=True)
     full_name = models.CharField(max_length=255)
@@ -46,9 +43,6 @@ class User(AbstractBaseUser):
         verbose_name_plural = 'کارمندان'
     
     def convert_to_english_numbers(self, input_str):
-        """
-        Convert Persian numbers to English numbers in a given string.
-        """
         persian_to_english = {
             '۰': '0',
             '۱': '1',
@@ -69,15 +63,9 @@ class User(AbstractBaseUser):
         return english_number_str
     
     def clean_email(self, email):
-        """
-        Clean and validate the email field.
-        """
         return self.email
 
     def clean_phone_number(self, phone_number):
-        """
-        Clean and validate the phone_number field.
-        """
         cleaned_phone_number = self.convert_to_english_numbers(phone_number)
         # Additional validation (e.g., ensuring the length or format of the phone number)
         # For example:
@@ -86,35 +74,20 @@ class User(AbstractBaseUser):
 
         return cleaned_phone_number  
     def save(self, *args, **kwargs):
-        """
-        Override the save method to clean and validate the phone_number and email fields before saving.
-        """
         self.phone_number = self.clean_phone_number(self.phone_number)
         self.email = self.clean_email(self.email)
         super().save(*args, **kwargs)    
     def __str__(self):
-        """
-        Return a string representation of the User object.
-        """
         return self.email
     
     def has_perm(self, perm, obj=None):
-        """
-        Check if the user has a specific permission.
-        """
         return True
     
     def has_module_perms(self, app_label):
-        """
-        Check if the user has permissions to access a specific module.
-        """
         return True
     
     @property
     def is_staff(self):
-        """
-        Check if the user is a staff member.
-        """
         return self.is_admin
    
 
@@ -131,9 +104,6 @@ class User(AbstractBaseUser):
 #         super(TimeStampedModel, self).save(*args, **kwargs)
 
 class TimeStampedModel(models.Model):
-    """
-    Abstract base model class that provides created_at and updated_at fields.
-    """
     created_at = models.CharField(max_length=20, editable=False)
     updated_at = models.CharField(max_length=20, editable=False)
 
@@ -141,9 +111,6 @@ class TimeStampedModel(models.Model):
         abstract = True
 
     def save(self, *args, **kwargs):
-        """
-        Override the save method to update the 'updated_at' timestamp before saving.
-        """
         # Update the 'updated_at' timestamp before saving
         self.updated_at = str(jdatetime_datetime.now().strftime('%Y/%m/%d %H:%M:%S'))
 

@@ -5,10 +5,8 @@ from .forms import UserForm, UserChangeForm
 from django.contrib.auth.models import Group
 
 # Register your models here.
+
 class UserAdmin(BaseUserAdmin):
-    """
-    Custom UserAdmin class for managing User model in Django admin.
-    """
     form = UserChangeForm
     add_form = UserForm
     
