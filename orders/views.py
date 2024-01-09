@@ -7,7 +7,7 @@ from django.shortcuts import redirect, render
 from django.views import View
 from .forms import UserSessionForm  , OrderForm ,CartAddForm , DiscountCodeForm
 from django.contrib import messages
-from cafe.models import Item, Cafe
+from cafe.models import Item, Cafe, Table
 import json
 from cafe.views import generate_random_id
 from .models import Order ,Discount
@@ -103,6 +103,16 @@ class CheckoutView(View):
             final_price= self.final_price
             
         return render(request, self.template_name, {'form': form ,"combined_items":combined_items ,'total_price': total_price ,"total_quantity":total_quantity , "final_price":final_price,"discount":cuppon_form})
+    
+    def get_final_price(self, request, *args, **kwargs):
+        item_quantity_dict = self.data
+        total_price = self.calculate_total_price(item_quantity_dict)
+        if self.final_price == 0:
+            final_price=total_price
+        else:
+            final_price= self.final_price
+        
+        return final_price
 
     def post(self, request, *args, **kwargs):
         """
@@ -121,9 +131,9 @@ class CheckoutView(View):
         if form.is_valid():
             # discount_code = request.POST.get('discount_code')
             action = request.POST.get('action')
-            describe= request.POST.get('describe')
+            describe= request.POST.get('description')
             table_number =request.POST.get('table_number')
-            customer_name= request.POST.get('name')
+            customer_name= request.POST.get('customer_name')
             phone_number = request.POST.get('phone_number')
             if action == 'checkout':
                 print("checkout-----")
@@ -206,13 +216,13 @@ class CheckoutView(View):
 
         Order.objects.create(
             description=describe,
-            table_number=table_number,
+            table_number=Table.objects.get(table_number=table_number),
             order_detail=order_detail,
             customer_name=customer_name,
             phone_number=phone_number,
             discount_code=self.model_discount_code,
             order_id=order_dict.get("id", []),
-            final_price=self.final_price,
+            final_price=self.get_final_price(request),
         )
         return redirect('cafe:home')
     
