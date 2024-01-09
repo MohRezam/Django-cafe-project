@@ -1,6 +1,6 @@
 import random
 from django.db import models
-from cafe.models import Item
+from cafe.models import Item, Table
 # from accounts.models import Customer
 # from accounts.models import User
 from django.contrib.sessions.models import Session
@@ -35,13 +35,12 @@ class Order(TimeStampedModel):
     """
     description= models.CharField(verbose_name="توضیحات", max_length=500, null=True , blank=True)
     order_date = models.DateTimeField(verbose_name="زمان ثبت سفارش", auto_now_add=True ,null=True)
-    table_number = models.IntegerField(verbose_name="شماره میز", null = True)
     staff_id= models.CharField(verbose_name="شماره کارمند",null=True,blank=True)
     order_detail= models.JSONField(default=dict) #save like dictionary
     order_id= models.CharField(max_length=255)
     customer_name= models.CharField(verbose_name="نام مشتری",blank = True , null = True , max_length=255) 
     phone_number = models.CharField(verbose_name="شماره تلفن",blank = True , null = True , max_length=11) 
-    table_number= models.IntegerField(verbose_name=" شماره میز ")
+    table_number= models.ForeignKey(Table, to_field="table_number", db_column="table_number", on_delete=models.CASCADE)
     discount_code=models.CharField(verbose_name="کد تخفیف ",max_length=255 , null=True , blank=True)
     final_price= models.CharField(max_length=255)
     order_status = models.BooleanField(verbose_name="پرداخت شده", default=False)
