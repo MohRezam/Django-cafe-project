@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect , get_object_or_404
-from .forms import UserLoginForm,UserForm,UserChangeForm,CategoryForm,ItemForm,SortOrdersPhone
+from .forms import UserLoginForm,UserForm,UserChangeForm,CategoryForm,CategoryChangeForm,ItemForm,SortOrdersPhone,ChangeOrderForm,CreateOrderForm
 from django.views import View
 from cafe.models import Item,Category
 from accounts.models import User
@@ -7,14 +7,18 @@ from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import login,authenticate,logout
 from django.views.generic import TemplateView
-from django.db.models import Count, Sum,Q
+from django.db.models import Count, Sum,Q,F,DateTimeField
 from django.utils import timezone
 from orders.models import Order
-import csv
-from django.http import HttpResponse
+import csv,json
+from collections import Counter
+from django.http import HttpResponse,JsonResponse
 import calendar
 from calendar import month_name
-from datetime import datetime, date
+from datetime import datetime, date,timedelta
+
+
+
 
 class StaffRegisterView(View):
     form_class = UserForm  
@@ -73,15 +77,31 @@ class StffLogoutView(LoginRequiredMixin, View):
 class StffProfileView(LoginRequiredMixin, View):
     def get(self, request):
         last_five_orders = Order.objects.order_by('-created_at')[:5]
+        all_orders = Order.objects.filter(order_status=True).exclude(order_detail=None).values_list('order_detail', flat=True)
+        product_id = [item['food_items'][0]['item_id'] for item in all_orders]
+        counter = Counter(product_id)
+        most_common_3 = counter.most_common(3)
+        list_product_popular = []
+        for pro_id in most_common_3:
+            list_product_popular.append(Item.objects.filter(id=pro_id[0]))
         today = date.today()
         today_salse = timezone.now().date()
-        orders_today = Order.objects.filter(order_date__date=today).count()
-        unpaid_orders = Order.objects.filter(order_status=False).count()
-        paid_orders = Order.objects.filter(order_status=True).count()
+        current_date = datetime.now()
+        orders_today = Order.objects.filter(order_date__date=today_salse).count()
+        unpaid_orders = Order.objects.filter(order_date__date=today_salse,order_status=False).count()
+        paid_orders = Order.objects.filter(order_date__date=today_salse,order_status=True).count()
         today_salse = Order.objects.filter(order_date__date=today_salse, order_status=True).aggregate(total=Sum('final_price'))
+        one_month_ago = today - timedelta(days=30)
+        orders_in_range = Order.objects.filter(order_status=True,order_date__date__gte=one_month_ago, order_date__date__lte=today)
+        total_sales_in_range = orders_in_range.aggregate(total_sales=Sum('final_price'))
+        total_sales_amount = total_sales_in_range['total_sales'] if total_sales_in_range['total_sales'] is not None else 0
+        one_year_ago = current_date - timedelta(days=365)
+        orders_annual = Order.objects.filter(order_status=True,order_date__date__gte=one_year_ago, order_date__date__lte=current_date)
+        total_sales_annual = orders_annual.aggregate(total_sales=Sum('final_price'))
+        total_sales_amount_annual = total_sales_annual['total_sales'] if total_sales_annual['total_sales'] is not None else 0
         order_reports = [orders_today,unpaid_orders,paid_orders]
-        salse_reports = [today_salse]
-        return render(request, 'accounts/profile.html', {"orders": last_five_orders,"orders_tody":order_reports,"salse_report":salse_reports})
+        salse_reports = [today_salse,total_sales_amount,total_sales_amount_annual]
+        return render(request, 'accounts/profile.html', {"orders": last_five_orders,"orders_tody":order_reports,"salse_report":salse_reports,"pupolar_product":list_product_popular})
      
 
 class StaffProfileInfoView(LoginRequiredMixin, View):
@@ -98,8 +118,8 @@ class StaffProfileInfoView(LoginRequiredMixin, View):
         form = self.form_class(request.POST, instance=user)
         if form.is_valid():
             form.save()
-            messages.success(request, 'آپدیت اطلاعات شخصی با موفقیت انجام شد', 'success')
-            return redirect('accounts:staff-profile')
+            messages.success(request, 'آپدیت اطلاعات کاربر با موفقیت انجام شد', 'success')
+            return redirect('accounts:staff-list-user')
         else:
             form = self.form_class(instance=user)
             return render(request, self.template_name, {'form': form})
@@ -117,7 +137,7 @@ class StaffCategoryDeleteView(LoginRequiredMixin,View):
           messages.success(request,"دسته بندی با موفقیت حذف شد","success")
           return redirect("accounts:staff-categories")
 class StaffCategoryUpdateView(LoginRequiredMixin, View):
-    form_class = CategoryForm
+    form_class = CategoryChangeForm
     template_name = "accounts/profile-update-category.html"
     
     def get(self, request, id_category):
@@ -136,27 +156,22 @@ class StaffCategoryUpdateView(LoginRequiredMixin, View):
         
         return render(request, self.template_name, {'form': form})   
 class StaffAddCategoryView(LoginRequiredMixin, View):
-    form_class = CategoryForm
+    form_class = CategoryChangeForm
     template_name = "accounts/profile-add-category.html"
     
     def get(self, request):
         form = self.form_class()
         return render(request, self.template_name, {'form': form})
-    
+        
     def post(self, request):
-        form = self.form_class(request.POST, request.FILES)
+        form = self.form_class(request.POST,request.FILES)
         
         if form.is_valid():
-            cd = form.cleaned_data
-            category = Category.objects.create()
-            category.category_name = cd['category_name']
-            category.image = cd['image']
-            category.created_at = cd['created_at']
-            category.save()
-            messages.success(request, 'دسته بندی جدید با موفقیت ایجاد شد', 'success')
+            form.save()
+            messages.success(request, 'آپدیت اطلاعات شخصی با موفقیت انجام شد', 'success')
             return redirect('accounts:staff-categories')
         
-        return render(request, self.template_name, {'form': form})
+        return render(request, self.template_name, {'form': form})   
 class StaffProfileItemsView(LoginRequiredMixin,View):
     def get(self,request):
         items = Item.objects.all()
@@ -385,6 +400,64 @@ class StaffProfileOrderDetailView(LoginRequiredMixin,View):
     def get(self,request,id_order):
         order = Order.objects.get(id=id_order)
         return render(request,'accounts/profile-order-details.html',{"order":order})
-class StaffReportsInsightsView(LoginRequiredMixin,View):
-    def get(self,request):
-        return render(request,'accounts/profile-reports-insight.html')
+class StaffReportsInsightsView(LoginRequiredMixin, View):
+    def get(self, request):
+        return render(request, 'accounts/profile-reports-insight.html')
+class StaffChangeOrderView(LoginRequiredMixin, View):
+    form_class = ChangeOrderForm
+    template_name = "accounts/profile-update-order.html"
+
+    def get(self, request, id_order):
+        order = get_object_or_404(Order, id=id_order)
+        form = self.form_class(instance=order)
+        return render(request, self.template_name, {"form": form})
+
+    def post(self, request, id_order):
+        order = get_object_or_404(Order, id=id_order)
+        form = self.form_class(request.POST, request.FILES, instance=order)
+        
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'آپدیت سفارش با موفقیت انجام شد')
+            return redirect('accounts:staff-orders')
+        else:
+            messages.error(request, 'خطا در فرم، لطفاً مجدداً تلاش کنید')
+            return render(request, self.template_name, {'form': form}) 
+class StaffAddOrderView(LoginRequiredMixin,View):
+    form_class = CreateOrderForm
+    template_name = 'accounts/profile-add-order.html'  
+
+    def get(self, request):
+        form = self.form_class()
+        return render(request, self.template_name, {'form': form})
+
+    def post(self, request):
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            order = form.save(commit=False)
+            order.save()
+            messages.success(request,"سفارش با موفقیت ثبت شد")
+            return redirect('accounts:staff-orders')  
+        messages.error(request,"لطفا در تکمیل فیلد ها دقت فرمایید")
+        return render(request, self.template_name, {'form': form})
+class StaffDeleteOrderView(LoginRequiredMixin,View):
+        def get(self,request,order_id):
+          order = get_object_or_404(Order, pk=order_id)
+          order.delete()
+          messages.success(request,"سفارش با موفقیت حذف شد","success")
+          return redirect("accounts:staff-orders")
+class StaffUserView(LoginRequiredMixin,View):
+       def get(self,request):
+          if request.user.is_admin:
+            user = User.objects.all()
+            return render(request,'accounts/profile-list-user.html',{"user":user})
+          redirect("accounts:staff-profile")
+          
+class staffUserDeleteView(LoginRequiredMixin,View):
+    def get(self,request,id_user):
+        if request.user.is_admin:
+            user = get_object_or_404(User, pk=id_user)
+            user.delete()
+            messages.success(request,"حذف کاربر با موفقیت انجام شد","success")
+            return redirect("accounts:staff-list-user")
+        redirect("accounts:staff-profile")

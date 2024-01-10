@@ -93,6 +93,9 @@
         </div>
         <div class="profile-stats">
           <div class="form-legal-row">
+            {% if messages %} {% for message in messages %}
+            <div class="alert alert-secondary mt-2" role="alert">{{ message }}</div>
+            {% endfor %}{% endif %}
             <div class="col-lg-6 col-xs-12 mx-auto">
               <div class="form-legal-col">
                 <form class="update-item-form" method="post" enctype="multipart/form-data">

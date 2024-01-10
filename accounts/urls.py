@@ -23,5 +23,11 @@ urlpatterns = [
     path('profile-order-uncomplete/',views.StaffProfileOrderUncompleteView.as_view(),name="staff-orders-uncomplete"),
     path('profile-order-complete/',views.StaffProfileOrdercompleteView.as_view(),name="staff-orders-complete"),
     path('profile-order-details/<int:id_order>/',views.StaffProfileOrderDetailView.as_view(),name="staff-order-detail"),
-    path('profile-reports-and-insights/',views.StaffReportsInsightsView.as_view(),name="staff-reports-insights")
+    path('profile-reports-and-insights/',views.StaffReportsInsightsView.as_view(),name="staff-reports-insights"),
+    path('profile-edite-order/<int:id_order>/', views.StaffChangeOrderView.as_view(), name='staff-change-order'),
+    path('profile-add-order/',views.StaffAddOrderView.as_view(),name="staff-add-order"),
+    path('profile-delete-order/<int:order_id>/',views.StaffDeleteOrderView.as_view(),name="staff-delete-order"),
+    path('profile-list-user/',views.StaffUserView.as_view(),name="staff-list-user"),
+    path('profile-user-delete/<int:id_user>/',views.staffUserDeleteView.as_view(),name="staf-delete-user")
+
 ]

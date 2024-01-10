@@ -83,6 +83,9 @@
       <div class="headline-profile page-profile-order">
         <span>همه سفارش های پرداخت شده</span>
       </div>
+      {% if messages %} {% for message in messages %}
+      <div class="alert alert-secondary mt-2" role="alert">{{ message }}</div>
+      {% endfor %}{% endif %}
       <div class="profile-stats page-profile-order">
         <div class="table-orders">
           <table class="table">
@@ -116,7 +119,9 @@
                 {% else %}
                 <td class="text-danger">پرداخت نشده</td>
                 {% endif %}
-                <td><i class="fa fa-angle-left"></i></td>
+                <td>                  <a href="{% url 'accounts:staff-order-detail' order.id %}"
+                  ><i class="fa fa-angle-left"></i
+                ></a></td>
               </tr>
               {% endfor %}
             </tbody>
