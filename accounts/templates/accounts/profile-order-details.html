@@ -1,4 +1,4 @@
-{% extends "base-staff.html" %} {% load static %} {% block title %} سفارش جزئیات
+{% extends "base-staff.html" %} {% load static %} {% load jalali_tags %} {% block title %} سفارش جزئیات
 {% endblock title %} {% block content %}
 <main class="contentM">
   <div class="container">
@@ -26,7 +26,7 @@
             <li>
               <a
                 href="{% url 'accounts:staff-profile' %}"
-                class="profile-menu-url active-profile"
+                class="profile-menu-url"
               >
                 <span class="mdi mdi-account-outline"></span> پروفایل
               </a>
@@ -86,11 +86,12 @@
           <a href="#" class="profile-navbar-btn-back">بازگشت</a>
           <h4>
             سفارش {{order.order_number}}
-            <span>ثبت شده در تاریخ {{ order.created_at|date:"j F y" }}</span>
+            <span>ثبت شده در تاریخ {{ order.created_at }}</span>
           </h4>
         </div>
         <div class="profile-navbar-invoice">
-          <button class="profile-navbar-btn-invoice">مشاهده فاکتور</button>
+          <a href="#"><button class="profile-navbar-btn-invoice">مشاهده فاکتور</button></a>
+          <a href="{% url 'accounts:staff-change-order' order.id %}"><button class="profile-navbar-btn-invoice" style="background-color: #767676;color: #fff;">ویرایش سفارش</button></a>
         </div>
       </div>
       <div class="profile-stats mt-3">
@@ -121,7 +122,9 @@
               <p>
                 <span>آیتم‌های سفارش:</span>
                 {% for food_item in order.order_detail.food_items %}
-                {{food_item.name }} {% endfor %}
+                {{ food_item.name }}
+                {% if not forloop.last %}, {% endif %}
+            {% endfor %}
               </p>
             </div>
           </div>
@@ -143,7 +146,7 @@
           >
             <div class="profile-stats-col">
               <p>
-                <span>تعداد آیتم:</span
+                <span>مجموع آیتم ها:</span
                 >{{order.order_detail.details_items.0.total_item}} آیتم
               </p>
             </div>
@@ -155,7 +158,7 @@
             <div class="profile-stats-col">
               <p>
                 <span>مبلغ قابل پرداخت:</span>
-                {{ order.order_detail.details_items.0.total_price }}
+                {{ order.final_price }}
               </p>
             </div>
           </div>
@@ -164,7 +167,11 @@
             style="padding: 0"
           >
             <div class="profile-stats-col">
-              <p><span>مبلغ کل:</span>۳,۴۲۰,۰۰۰</p>
+              {% if order.staff_id %}
+              <p><span>شماره کارمند</span>{{order.staff_id}}</p>
+              {% else %}
+              <p><span>شماره کارمند</span>شماره کارمند هنوز ثبت نشده</p>
+              {% endif %}
             </div>
           </div>
           <div
@@ -172,10 +179,33 @@
             style="padding: 0"
           >
             <div class="profile-stats-col">
-              <p><span>وضعیت سفارش :</span>تحویل داده شده</p>
+              {% if order.order_status %}
+              <p><span>وضعیت سفارش :</span>پرداخت شده</p>
+              {% else %}
+              <p><span>وضعیت سفارش :</span>پرداخت نشده</p>
+              {% endif %}
             </div>
           </div>
-          <!--                    <a href="#" class="link-spoiler-edit"></a>-->
+          <div
+          class="col-lg-6 col-md-6 col-xs-12 pull-right"
+          style="padding: 0"
+        >
+          <div class="profile-stats-col">
+            <p><span>شماره میز :</span>{{order.table_number}}</p>
+          </div>
+        </div>
+        <div
+        class="col-lg-6 col-md-6 col-xs-12 pull-right"
+        style="padding: 0"
+      >
+        <div class="profile-stats-col">
+          {% if order.description %}
+          <p><span>توضیحات :</span>{{order.description}}</p>
+          {% else %}
+          <p><span>توضیحات :</span>توضیحاتی ندارد</p>
+          {% endif %}
+        </div>
+      </div>
         </div>
       </div>
     </div>

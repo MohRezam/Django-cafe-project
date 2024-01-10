@@ -1,5 +1,6 @@
 from django import forms
 from .models import User
+from orders.models import Order
 from django.core.exceptions import ValidationError
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from cafe.models import Item,Category
@@ -29,10 +30,18 @@ class UserForm(forms.ModelForm):
         return email
 
 class CategoryForm(forms.ModelForm):
-
     class Meta:
         model = Category
-        fields = ('category_name', 'image')
+        fields = ['category_name', 'image']
+        labels = {
+            'category_name': 'دسته بندی',
+            'image': 'تصویر',
+        }
+
+class CategoryChangeForm(forms.ModelForm):
+    class Meta:
+        model = Category
+        fields = ['category_name', 'image']
         labels = {
             'category_name': 'دسته بندی',
             'image': 'تصویر',
@@ -67,6 +76,47 @@ class UserChangeForm(forms.ModelForm):
 class SortOrdersPhone(forms.Form):
     search = forms.CharField(widget=forms.TextInput(attrs={"class":"form-control", "placeholder":"جست و جوی سفارش ها"}))        
 
+class ChangeOrderForm(forms.ModelForm):
+    class Meta:
+        model = Order
+        exclude = ['order_date']  
+        labels = {
+            'description': 'توضیحات',
+            'table_number': 'شماره میز',
+            'staff_id': 'شماره کارمند',
+            'order_detail': 'جزئیات سفارش',
+            'order_id': 'شماره سفارش',
+            'customer_name': 'نام مشتری',
+            'phone_number': 'شماره تلفن',
+            'discount_code': 'کد تخفیف',
+            'final_price': 'قیمت نهایی',
+            'order_status': 'پرداخت شده'
+        }
+        widgets = {
+            'order_detail': forms.Textarea(),  
+            'order_status': forms.CheckboxInput(),
+        }
+
+class CreateOrderForm(forms.ModelForm):
+    class Meta:
+        model = Order
+        exclude = ['order_date']
+        labels = {
+            'description': 'توضیحات',
+            'table_number': 'شماره میز',
+            'staff_id': 'شماره کارمند',
+            'order_detail': 'جزئیات سفارش',
+            'order_id': 'شماره سفارش',
+            'customer_name': 'نام مشتری',
+            'phone_number': 'شماره تلفن',
+            'discount_code': 'کد تخفیف',
+            'final_price': 'قیمت نهایی',
+            'order_status': 'پرداخت شده'
+        }
+        widgets = {
+            'order_detail': forms.Textarea(),  
+            'order_status': forms.CheckboxInput(),  
+        }
 # template 
 class UserLoginForm(forms.Form):
     phone_number = forms.CharField(label="شماره موبایل :",max_length=11)

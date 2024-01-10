@@ -1,0 +1,82 @@
+{% extends "base-staff.html" %} {% load static %} {% block title %}ویرایش
+سفارش{% endblock title %} {% block content %}
+<main class="contentM">
+  <div class="container">
+    <div class="col-lg-10 col-md-9 col-xs-12" style="margin: 0 auto">
+      <div class="col-lg-12 col-xs-12 pull-right">
+        <div class="profile-navbar">
+          <div class="profile-navbar-back-alignment">
+            <a
+              href="{% url 'accounts:staff-orders' %}"
+              class="profile-navbar-btn-back"
+              >بازگشت</a
+            >
+            <h4 class="edit-personal">ویرایش سفارش</h4>
+          </div>
+        </div>
+        <div class="profile-stats">
+          <div class="form-legal-row">
+            {% if messages %} {% for message in messages %}
+            <div class="alert alert-secondary mt-2" role="alert">
+              {{ message }}
+            </div>
+            {% endfor %}{% endif %}
+            <div class="col-lg-6 col-xs-12 mx-auto">
+              <div class="form-legal-col">
+                <form class="update-item-form" method="post">
+                  {% csrf_token %}
+                  <div>
+                    <label for="id_description">توضیحات:</label><br />
+                    {{ form.description }}
+                  </div>
+                  <div>
+                    <label for="id_table_number">شماره میز:</label><br />
+                    {{ form.table_number }}
+                  </div>
+                  <div>
+                    <label for="id_staff_id">شماره کارمند:</label><br />
+                    {{ form.staff_id }}
+                  </div>
+                  <div>
+                    <label for="id_order_detail">جزئیات سفارش:</label><br />
+                    {{ form.order_detail }}
+                  </div>
+                  <div>
+                    <label for="id_order_id">شماره سفارش:</label><br />
+                    {{ form.order_id }}
+                  </div>
+                  <div>
+                    <label for="id_customer_name">نام مشتری:</label><br />
+                    {{ form.customer_name }}
+                  </div>
+                  <div>
+                    <label for="id_phone_number">شماره تلفن:</label><br />
+                    {{ form.phone_number }}
+                  </div>
+                  <div>
+                    <label for="id_discount_code">کد تخفیف:</label><br />
+                    {{ form.discount_code }}
+                  </div>
+                  <div>
+                    <label for="id_final_price">قیمت نهایی:</label><br />
+                    {{ form.final_price }}
+                  </div>
+                  <div class="status-item">
+                    <label for="id_order_status">پرداخت شده:</label><br />
+                    {{ form.order_status }}
+                  </div>
+                  <input
+                    class="dk-btn dk-btn-info text-center w-100"
+                    type="submit"
+                    value="ذخیره"
+                  />
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+{% endblock %}

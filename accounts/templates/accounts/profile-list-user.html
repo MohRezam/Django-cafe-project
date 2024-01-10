@@ -5,14 +5,7 @@
     <div class="col-lg-10 col-md-10 col-xs-12" style="margin: 0 auto">
       <div class="headline-profile page-profile-order">
         <span>همه سفارش ها</span>
-        <div class="filter-order">
-          <form action="" method="get" class="d-flex" role="search">
-            {{form.search}}
-            <button class="btn btn-outline-success" type="submit">
-              Search
-            </button>
-          </form>
-        </div>
+        <div class="filter-order"></div>
       </div>
       {% if messages %} {% for message in messages %}
       <div class="alert alert-secondary mt-2" role="alert">{{ message }}</div>
@@ -23,42 +16,36 @@
             <thead class="thead-light">
               <tr>
                 <th scope="col">#</th>
-                <th scope="col">شماره سفارش</th>
-                <th scope="col">تاریخ ثبت سفارش</th>
-                <th scope="col">مبلغ قابل پرداخت</th>
-                <th scope="col">آیتم</th>
-                <th scope="col">عملیات پرداخت</th>
+                <th scope="col">نام و نام خانوادگی</th>
+                <th scope="col">شماره</th>
+                <th scope="col">نقش کاربر</th>
+                <th scope="col">شماره کاربری</th>
                 <th scope="col">حذف</th>
                 <th scope="col">جزئیات</th>
               </tr>
             </thead>
             <tbody>
-              {% for order in orders %}
+              {% for item in user %}
               <tr>
                 <td>{{ forloop.counter }}</td>
-                <td class="order-code">{{ order.order_id }}</td>
-                <td>{{ order.created_at }}</td>
-                <td>{{order.order_detail.details_items.0.total_price}}</td>
-                <td>
-                  {% for food_item in order.order_detail.food_items %}
-                  <p>{{ forloop.counter }}-{{ food_item.name }}</p>
-                  {% endfor %}
-                </td>
-                {% if order.order_status %}
-                <td class="text-success">پرداخت شده</td>
+                <td class="order-code">{{ item.full_name}}</td>
+                <td>{{item.phone_number}}</td>
+                {% if item.is_admin %}
+                <td>مدیر</td>
                 {% else %}
-                <td class="text-danger">پرداخت نشده</td>
+                <td>کارمند</td>
                 {% endif %}
+                <td>{{item.id}}</td>
                 <td>
                   <a
-                    href="{% url 'accounts:staff-delete-order' order.id %}"
+                    href="{% url 'accounts:staf-delete-user' item.id %}"
                     class="btn-remove-address btn btn-danger text-light"
                   >
                     حذف
                   </a>
                 </td>
                 <td>
-                  <a href="{% url 'accounts:staff-order-detail' order.id %}"
+                  <a href="{% url 'accounts:staff-profile-info' item.id %}"
                     ><i class="fa fa-angle-left"></i
                   ></a>
                 </td>

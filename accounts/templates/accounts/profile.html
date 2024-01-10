@@ -48,7 +48,11 @@
               style="padding: 0"
             >
               <div class="profile-stats-col">
+                {% if salse_report.0.total %}
                 <p><span>فروش امروز :</span>{{salse_report.0.total}} تومان</p>
+                {% else %}
+                <p><span>فروش امروز :</span>فروشی ثبت نشده</p>
+                {% endif %}
               </div>
             </div>
 
@@ -57,7 +61,7 @@
               style="padding: 0"
             >
               <div class="profile-stats-col">
-                <p><span> فروش ماهانه :</span>4,555,325 تومان</p>
+                <p><span> فروش ماهانه :</span>{{salse_report.1}} تومان</p>
               </div>
             </div>
             <div
@@ -65,7 +69,7 @@
               style="padding: 0"
             >
               <div class="profile-stats-col">
-                <p><span>فروش سالانه :</span>429,435,767 تومان</p>
+                <p><span>فروش سالانه :</span>{{salse_report.2}} تومان</p>
               </div>
             </div>
           </div>
@@ -77,6 +81,7 @@
         </div>
         <div class="profile-stats mt-3">
           <div class="profile-stats-row">
+            {% for product in pupolar_product %}
             <div
               class="col-lg-12 col-md-12 col-xs-12 pull-right"
               style="padding: 0"
@@ -84,47 +89,16 @@
               <div class="profile-stats-col">
                 <div>
                   <div class="img-bo-product">
-                    <img src="{% static 'images/اسپرینگ-رول-300x300.png' %}" />
+                    <img src="{{product.0.image.url}}" />
                   </div>
                   <div class="box-detail">
-                    <p>غذای اسپرینگ رولت</p>
-                    <span>250,000 تومان</span>
+                    <p>{{product.0.name}}</p>
+                    <span>{{product.0.price}} تومان</span>
                   </div>
                 </div>
               </div>
             </div>
-            <div
-              class="col-lg-12 col-md-12 col-xs-12 pull-right"
-              style="padding: 0"
-            >
-              <div class="profile-stats-col">
-                <div>
-                  <div class="img-bo-product">
-                    <img src="{% static 'images/اسپرینگ-رول-300x300.png' %}" />
-                  </div>
-                  <div class="box-detail">
-                    <p>غذای اسپرینگ رولت</p>
-                    <span>250,000 تومان</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div
-              class="col-lg-12 col-md-12 col-xs-12 pull-right"
-              style="padding: 0"
-            >
-              <div class="profile-stats-col">
-                <div>
-                  <div class="img-bo-product">
-                    <img src="{% static 'images/اسپرینگ-رول-300x300.png' %}" />
-                  </div>
-                  <div class="box-detail">
-                    <p>غذای اسپرینگ رولت</p>
-                    <span>250,000 تومان</span>
-                  </div>
-                </div>
-              </div>
-            </div>
+            {% endfor %}
           </div>
         </div>
       </div>
@@ -163,7 +137,11 @@
                 {% else %}
                 <td class="text-danger">پرداخت نشده</td>
                 {% endif %}
-                <td><i class="fa fa-angle-left"></i></td>
+                <td>
+                  <a href="{% url 'accounts:staff-order-detail' order.id %}"
+                    ><i class="fa fa-angle-left"></i
+                  ></a>
+                </td>
               </tr>
               {% endfor %}
             </tbody>
