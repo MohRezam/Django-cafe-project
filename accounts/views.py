@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect , get_object_or_404
-from .forms import UserLoginForm,UserForm,UserChangeForm,CategoryForm,CategoryChangeForm,ItemForm,SortOrdersPhone,ChangeOrderForm,CreateOrderForm
+from .forms import UserLoginForm,UserForm,UserChangeForm,CategoryForm,CategoryChangeForm,ItemForm,SortOrdersPhone,ChangeOrderForm,CreateOrderForm,TableForm
 from django.views import View
-from cafe.models import Item,Category
+from cafe.models import Item,Category,Order
 from accounts.models import User
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -25,6 +25,7 @@ class StaffRegisterView(View):
     template_name = 'accounts/register.html'
 
     def get(self, request):
+        
         form = self.form_class()
         return render(request, self.template_name, {'form': form})
 
@@ -453,7 +454,7 @@ class StaffUserView(LoginRequiredMixin,View):
             return render(request,'accounts/profile-list-user.html',{"user":user})
           redirect("accounts:staff-profile")
           
-class staffUserDeleteView(LoginRequiredMixin,View):
+class StaffUserDeleteView(LoginRequiredMixin,View):
     def get(self,request,id_user):
         if request.user.is_admin:
             user = get_object_or_404(User, pk=id_user)
@@ -461,3 +462,31 @@ class staffUserDeleteView(LoginRequiredMixin,View):
             messages.success(request,"حذف کاربر با موفقیت انجام شد","success")
             return redirect("accounts:staff-list-user")
         redirect("accounts:staff-profile")
+class StaffTablesView(LoginRequiredMixin,View):
+      def get(self,request):
+          tables = Order.objects.all()
+          return render(request,"accounts/profile-list-table.html",{"tables":tables})
+class StaffDeleteTableView(LoginRequiredMixin,View):
+    def get(self,request,id_table):
+        if request.user.is_admin:
+            table = get_object_or_404(Order,id=id_table)
+            table.delete()
+            messages.success(request,"حذف میز با موفقیت انجام شد","success")
+            return redirect("accounts:staff-list-table")
+        redirect("accounts:staff-profile")
+
+
+class StaffTableFormView(LoginRequiredMixin,View):
+    def get(self, request,id_table):
+        table = get_object_or_404(Order,id=id_table)
+        form = TableForm(instance=table)
+        return render(request, 'accounts/prfile-edite-table.html', {'form': form})
+
+    def post(self, request,id_table):
+        
+        table = get_object_or_404(Order,id=id_table)
+        form = TableForm(request.POST,instance=table)
+        if form.is_valid():
+            table.save()
+            return redirect("accounts:staff-list-table")
+        return render(request, 'accounts/prfile-edite-table.html', {'form': form})  

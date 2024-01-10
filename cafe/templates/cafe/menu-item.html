@@ -127,7 +127,7 @@
               <p class="status-order-accept">سفارش می پذیریم.</p>
             </div>
           </div>
-          <div class="box-search w-75">
+          <div class="box-search">
             <form class="d-flex" action="" method="get">
               {{search_form.search}}
               <button class="btn btn-outline-success btn-search" type="submit"><i class="fas fa-search"></i></button>
@@ -252,8 +252,8 @@
         {% endif %} -->
         {% if messages %}
         {% for msg in messages %}
-          <p class="alert alert-{{msg.tags}}">{{msg}}</p>
-        {% endfor %}
+        <p class="alert alert-{{msg.tags}}">{{msg}}</p>
+         {% endfor %}
         {% else %}
         <div class="main-item-section">
           <div id="category-1" class="food-main-group my-5">
@@ -501,7 +501,21 @@
         </footer>
       </div>
     </div>
-    <script src="{% static "js/bootstrap.min.js" %}"></script>
+    <a href="{% url 'orders:cart_page' %}" class="cartbutton" id="cartButton" style="display: none;">نمایش سبد خرید</a>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+      function checkCartCookie() {
+          var cartCookie = document.cookie.split(';').find(cookie => cookie.trim().startsWith('cart='));
+          return cartCookie != null;
+      }
+  
+      $(document).ready(function() {
+          if (checkCartCookie()) {
+              $('#cartButton').show();
+          }
+      });
+    </script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
     <script>
       function myFunction() {
         document.getElementById("myDropdown").classList.toggle("show-one");

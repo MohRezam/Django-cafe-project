@@ -203,6 +203,24 @@ a:visited {
   top: 0;
   right: 0;
 }
+.cartbutton {
+  position: fixed;
+  left: 25px;
+  bottom: 10px;
+  background-color: #036666;
+  padding: 10px 15px;
+  color: #fff !important;
+  font-size: 18px;
+  height: 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 16px;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+  z-index: 10;
+}
+
 .icon-social a {
   font-size: 20px;
   cursor: pointer;
@@ -663,6 +681,17 @@ a.checkout-button {
   height: 100px;
   justify-content: center;
 }
+.box-search {
+  width: 75%;
+}
+.table thead tr th {
+  background-color: transparent;
+}
+.table thead tr {
+  border-left: 1px solid #7979a7;
+  border-top: 1px solid #7979a7;
+  border-right: 1px solid #7979a7;
+}
 .title-box {
   font-size: 19px;
   font-weight: 600;
@@ -710,6 +739,9 @@ a.checkout-button {
 @media screen and (max-width: 768px) {
   .container-responsive {
     max-width: 100% !important;
+  }
+  .box-search {
+    width: 100% !important;
   }
   .offcanva {
     display: block;
@@ -831,6 +863,11 @@ a.checkout-button {
   .quantity {
     display: flex;
   }
+  .cartbutton {
+    bottom: 39px;
+    left: 41%;
+    border-radius: 50%;
+  }
   .food-remove a {
     font-size: 20px;
   }
@@ -846,6 +883,12 @@ a.checkout-button {
   }
   .contact div {
     width: 100% !important;
+  }
+}
+@media screen and (max-width: 768px) {
+  .cartbutton {
+    bottom: 35px;
+    left: 31%;
   }
 }
 @media screen and (max-height: 450px) {

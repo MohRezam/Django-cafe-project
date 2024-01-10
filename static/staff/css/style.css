@@ -3417,7 +3417,9 @@ footer .copy-right-footer p {
   color: #535353;
   margin-bottom: 0;
 }
-
+.update-item-form input[type="checkbox"] {
+    display: block;
+}
 /*footer------------------------*/
 
 /*style login and register-------------------*/

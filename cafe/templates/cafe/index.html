@@ -1,31 +1,29 @@
-{% extends "base.html" %}
-{% load static %}
- {% block title %}{{ cafe.name }}{% endblock title %} 
- {% block content %}
-  <body class="home-bg">
-    <main class="d-flex flex-column align-items-center px-5 gap-4">
-      <img
-        class="img-fluid img-logo"
-        src="{{ cafe.logo_image.url }}"
-        alt="logo"
-      />
-      <div class="container my-5">
-        <div class="row extera-row">
-          {% for category in all_categories %}
-          <div
-            class="col-md-3 col-sm-6 col-12 smx-box py-sm-4 d-flex justify-content-center box-item"
-          >
-            <a href="{% url 'cafe:cafe_menu' category.category_name %}">
-              <img
-                class="rounded-5"
-                src="{{ category.image.url }}"
-                alt="{( category.category_name }}"
-            /></a>
-          </div>
-          {% endfor %}
+{% extends "base.html" %} {% load static %} {% block title %}{{ cafe.name }}{%
+endblock title %} {% block content %}
+<body class="home-bg">
+  <main class="d-flex flex-column align-items-center px-5 gap-4">
+    <img
+      class="img-fluid img-logo"
+      src="{{ cafe.logo_image.url }}"
+      alt="logo"
+    />
+    <div class="container my-5">
+      <div class="row extera-row">
+        {% for category in all_categories %}
+        <div
+          class="col-md-3 col-sm-6 col-12 smx-box py-sm-4 d-flex justify-content-center box-item"
+        >
+          <a href="{% url 'cafe:cafe_menu' category.category_name %}">
+            <img
+              class="rounded-5"
+              src="{{ category.image.url }}"
+              alt="{{category.category_name}}"
+          /></a>
         </div>
+        {% endfor %}
       </div>
-    </main>
-    <script src="{% static "js/bootstrap.min.js" %}"></script>
-  </body>
+    </div>
+  </main>
+  <script src="{% static 'js/bootstrap.min.js' %}"></script>
+</body>
 {% endblock content %}

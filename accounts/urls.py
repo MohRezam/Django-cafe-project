@@ -28,6 +28,9 @@ urlpatterns = [
     path('profile-add-order/',views.StaffAddOrderView.as_view(),name="staff-add-order"),
     path('profile-delete-order/<int:order_id>/',views.StaffDeleteOrderView.as_view(),name="staff-delete-order"),
     path('profile-list-user/',views.StaffUserView.as_view(),name="staff-list-user"),
-    path('profile-user-delete/<int:id_user>/',views.staffUserDeleteView.as_view(),name="staf-delete-user")
+    path('profile-user-delete/<int:id_user>/',views.StaffUserDeleteView.as_view(),name="staff-delete-user"),
+    path('profile-list-table/',views.StaffTablesView.as_view(),name="staff-list-table"),
+    path('profile-table-delete/<int:id_table>/',views.StaffDeleteTableView.as_view(),name="staff-delete-table"),
+    path('profile-edite-table/<int:id_table>',views.StaffTableFormView.as_view(),name="staff-edite-table")
 
 ]

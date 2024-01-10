@@ -16,36 +16,32 @@
             <thead class="thead-light">
               <tr>
                 <th scope="col">#</th>
-                <th scope="col">نام و نام خانوادگی</th>
-                <th scope="col">شماره</th>
-                <th scope="col">نقش کاربر</th>
-                <th scope="col">شماره کاربری</th>
+                <th scope="col">شماره میز</th>
+                <th scope="col">رزرو</th>
                 <th scope="col">حذف</th>
                 <th scope="col">جزئیات</th>
               </tr>
             </thead>
             <tbody>
-              {% for item in user %}
+              {% for table in tables %}
               <tr>
                 <td>{{ forloop.counter }}</td>
-                <td class="order-code">{{ item.full_name}}</td>
-                <td>{{item.phone_number}}</td>
-                {% if item.is_admin %}
-                <td>مدیر</td>
+                <td class="order-code">{{ table.table_number}}</td>
+                {% if table.is_available %}
+                <td>موجود</td>
                 {% else %}
-                <td>کارمند</td>
+                <td>رزرو شده</td>
                 {% endif %}
-                <td>{{item.id}}</td>
                 <td>
                   <a
-                    href="{% url 'accounts:staff-delete-user' item.id %}"
+                    href="{% url 'accounts:staff-delete-table' table.id %}"
                     class="btn-remove-address btn btn-danger text-light"
                   >
                     حذف
                   </a>
                 </td>
                 <td>
-                  <a href="{% url 'accounts:staff-profile-info' item.id %}"
+                  <a href="{% url 'accounts:staff-edite-table' table.id %}"
                     ><i class="fa fa-angle-left"></i
                   ></a>
                 </td>

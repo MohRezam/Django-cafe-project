@@ -3,7 +3,7 @@ from .models import User
 from orders.models import Order
 from django.core.exceptions import ValidationError
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
-from cafe.models import Item,Category
+from cafe.models import Item,Category,Order
 
 
 # admin panel
@@ -126,8 +126,24 @@ class UserLoginForm(forms.Form):
         if phone_number and len(phone_number) != 11:
          raise forms.ValidationError('شماره تلفن باید یازده رقم باشد')
         return phone_number
-        
 
+class TableForm(forms.ModelForm):
+    CHOICES = (
+        ("1", "1"), 
+        ("2", "2"), 
+        ("3", "3"), 
+        ("4", "4"), 
+        ("5", "5"), 
+        ("6", "6"), 
+        ("7", "7"), 
+        ("8", "8"),
+        ("9", "9"),
+        ("10", "10") 
+    )
+    
+    table_number = forms.ChoiceField(label='شماره میز', choices=CHOICES)
+    is_available = forms.BooleanField(label='موجود', required=False)
 
-    
-    
+    class Meta:
+        model = Order
+        fields = ['table_number', 'is_available']
