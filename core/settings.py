@@ -11,12 +11,14 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
-# import environ
+import environ
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
  
 
+env = environ.Env()
+environ.Env.read_env()
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
@@ -79,18 +81,20 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
+# this code going to read datas from .env file to prevent sending actual DB datas to the github.
 DATABASES = {
     'default': {
        'ENGINE': 'django.db.backends.postgresql', 
-       'NAME': 'postgres',
-       'USER': 'root',
-       'PASSWORD': 'jhNp1rb2mTBJ99GbcRPqtOW9',
-       'HOST': 'mont-blanc.liara.cloud',
-       'PORT': '30040',
+       'NAME': env("DBNAME"),
+       'USER': env("DBUSER"),
+       'PASSWORD': env("DBPASSWORD"),
+       'HOST': env("DBHOST"),
+       'PORT': env("DBPORT"),
         
     }
 }
 
+SECRET_KEY = env("SECRET_KEY")
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
