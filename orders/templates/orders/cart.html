@@ -229,25 +229,28 @@
         <table class="table">
           <thead>
             <tr>
-              <th scope="col" style="text-align: left">محصول</th>
-              <th scope="col" style="text-align: left">قیمت</th>
-              <th scope="col" style="text-align: left">تعداد</th>
-              <th scope="col" style="text-align: left">جمع جزء</th>
-              <th scope="col" style="text-align: left">عملیات</th>
+              <th scope="col"></th>
+              <th scope="col">محصول</th>
+              <th scope="col">قیمت</th>
+              <th scope="col">تعداد</th>
+              <th scope="col">جمع جزء</th>
+              <th scope="col" style="text-align: center">عملیات</th>
             </tr>
           </thead>
           <tbody>
-            {% for item, qty, price,cart_item in combined_items %}
+            {% for item, qty, price,cart_item,priceitem in combined_items %}
             <tr>
               <td>
                 <div class="food-thumbnail">
-                  <img src="./images/پومودور-300x300.png" alt="{{ item.name }}" />
+                  <img src="{{item.0.image.url}}" alt="{{ item.name }}" />
                 </div>
+              </td>
+              <td>
                 <div class="food-title">
                   <p>{{ item.0 }}</p>
                 </div>
               </td>
-              <td>{{ item.price }}</td>
+              <td>{{ priceitem }}</td>
               <td>{{ qty }}</td>
               <td>{{ price }}</td>
               <td>
@@ -275,7 +278,7 @@
                       <input type="hidden" name="quantity" value="0" />
                       <input type="hidden" name="item_id" value="{{ cart_item.id }}" />
                       <input type="hidden" name="action" id="actionvalue" value="delete"/>
-                      <button type="submit" class="btn food-button" onclick="changeaction()" id="deletebutton" data-item-id="{{ item.id }}" data-quantity="{{ cart_form.quantity.value }}">
+                      <button type="submit" class="btn food-button bg-danger" onclick="changeaction()" id="deletebutton" data-item-id="{{ item.id }}" data-quantity="{{ cart_form.quantity.value }}">
                        حذف
                       </button>
                   </div>
@@ -286,101 +289,8 @@
           </tbody>
         </table>
         <div
-          class="food-cart-box d-flex align-items-center justify-content-between"
+          class="navigation-card w-100 d-flex py-3 px-2 align-items-center justify-content-end"
         >
-          <div class="food-remove">
-            <a href="#">×</a>
-
-          </div>
-          <div class="food-thumbnail">
-            <img src="./images/پومودور-300x300.png" />
-          </div>
-          <div class="food-title">
-            <p>نوشابه گاز دار با طعم کولا پپسی - 330 میلی لیتر</p>
-          </div>
-          <div class="food-cart-price">
-            <p>6,900 تومان</p>
-          </div>
-          <div class="food-quantity">
-            <div class="quantity">
-              <button class="plus-btn" type="button" name="button">
-                <img src="./images/plus.svg" alt="" />
-              </button>
-              <input type="text" name="name" value="1" />
-              <button class="minus-btn" type="button" name="button">
-                <img src="./images/minus.svg" alt="" />
-              </button>
-            </div>
-          </div>
-          <div class="food-amount">
-            <p class="amount-price">6,900 تومان</p>
-          </div>
-        </div>
-        <div
-          class="food-cart-box d-flex align-items-center justify-content-between"
-        >
-          <div class="food-remove">
-            <a href="#">×</a>
-          </div>
-          <div class="food-thumbnail">
-            <img src="./images/پومودور-300x300.png" />
-          </div>
-          <div class="food-title">
-            <p>نوشابه گاز دار با طعم کولا پپسی - 330 میلی لیتر</p>
-          </div>
-          <div class="food-cart-price">
-            <p>6,900 تومان</p>
-          </div>
-          <div class="food-quantity">
-            <div class="quantity">
-              <button class="plus-btn" type="button" name="button">
-                <img src="./images/plus.svg" alt="" />
-              </button>
-              <input type="text" name="name" value="1" />
-              <button class="minus-btn" type="button" name="button">
-                <img src="./images/minus.svg" alt="" />
-              </button>
-            </div>
-          </div>
-          <div class="food-amount">
-            <p class="amount-price">6,900 تومان</p>
-          </div>
-        </div>
-        <div
-          class="food-cart-box d-flex align-items-center justify-content-between"
-        >
-          <div class="food-remove">
-            <a href="#">×</a>
-          </div>
-          <div class="food-thumbnail">
-            <img src="./images/پومودور-300x300.png" />
-          </div>
-          <div class="food-title">
-            <p>نوشابه گاز دار با طعم کولا پپسی - 330 میلی لیتر</p>
-          </div>
-          <div class="food-cart-price">
-            <p>6,900 تومان</p>
-          </div>
-          <div class="food-quantity">
-            <div class="quantity">
-              <button class="plus-btn" type="button" name="button">
-                <img src="./images/plus.svg" alt="" />
-              </button>
-              <input type="text" name="name" value="1" />
-              <button class="minus-btn" type="button" name="button">
-                <img src="./images/minus.svg" alt="" />
-              </button>
-            </div>
-          </div>
-          <div class="food-amount">
-            <p class="amount-price">6,900 تومان</p>
-          </div>
-        </div>
-        <div
-          class="navigation-card w-100 d-flex py-3 px-2 align-items-center justify-content-between"
-        >
-        <a href="{% url 'cafe:home' %}"><button class="update-cart"> از سر گیری  سفارش </button>
-        </a>
           <a
             href="{% url 'orders:checkout' %}"
             class="checkout-button text-white d-flex align-item-center justify-content-center gap-2"

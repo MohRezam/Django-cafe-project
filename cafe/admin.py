@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Menu, Category, Item, Cafe, Order
+from .models import Menu, Category, Item, Cafe, Table
 
 """
 This file is responsible for registering models with the Django admin site.
@@ -16,7 +16,7 @@ This file is responsible for registering models with the Django admin site.
 #     list_filter = ('is_available',)
 #     search_fields = ('table_number',)
 #     ordering = ('table_number',)
-admin.site.register(Order)
+admin.site.register(Table)
 
 @admin.register(Cafe)
 class CafeAdmin(admin.ModelAdmin):  # Register the Cafe model with the CafeAdmin.

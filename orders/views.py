@@ -5,7 +5,7 @@ from django.shortcuts import redirect, render
 from django.views import View
 from .forms import UserSessionForm  , OrderForm ,CartAddForm , DiscountCodeForm
 from django.contrib import messages
-from cafe.models import Item, Cafe, Table
+from cafe.models import Item, Cafe,Table
 import json
 from cafe.views import generate_random_id
 from.models import Order ,Discount
@@ -139,7 +139,7 @@ class CheckoutView(View):
 
         Order.objects.create(
             description=describe,
-            table_number=Table.objects.get(table_number=table_number),
+            table_number=Order.objects.get(table_number=table_number),
             order_detail=order_detail,
             customer_name=customer_name,
             phone_number=phone_number,
@@ -217,7 +217,10 @@ class ViewCartView(View):
 
         values=(self.data.values())
         prices=self.calculate_price(self.data)
-        combined_items = zip_longest(list_items.values(), values, prices,cart_items, fillvalue=None)
+        prices = [int(price) for price in prices]
+        list_data = list(self.data.values())
+        res_list = [prices[i] // list_data[i] for i in range(len(list_data))]
+        combined_items = zip_longest(list_items.values(), values, prices,cart_items,res_list, fillvalue=None)
 
         return render(request, self.template_name, {'combined_items': combined_items,'cart_form':cart_form})
     

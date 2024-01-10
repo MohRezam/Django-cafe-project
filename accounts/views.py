@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect , get_object_or_404
 from .forms import UserLoginForm,UserForm,UserChangeForm,CategoryForm,CategoryChangeForm,ItemForm,SortOrdersPhone,ChangeOrderForm,CreateOrderForm,TableForm
 from django.views import View
-from cafe.models import Item,Category,Order
+from cafe.models import Item,Category,Table
 from accounts.models import User
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin

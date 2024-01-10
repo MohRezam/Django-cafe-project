@@ -5,7 +5,10 @@ body {
   background-image: url("../images/5798526731357895772_121.jpg");
   background-size: cover;
   background-repeat: no-repeat;
+  background-position: center;
   padding: 100px 0;
+  width: 100vw;
+  height: 100vh;
 }
 .img-logo {
   width: 200px;

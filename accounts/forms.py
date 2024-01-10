@@ -3,7 +3,7 @@ from .models import User
 from orders.models import Order
 from django.core.exceptions import ValidationError
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
-from cafe.models import Item,Category,Order
+from cafe.models import Item,Category,Table
 
 
 # admin panel

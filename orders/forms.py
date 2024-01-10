@@ -29,9 +29,13 @@ class DiscountCodeForm(forms.ModelForm):
     """
     A form for creating or updating a Discount object.
     """
+
     class Meta:
         model = Discount
         fields = ['code']
+        widgets = {
+            'code': forms.TextInput(attrs={'class':'input-coupon w-75','placeholder':'افزودن کد تخفیف'}),   
+        }
 
 
 

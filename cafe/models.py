@@ -31,7 +31,7 @@ class Item(TimeStampedModel):
     
     def __str__(self) -> str:
         return f"{self.name}"
-class Order(models.Model):
+class Table(models.Model):
     """
     Represents a table in the cafe.
     """

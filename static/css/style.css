@@ -692,6 +692,14 @@ a.checkout-button {
   border-top: 1px solid #7979a7;
   border-right: 1px solid #7979a7;
 }
+.table tbody tr {
+  border-right: 1px solid #7979a7;
+  border-left: 1px solid #7979a7;
+}
+
+.table tbody tr td {
+  background-color: transparent;
+}
 .title-box {
   font-size: 19px;
   font-weight: 600;
