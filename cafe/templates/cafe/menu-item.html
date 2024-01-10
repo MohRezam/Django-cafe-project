@@ -251,7 +251,9 @@
         {% endfor %}
         {% endif %} -->
         {% if messages %}
-        <p>چیزی یافت نشود</p>
+        {% for msg in messages %}
+          <p class="alert alert-{{msg.tags}}">{{msg}}</p>
+        {% endfor %}
         {% else %}
         <div class="main-item-section">
           <div id="category-1" class="food-main-group my-5">
