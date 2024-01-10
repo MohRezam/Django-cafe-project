@@ -32,11 +32,11 @@ from .forms import CartAddForm, SearchForm
 class CafeMenuView(View):
     data = {}
 
-    # def dispatch(self, request, category_name):
-    #     category = Category.objects.filter(category_name=category_name).exists()
-    #     if not category:
-    #         return redirect("cafe:home")
-    #     return super().dispatch(request, category_name)
+    def dispatch(self, request, category_name):
+        category = Category.objects.filter(category_name=category_name).exists()
+        if not category:
+            return redirect("cafe:home")
+        return super().dispatch(request, category_name)
 
     def load_data_from_cookie(self, request):
         cart_cookie = request.COOKIES.get('cart', '{}')
