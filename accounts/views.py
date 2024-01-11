@@ -310,12 +310,12 @@ class StaffProfileOrdersView(LoginRequiredMixin, View):
         return render(request, self.template_name, {"orders": order, "form": form})  
 class StaffProfileOrderUncompleteView(LoginRequiredMixin,View):
     def get(self,request):
-          order = Order.objects.filter(order_status=False)
-          return render(request,'accounts/orders-uncomplete.html',{"orders":order})
+        order = Order.objects.filter(order_status=False)
+        return render(request,'accounts/orders-uncomplete.html',{"orders":order})
 class StaffProfileOrdercompleteView(LoginRequiredMixin,View):
     def get(self,request):
-          order = Order.objects.filter(order_status=True)
-          return render(request,'accounts/orders-complete.html',{"orders":order})
+        order = Order.objects.filter(order_status=True)
+        return render(request,'accounts/orders-complete.html',{"orders":order})
 class StaffProfileOrderDetailView(LoginRequiredMixin,View):
     def get(self,request,id_order):
         order = Order.objects.get(id=id_order)
