@@ -369,6 +369,182 @@ class StaffProfileAddItemView(LoginRequiredMixin,View):
 #         for customer in context['customer_order_history_report']:
 #             writer.writerow([customer['customer__name'], customer['total_orders']])
 #             return response
+
+
+# cafe/views.py
+
+from django.views import View
+from django.http import JsonResponse
+from django.db.models import Sum, Count
+from django.db.models.functions import TruncHour
+
+# class SalesStatisticsView(View):
+#     model = Order
+#     tempelate_name = "accounts/statistics.ht"
+#     def get(self, request, *args, **kwargs):
+#         # Sales by Category
+#         category_sales = Order.objects.values('order_detail__category__category_name').annotate(total_sales=Sum('final_price'))
+
+#         # Sales by Time of the Day
+#         time_of_day_sales = Order.objects.annotate(hour=TruncHour('order_date')).values('hour').annotate(total_orders=Count('id'), total_sales=Sum('final_price'))
+
+#         # Sales by Employee
+#         employee_sales = Order.objects.values('staff_id').annotate(total_sales=Sum('final_price'))
+
+#         data = {
+#             "category_sales": [{"category_name": sale['order_detail__category__category_name'], "total_sales": sale['total_sales']} for sale in category_sales],
+#             "time_of_day_sales": [{"hour": sale['hour'], "total_orders": sale['total_orders'], "total_sales": sale['total_sales']} for sale in time_of_day_sales],
+#             "employee_sales": [{"staff_id": sale['staff_id'], "total_sales": sale['total_sales']} for sale in employee_sales],
+#         }
+
+#         return JsonResponse(data, safe=False)
+
+from django.views import View
+from django.http import JsonResponse
+from django.db.models import Sum, Count
+from django.db.models.functions import TruncHour
+
+# class SalesStatisticsView(View):
+#     def get(self, request, *args, **kwargs):
+#         # Sales by Category
+#         category_sales = Order.objects.values('order_detail__category__category_name').annotate(total_sales=Sum('final_price'))
+
+#         # Sales by Time of the Day
+#         time_of_day_sales = Order.objects.annotate(hour=TruncHour('order_date')).values('hour').annotate(total_orders=Count('id'), total_sales=Sum('final_price'))
+
+#         # Sales by Employee
+#         employee_sales = Order.objects.values('staff_id').annotate(total_sales=Sum('final_price'))
+
+#         # Handle null values
+#         for sale in category_sales:
+#             sale['category_name'] = sale['order_detail__category__category_name'] if sale['order_detail__category__category_name'] else 'Uncategorized'
+
+#         for sale in employee_sales:
+#             sale['staff_id'] = sale['staff_id'] if sale['staff_id'] else 'Unknown Employee'
+
+#         data = {
+#             "category_sales": category_sales,
+#             "time_of_day_sales": time_of_day_sales,
+#             "employee_sales": employee_sales,
+#         }
+
+#         return JsonResponse(data, safe=False)
+
+class StatisticsMixin:
+    @staticmethod
+    def fetch_data():
+        # Common data fetching logic used in both views
+        # You can modify this based on your actual data fetching requirements
+        category_sales = Order.objects.values('order_detail__category__category_name').annotate(total_sales=Sum('final_price'))
+        time_of_day_sales = Order.objects.annotate(hour=TruncHour('order_date')).values('hour').annotate(total_orders=Count('id'), total_sales=Sum('final_price'))
+        employee_sales = Order.objects.values('staff_id').annotate(total_sales=Sum('final_price'))
+
+        # Ensure the keys are present in the result
+        category_sales = [{'category_name': sale.get('order_detail__category__category_name', 'Uncategorized'), 'total_sales': sale['total_sales']} for sale in category_sales]
+
+        employee_sales = [{'staff_id': sale.get('staff_id', 'Unknown Employee'), 'total_sales': sale['total_sales']} for sale in employee_sales]
+
+        # Convert QuerySet to list for time_of_day_sales
+        time_of_day_sales = list(time_of_day_sales)
+
+        return {
+            "category_sales": category_sales,
+            "time_of_day_sales": time_of_day_sales,
+            "employee_sales": employee_sales,
+        }
+
+
+# class SalesStatisticsView(View, StatisticsMixin):
+#     model = Order
+#     template_name = "accounts/statistics.html"
+#     def get(self, request, *args, **kwargs):
+#         data = self.fetch_data()
+        
+#         category_sales = Order.objects.values('order_detail__category__category_name').annotate(total_sales=Sum('final_price'))
+#         time_of_day_sales = Order.objects.annotate(hour=TruncHour('order_date')).values('hour').annotate(total_orders=Count('id'), total_sales=Sum('final_price'))
+#         employee_sales = Order.objects.values('staff_id').annotate(total_sales=Sum('final_price'))
+class SalesStatisticsView(View, StatisticsMixin):
+    model = Order
+    template_name = "accounts/statistics.html"
+
+    def get(self, request, *args, **kwargs):
+        data = self.fetch_data()
+
+        category_sales = Order.objects.values('order_detail__category__category_name').annotate(total_sales=Sum('final_price'))
+        time_of_day_sales = Order.objects.annotate(hour=TruncHour('order_date')).values('hour').annotate(total_orders=Count('id'), total_sales=Sum('final_price'))
+        employee_sales = Order.objects.values('staff_id').annotate(total_sales=Sum('final_price'))
+
+        category_sales = [{'category_name': sale['order_detail__category__category_name'] if sale['order_detail__category__category_name'] else 'Uncategorized', 'total_sales': sale['total_sales']} for sale in category_sales]
+
+        employee_sales = [{'staff_id': sale['staff_id'] if sale['staff_id'] else 'Unknown Employee', 'total_sales': sale['total_sales']} for sale in employee_sales]
+
+        # Convert QuerySet to list for time_of_day_sales
+        time_of_day_sales = list(time_of_day_sales)
+
+        data = {
+            "category_sales": category_sales,
+            "time_of_day_sales": time_of_day_sales,
+            "employee_sales": employee_sales,
+        }
+
+        # Check if the request wants CSV
+        if request.GET.get('format') == 'csv':
+            return self.get_csv_response(data)
+        else:
+            return JsonResponse(data, safe=False)
+      
+from django.shortcuts import render
+
+def sales_statistics_view(request):
+    return render(request, 'accounts/statistics.html')
+
+class DownloadCSVView(View, StatisticsMixin):
+    model = Order
+    template_name = "accounts/csv.html"
+    def get(self, request, *args, **kwargs):
+        data = self.fetch_data()
+
+        # Prepare CSV data
+        csv_data = self.prepare_csv_data(data)
+
+        # Create a CSV response
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename="sales_statistics.csv"'
+
+        writer = csv.writer(response)
+
+        # Write CSV data
+        writer.writerows(csv_data)
+
+        return response
+
+    def prepare_csv_data(self, data):
+        csv_data = []
+
+        # Write CSV headers for category sales
+        csv_data.extend([['Category Name', 'Total Sales']])
+        csv_data.extend([[sale['category_name'], sale['total_sales']] for sale in data['category_sales']])
+        csv_data.append([])  # Add an empty row for better readability
+
+        # Write CSV headers for time of day sales
+        csv_data.extend([['Hour', 'Total Orders', 'Total Sales']])
+        csv_data.extend([[sale['hour'], sale['total_orders'], sale['total_sales']] for sale in data['time_of_day_sales']])
+        csv_data.append([])  # Add an empty row for better readability
+
+        # Write CSV headers for employee sales
+        csv_data.extend([['Staff ID', 'Total Sales']])
+        csv_data.extend([[sale['staff_id'], sale['total_sales']] for sale in data['employee_sales']])
+
+        return csv_data
+
+
+
+        return response
+
+# 
+
+
+
 class StaffProfileOrdersView(LoginRequiredMixin, View):
     form_class = SortOrdersPhone
     template_name = 'accounts/orders.html'
