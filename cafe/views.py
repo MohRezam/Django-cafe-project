@@ -7,7 +7,9 @@ from django.views import View
 from .forms import CartAddForm, SearchForm
 from django.db.models import Q
 from django.contrib import messages
-
+from orders.models import Order
+from collections import Counter
+from datetime import datetime,timedelta
 # from django.shortcuts import render, redirect
 # from django.views import View
 # from .models import Order, OrderItem
@@ -22,13 +24,6 @@ class HomeView(View):
         return render(request, "cafe/index.html", context={"all_categories":all_categories, "cafe":cafe})
 
 
-from datetime import datetime, timedelta
-from django.shortcuts import render, get_object_or_404, redirect
-from django.http import JsonResponse, HttpResponse
-from django.views import View
-from django.db.models import Q
-from .models import Cafe, Item, Category
-from .forms import CartAddForm, SearchForm
 class CafeMenuView(View):
     data = {}
 
@@ -56,9 +51,11 @@ class CafeMenuView(View):
 
     def get(self, request, category_name):
         self.load_data_from_cookie(request)
+        category = Category.objects.all()
         cart_form = CartAddForm()
         cafe = get_object_or_404(Cafe)
         items = Item.objects.filter(category=category_name)
+
         search_form = SearchForm()
         
 
@@ -71,7 +68,7 @@ class CafeMenuView(View):
                 if not items.exists():
                     messages.error(request, "یافت نشد", "danger")
         
-        return render(request, "cafe/menu-item.html", context={"items": items, "cart_form": cart_form, "cafe":cafe, "search_form":search_form,"data_cart":self.data.values()})
+        return render(request, "cafe/menu-item.html", context={"items": items, "cart_form": cart_form, "cafe":cafe, "search_form":search_form,"data_cart":self.data.values(),"categorys":category,"category_name":category_name})
 
 
     def post(self, request, category_name, *args, **kwargs):

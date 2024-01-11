@@ -3,7 +3,7 @@ from .models import User
 from orders.models import Order
 from django.core.exceptions import ValidationError
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
-from cafe.models import Item,Category,Table
+from cafe.models import Item,Category,Table,Cafe
 
 
 # admin panel
@@ -145,5 +145,24 @@ class TableForm(forms.ModelForm):
     is_available = forms.BooleanField(label='موجود', required=False)
 
     class Meta:
-        model = Order
+        model = Table
         fields = ['table_number', 'is_available']
+
+class CafeForm(forms.ModelForm):
+    class Meta:
+        model = Cafe
+        fields = ['name', 'logo_image', 'about_page_image', 'about_page_description', 'address', 'phone_number', 'instagram_url', 'teleram_url', 'whatsapp_url']
+        labels = {
+            'name': 'نام',
+            'logo_image': 'تصویر لوگو',
+            'about_page_image': 'تصویر صفحه توضیحات',
+            'about_page_description': 'توضیحات',
+            'address': 'آدرس',
+            'phone_number': 'شماره تماس',
+            'instagram_url': 'URL اینستاگرام',
+            'teleram_url': 'URL تلگرام',
+            'whatsapp_url': 'URL واتساپ',
+        }
+        widgets = {
+            'about_page_description': forms.Textarea(attrs={'rows': 5}),
+        }

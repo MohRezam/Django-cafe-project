@@ -90,11 +90,11 @@
           </h4>
         </div>
         <div class="profile-navbar-invoice">
-          <a href="#"><button class="profile-navbar-btn-invoice">مشاهده فاکتور</button></a>
+          <button id="buttondownloadinvoice" class="profile-navbar-btn-invoice">مشاهده فاکتور</button>
           <a href="{% url 'accounts:staff-change-order' order.id %}"><button class="profile-navbar-btn-invoice" style="background-color: #767676;color: #fff;">ویرایش سفارش</button></a>
         </div>
       </div>
-      <div class="profile-stats mt-3">
+      <div id="invoicebody" class="profile-stats mt-3">
         <div class="profile-stats-row">
           <div
             class="col-lg-6 col-md-6 col-xs-12 pull-right"
@@ -206,6 +206,14 @@
           {% endif %}
         </div>
       </div>
+      <div
+      class="col-lg-6 col-md-6 col-xs-12 pull-right"
+      style="padding: 0"
+    >
+      <div class="profile-stats-col">
+        <p><span> تاریخ ثبت سفارش:</span>{{ order.created_at }}</p>
+      </div>
+    </div>
         </div>
       </div>
     </div>

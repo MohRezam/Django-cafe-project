@@ -9,7 +9,7 @@
       >
         <header class="d-flex flex-column align-items-center gap-2 w-100">
           <img
-            src="./images/clipart2415024.png"
+            src="{{ cafe.logo_image.url }}"
             alt="logo"
             class="logo img-fluid"
           />
@@ -19,16 +19,10 @@
             </span>
             <ul id="myDropdown" class="dropdown-content pt-2 px-1">
               <li class="py-2">
-                <a class="down-item text-white" href="#">درباره ما</a>
+                <a class="down-item text-white" href="{% url 'cafe:about' %}">درباره ما</a>
               </li>
               <li class="py-2">
-                <a class="down-item text-white" href="#">سوالات متداول</a>
-              </li>
-              <li class="py-2">
-                <a class="down-item text-white" href="#">قوانین و مقررات</a>
-              </li>
-              <li class="py-2">
-                <a class="down-item text-white" href="#">تماس با ما</a>
+                <a class="down-item text-white" href="{% url 'cafe:contact' %}">تماس با ما</a>
               </li>
             </ul>
             <a
@@ -59,16 +53,10 @@
               <div class="offcanvas-body">
                 <ul class="list-unstyled pt-2 px-1">
                   <li class="py-2 border-top border-bottom">
-                    <a class="down-item text-dark" href="#">درباره ما</a>
+                    <a class="down-item text-dark" href="{% url 'cafe:about' %}">درباره ما</a>
                   </li>
                   <li class="py-2 border-top border-bottom">
-                    <a class="down-item text-dark" href="#">سوالات متداول</a>
-                  </li>
-                  <li class="py-2 border-top border-bottom">
-                    <a class="down-item text-dark" href="#">قوانین و مقررات</a>
-                  </li>
-                  <li class="py-2 border-top border-bottom">
-                    <a class="down-item text-dark" href="#">تماس با ما</a>
+                    <a class="down-item text-dark" href="{% url 'cafe:contact' %}">تماس با ما</a>
                   </li>
                 </ul>
               </div>
@@ -76,7 +64,7 @@
           </div>
           <div class="d-flex justify-content-between align-items-center w-75">
             <div class="name-resturan text-center">
-              <p>کافه و رستوران استارباکس</p>
+               <p>{{cafe.name}}</p>
             </div>
             <div
               class="online-ordianry d-flex flex-column align-items-center justify-content-center gap-1"
@@ -135,8 +123,7 @@
             class="addres-online border-top border-1 w-75 d-flex align-items-center justify-content-between"
           >
             <p>
-              کرمان بلوار جمهوری اسلامی- کوچه رئوف 1 - برج ماهان - طبقه همکف -
-              واحد 1290
+              {{ cafe.address }}
             </p>
             <a
               target="_blank"
@@ -150,20 +137,20 @@
             <div
               class="icon-social d-flex flex-column align-items-center justify-content-center"
             >
-              <a href="#"><i class="fa-brands fa-instagram"></i></a>
-              <a href="#"><i class="fab fa-whatsapp"></i></a>
-              <a href="#"><i class="fa-brands fa-telegram"></i></a>
+            <a href="{{cafe.instagram_url}}"><i class="fa-brands fa-instagram"></i></a>
+            <a href="{{cafe.whatsapp_url}}"><i class="fab fa-whatsapp"></i></a>
+            <a href="{{cafe.teleram_url}}"><i class="fa-brands fa-telegram"></i></a>
             </div>
             <div class="list-footer">
               <ul class="list-group-footer">
-                <li class="list-group-item"><a href="#">درباره ما</a></li>
-                <li class="list-group-item"><a href="#">درباره ما</a></li>
-                <li class="list-group-item"><a href="#">درباره ما</a></li>
-                <li class="list-group-item"><a href="#">درباره ما</a></li>
+                <ul class="list-group-footer">
+                  <li class="list-group-item"><a href="{% url 'cafe:about' %}">درباره ما</a></li>
+                  <li class="list-group-item"><a href="{% url 'cafe:contact' %}">تماس با ما</a></li>
+                </ul>
               </ul>
             </div>
             <div class="phone">
-              <a href="tel:03432611100">
+              <a href="tel:{{cafe.phone_number}}">
                 <svg
                   width="26"
                   height="26"
@@ -215,17 +202,18 @@
                     stroke="white"
                   ></path>
                 </svg>
-                <p>03432611100</p></a
+                <p>{{cafe.phone_number}}</p></a
               >
             </div>
           </div>
           <div class="copyrights border-top border-1 w-75 py-2">
-            <span>© 2023 کدک رایان</span>
+            <span>© 2023 {{cafe.name}}</span>
           </div>
         </footer>
       </div>
       <div class="main col-lg-9 col-sm-12 py-4">
         <h1 class="px-2 title-page">سبد خرید</h1>
+        <div class="table-responsive">
         <table class="table">
           <thead>
             <tr>
@@ -288,6 +276,7 @@
             {% endfor %}
           </tbody>
         </table>
+      </div>
         <div
           class="navigation-card w-100 d-flex py-3 px-2 align-items-center justify-content-end"
         >

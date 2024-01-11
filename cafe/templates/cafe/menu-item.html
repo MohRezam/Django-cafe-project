@@ -8,11 +8,13 @@
         class="sidenav col-lg-3 col-sm-12 d-flex flex-column align-items-center justify-content-between"
       >
         <header class="d-flex flex-column align-items-center gap-2 w-100">
+          <a href="{% url 'cafe:home' %}">
           <img
             src="{{ cafe.logo_image.url }}"
             alt="logo"
             class="logo img-fluid"
           />
+          </a>
           <div class="drop-menu bg-dark rounded-4 w-75 py-2 px-3 d-flex">
             <span class="side-nav-btn text-white curo" onclick="myFunction()">
               <i class="fa-solid fa-bars-staggered side-nav-btn"></i>
@@ -20,12 +22,6 @@
             <ul id="myDropdown" class="dropdown-content pt-2 px-1">
               <li class="py-2">
                 <a class="down-item text-white" href="{% url 'cafe:about' %}">درباره ما</a>
-              </li>
-              <li class="py-2">
-                <a class="down-item text-white" href="#">سوالات متداول</a>
-              </li>
-              <li class="py-2">
-                <a class="down-item text-white" href="#">قوانین و مقررات</a>
               </li>
               <li class="py-2">
                 <a class="down-item text-white" href="{% url 'cafe:contact' %}">تماس با ما</a>
@@ -60,12 +56,6 @@
                 <ul class="list-unstyled pt-2 px-1">
                   <li class="py-2 border-top border-bottom">
                     <a class="down-item text-dark" href="{% url 'cafe:about' %}">درباره ما</a>
-                  </li>
-                  <li class="py-2 border-top border-bottom">
-                    <a class="down-item text-dark" href="#">سوالات متداول</a>
-                  </li>
-                  <li class="py-2 border-top border-bottom">
-                    <a class="down-item text-dark" href="#">قوانین و مقررات</a>
                   </li>
                   <li class="py-2 border-top border-bottom">
                     <a class="down-item text-dark" href="{% url 'cafe:contact' %}">تماس با ما</a>
@@ -155,20 +145,18 @@
             <div
               class="icon-social d-flex flex-column align-items-center justify-content-center"
             >
-              <a href="#"><i class="fa-brands fa-instagram"></i></a>
-              <a href="#"><i class="fab fa-whatsapp"></i></a>
-              <a href="#"><i class="fa-brands fa-telegram"></i></a>
+              <a href="{{cafe.instagram_url}}"><i class="fa-brands fa-instagram"></i></a>
+              <a href="{{cafe.whatsapp_url}}"><i class="fab fa-whatsapp"></i></a>
+              <a href="{{cafe.teleram_url}}"><i class="fa-brands fa-telegram"></i></a>
             </div>
             <div class="list-footer">
               <ul class="list-group-footer">
-                <li class="list-group-item"><a href="#">درباره ما</a></li>
-                <li class="list-group-item"><a href="#">درباره ما</a></li>
-                <li class="list-group-item"><a href="#">درباره ما</a></li>
-                <li class="list-group-item"><a href="#">درباره ما</a></li>
+                <li class="list-group-item"><a href="{% url 'cafe:about' %}">درباره ما</a></li>
+                <li class="list-group-item"><a href="{% url 'cafe:contact' %}">تماس با ما</a></li>
               </ul>
             </div>
             <div class="phone">
-              <a href="tel:03432611100">
+              <a href="tel:{{cafe.phone_number}}">
                 <svg
                   width="26"
                   height="26"
@@ -220,26 +208,25 @@
                     stroke="white"
                   ></path>
                 </svg>
-                <p>03432611100</p></a
+                <p>{{cafe.phone_number}}</p></a
               >
             </div>
           </div>
           <div class="copyrights border-top border-1 w-75 py-2">
-            <span>© 2023 کدک رایان</span>
+            <span>© 2023 {{cafe.name}}</span>
           </div>
         </footer>
       </div>
       <div class="main col-lg-9 col-sm-12 py-4">
         <nav id="dynamic" class="navbar">
           <ul>
-            <li class="active"><a href="#category-1">محبوب ترین</a></li>
-            <li><a href="#category-2">سالاد</a></li>
-            <li><a href="#category-3">غذای اصلی</a></li>
-            <li><a href="#category-4">پاستا</a></li>
-            <li><a href="#category-5">پیتزا</a></li>
-            <li><a href="#category-6">برگر</a></li>
-            <li><a href="#category-7">نوشیدنی</a></li>
-  
+            {% for category in categorys %}
+            {% if category.category_name == category_name %}
+            <li class="active-nav"><a href="{% url 'cafe:cafe_menu' category.category_name %}">{{category.category_name}}</a></li>
+            {% else %}
+            <li><a href="{% url 'cafe:cafe_menu' category.category_name %}">{{category.category_name}}</a></li>
+            {% endif %}
+            {% endfor %}
           </ul>
           {% comment %} added this navbar for search {% endcomment %}
 
@@ -258,7 +245,7 @@
         <div class="main-item-section">
           <div id="category-1" class="food-main-group my-5">
             <h3 class="food-tab-title">
-              <span id="category-3">غذای اصلی </span>
+              <span id="category-3">{{category_name}}</span>
             </h3>
             <div class="food-content">
               <div class="d-grid grid-card-food">
@@ -271,7 +258,7 @@
                     <div class="food-info-content w-50 pt-2">
                       <h2 class="food-info-title">{{item.name}}</h2>
                       <p class="food-info-description">
-                        {{item.description}}
+                        {{item.ingredients}}
                       </p>
                     </div>
                     <div

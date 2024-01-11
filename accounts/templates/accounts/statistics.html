@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Statistics</title>
+  </head>
+  <body>
+    <h1>Statistics</h1>
+    <a href="{% url 'statistics' %}">View Statistics</a>
+    <h2>Most Ordered Items</h2>
+    <ul>
+      {% for item in most_ordered_items %}
+      <li>{{ item.order_detail__item__name }} - {{ item.total_quantity }}</li>
+      {% endfor %}
+    </ul>
+
+    <h2>Most Reserved Tables</h2>
+    <ul>
+      {% for table in most_reserved_tables %}
+      <li>
+        Table {{ table.table_number }} - {{ table.total_reservations }}
+        reservations
+      </li>
+      {% endfor %}
+    </ul>
+
+    <!-- Display other statistics in a similar manner -->
+  </body>
+</html>

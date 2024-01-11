@@ -1,6 +1,10 @@
-{% extends "base.html" %} {% load static %} {% block title %} {{ cafe.name }} {% endblock %} {% block content %}
+{% extends "base.html" %} {% load static %} {% block title %} {{ cafe.name }} {% endblock %} 
+{% block content %}
 <body class="home-bg">
   <main class="d-flex flex-column align-items-center px-5 gap-4">
+    {% if messages %} {% for msg in messages %}
+    <p class="alert alert-{{msg.tags}}">{{msg}}</p>
+    {% endfor %} {% endif %}
     <img
       class="img-fluid img-logo"
       src="{{ cafe.logo_image.url }}"
@@ -17,7 +21,8 @@
               class="rounded-5"
               src="{{ category.image.url }}"
               alt="{{category.category_name}}"
-          /></a>
+            />
+          </a>
         </div>
         {% endfor %}
       </div>

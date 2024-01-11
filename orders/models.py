@@ -33,6 +33,8 @@ class Order(TimeStampedModel):
 
     def __str__(self) -> str:
         return f"{self.phone_number}"
+    
+    
   
 
 
@@ -49,6 +51,11 @@ class Discount(models.Model):
     start_date = models.DateField()
     end_date = models.DateField()
 
+    class Meta:
+        verbose_name_plural = 'تخفیف'
+        def __str__(self) -> str:
+          return f"{self.code}"
+
     def is_valid(self):
         from django.utils import timezone
         today = timezone.now().date()
@@ -57,7 +64,8 @@ class Discount(models.Model):
     def apply_discount(self, amount):
         if self.is_valid():
             discount_amount = (self.percentage / 100) * amount
-            return amount - discount_amount
+            return int(amount - discount_amount)
         else:
             return amount
+
 

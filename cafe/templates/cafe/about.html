@@ -8,27 +8,23 @@
         class="sidenav col-lg-3 col-sm-12 d-flex flex-column align-items-center justify-content-between"
       >
         <header class="d-flex flex-column align-items-center gap-2 w-100">
+          <a href="{% url 'cafe:home' %}">
           <img
             src="{{ cafe.logo_image.url }}"
             alt="logo"
             class="logo img-fluid"
           />
+          </a>
           <div class="drop-menu bg-dark rounded-4 w-75 py-2 px-3 d-flex">
             <span class="side-nav-btn text-white curo" onclick="myFunction()">
               <i class="fa-solid fa-bars-staggered side-nav-btn"></i>
             </span>
             <ul id="myDropdown" class="dropdown-content pt-2 px-1">
               <li class="py-2">
-                <a class="down-item text-white" href="{% url "cafe:about" %}">درباره ما</a>
+                <a class="down-item text-white" href="{% url 'cafe:about' %}">درباره ما</a>
               </li>
               <li class="py-2">
-                <a class="down-item text-white" href="#">سوالات متداول</a>
-              </li>
-              <li class="py-2">
-                <a class="down-item text-white" href="#">قوانین و مقررات</a>
-              </li>
-              <li class="py-2">
-                <a class="down-item text-white" href="{% url "cafe:contact" %}">تماس با ما</a>
+                <a class="down-item text-white" href="{% url 'cafe:contact' %}">تماس با ما</a>
               </li>
             </ul>
             <a
@@ -59,16 +55,10 @@
               <div class="offcanvas-body">
                 <ul class="list-unstyled pt-2 px-1">
                   <li class="py-2 border-top border-bottom">
-                    <a class="down-item text-dark" href="{% url "cafe:about" %}">درباره ما</a>
+                    <a class="down-item text-dark" href="{% url 'cafe:about' %}">درباره ما</a>
                   </li>
                   <li class="py-2 border-top border-bottom">
-                    <a class="down-item text-dark" href="#">سوالات متداول</a>
-                  </li>
-                  <li class="py-2 border-top border-bottom">
-                    <a class="down-item text-dark" href="#">قوانین و مقررات</a>
-                  </li>
-                  <li class="py-2 border-top border-bottom">
-                    <a class="down-item text-dark" href="{% url "cafe:contact" %}">تماس با ما</a>
+                    <a class="down-item text-dark" href="{% url 'cafe:contact' %}">تماس با ما</a>
                   </li>
                 </ul>
               </div>
@@ -127,9 +117,17 @@
               <p class="status-order-accept">سفارش می پذیریم.</p>
             </div>
           </div>
+          <div class="box-search">
+            {% if search_form %}
+            <form class="d-flex" action="" method="get">
+              {{search_form.search}}
+              <button class="btn btn-outline-success btn-search" type="submit"><i class="fas fa-search"></i></button>
+            </form>
+            {% endif %}
+          </div>
         </header>
         <footer
-          class="footer d-flex flex-column justify-content-center align-items-center gap-2"
+          class="footer w-100 d-flex flex-column justify-content-center align-items-center gap-2"
         >
           <div
             class="addres-online border-top border-1 w-75 d-flex align-items-center justify-content-between"
@@ -149,20 +147,18 @@
             <div
               class="icon-social d-flex flex-column align-items-center justify-content-center"
             >
-              <a href="#"><i class="fa-brands fa-instagram"></i></a>
-              <a href="#"><i class="fab fa-whatsapp"></i></a>
-              <a href="#"><i class="fa-brands fa-telegram"></i></a>
+              <a href="{{cafe.instagram_url}}"><i class="fa-brands fa-instagram"></i></a>
+              <a href="{{cafe.whatsapp_url}}"><i class="fab fa-whatsapp"></i></a>
+              <a href="{{cafe.teleram_url}}"><i class="fa-brands fa-telegram"></i></a>
             </div>
             <div class="list-footer">
               <ul class="list-group-footer">
-                <li class="list-group-item"><a href="#">درباره ما</a></li>
-                <li class="list-group-item"><a href="#">درباره ما</a></li>
-                <li class="list-group-item"><a href="#">درباره ما</a></li>
-                <li class="list-group-item"><a href="#">درباره ما</a></li>
+                <li class="list-group-item"><a href="{% url 'cafe:about' %}">درباره ما</a></li>
+                <li class="list-group-item"><a href="{% url 'cafe:contact' %}">تماس با ما</a></li>
               </ul>
             </div>
             <div class="phone">
-              <a href="tel:03432611100">
+              <a href="tel:{{cafe.phone_number}}">
                 <svg
                   width="26"
                   height="26"
@@ -219,7 +215,7 @@
             </div>
           </div>
           <div class="copyrights border-top border-1 w-75 py-2">
-            <span>© 2023 کدک رایان</span>
+            <span>© 2023 {{cafe.name}}</span>
           </div>
         </footer>
       </div>

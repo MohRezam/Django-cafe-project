@@ -95,12 +95,12 @@
           <div class="form-legal-row">
             <div class="col-lg-6 col-xs-12 mx-auto">
               <div class="form-legal-col">
-                <form class="form-info-edit" action="" method="post" novalidate>
+                <form class="form-info-edit" action="" method="post" enctype="multipart/form-data" novalidate>
                   {% csrf_token %} {{ form.as_p }}
                   <button type="submit" class="dk-btn dk-btn-info text-center w-100">
-                    ثبت اطلاعات
+                      ثبت اطلاعات
                   </button>
-                </form>
+              </form>
               </div>
             </div>
           </div>

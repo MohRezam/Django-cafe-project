@@ -114,7 +114,9 @@ a:visited {
   overflow-x: hidden;
   padding-top: 5px;
 }
-
+table {
+  margin-bottom: 0 !important;
+}
 .main {
   float: left;
   padding: 0px 50px;
@@ -696,7 +698,17 @@ a.checkout-button {
   border-right: 1px solid #7979a7;
   border-left: 1px solid #7979a7;
 }
-
+form.checkout-form-finall input,
+form.checkout-form-finall select {
+  display: block;
+  width: 100%;
+  padding: 0.375rem 0.75rem;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  border-radius: 8px;
+  border: 0;
+}
 .table tbody tr td {
   background-color: transparent;
 }

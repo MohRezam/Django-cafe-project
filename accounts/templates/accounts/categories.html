@@ -2,85 +2,7 @@
 {% endblock title %} {% block content %}
 <main class="contentM">
   <div class="container">
-    <div class="col-lg-3 col-md-4 col-xs-12 pull-right">
-      <div class="sidebar-wrapper">
-        <div class="box-sidebar">
-          <div class="profile-box">
-            <div class="profile-box-avator">
-              <img
-                src="{% static 'staff/images/svg/user-profile.svg' %}"
-                alt="profile"
-              />
-            </div>
-
-            <div class="profile-box-content">
-              <span class="profile-box-nameuser"
-                >{{request.user.full_name}}</span
-              >
-              <span class="profile-box-phone"
-                >{{request.user.phone_number}}</span
-              >
-            </div>
-          </div>
-          <ul class="profile-menu-items">
-            <li>
-              <a
-                href="{% url 'accounts:staff-profile' %}"
-                class="profile-menu-url active-profile"
-              >
-                <span class="mdi mdi-account-outline"></span> پروفایل
-              </a>
-            </li>
-            <li>
-              <a href="{% url 'accounts:staff-orders' %}" class="profile-menu-url">
-                <span class="mdi mdi-basket"></span> همه سفارش ها
-                <i class="fa-solid fa-chevron-left"></i>
-              </a>
-              <ul class="profile-menu-items-children">
-                <li><a href="{% url 'accounts:staff-orders-complete' %}">سفارش های پرداخت شده</a></li>
-                <li><a href="{% url 'accounts:staff-orders-uncomplete' %}">سفارش های پرداخت نشده</a></li>
-              </ul>
-            </li>
-            <li>
-              <a href="{% url 'accounts:staff-items' %}" class="profile-menu-url">
-                <span><i class="fa-solid fa-bowl-food"></i></i></span> آیتم ها
-                <i class="fa-solid fa-chevron-left"></i>
-              </a>
-              <ul class="profile-menu-items-children">
-                <li><a href="{% url 'accounts:staff-add-item' %}">افزودن آیتم ها</a></li>
-              </ul>
-            </li>
-            <li>
-              <a href="{% url 'accounts:staff-categories' %}" class="profile-menu-url">
-                <span><i class="fa fa-list-alt" aria-hidden="true"></i></span>
-                دسته بندی ها
-                <i class="fa-solid fa-chevron-left"></i>
-              </a>
-              <ul class="profile-menu-items-children">
-                <li><a href="{% url 'accounts:staff-add-category' %}">افزودن دسته بندی</a></li>
-              </ul>
-            </li>
-            <li>
-              <a
-                href="{% url 'accounts:staff-personal-info' %}"
-                class="profile-menu-url"
-              >
-                <span class="mdi mdi-account-circle"></span> اطلاعات شخصی
-              </a>
-            </li>
-            <li>
-              <a
-                href="{% url 'accounts:staff-logout' %}"
-                class="profile-menu-url"
-              >
-                <span class="mdi mdi-power"></span> خروج
-              </a>
-            </li>
-          </ul>
-        </div>
-      </div>
-   </div>
-    <div class="col-lg-9 col-md-8 col-xs-12 pull-right">
+    <div class="col-lg-10 col-md-8 col-xs-12" style="margin: 0 auto">
       {% if messages %} {% for message in messages %}
       <div class="alert alert-secondary mt-2" role="alert">{{ message }}</div>
       {% endfor %}{% endif %}
@@ -98,7 +20,6 @@
                     <th scope="col">#</th>
                     <th scope="col">تصویر دسته بندی</th>
                     <th scope="col">نام دسته بندی</th>
-                    <th scope="col">تاریخ ایجاد</th>
                     <th scope="col">حذف</th>
                     <th scope="col">ویرایش</th>
                   </tr>
@@ -107,22 +28,32 @@
                 <tbody>
                   <tr>
                     <td>{{ category.id }}</td>
-                    <td class="order-code"><img src="{{ category.image.url }}"></td>
+                    <td class="order-code">
+                      <img src="{{ category.image.url }}" />
+                    </td>
                     <td>{{ category.category_name }}</td>
-                    <td>{{ category.created_at }}</td>
-                    <td><a href="{% url 'accounts:staff-category-delete' category.id %}" class="btn-remove-address btn btn-danger text-light">
-                            حذف
-                    </a></td>
-                    <td><a href="{% url 'accounts:staff-category-update' category.id %}" class="btn-remove-address btn btn-secondary text-light">
+                    <td>
+                      <a
+                        href="{% url 'accounts:staff-category-delete' category.id %}"
+                        class="btn-remove-address btn btn-danger text-light"
+                      >
+                        حذف
+                      </a>
+                    </td>
+                    <td>
+                      <a
+                        href="{% url 'accounts:staff-category-update' category.id %}"
+                        class="btn-remove-address btn btn-secondary text-light"
+                      >
                         ویرایش
-                      </a></td>
+                      </a>
+                    </td>
                   </tr>
                 </tbody>
                 {% endfor %}
               </table>
             </div>
           </div>
-
         </div>
       </div>
     </div>

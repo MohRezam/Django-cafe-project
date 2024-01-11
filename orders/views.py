@@ -23,11 +23,15 @@ class CheckoutView(View):
     model_discount_code= None
     total_price=0
     model_total_price = 0
+    discounted_number=0
     
     def dispatch(self, request: HttpRequest, *args: any, **kwargs: any) -> HttpResponse:
             if len(self.load_data_from_cookie(request)) == 0:
              return redirect("cafe:home")
             return super().dispatch(request, *args, **kwargs)
+    
+
+
 
     def load_data_from_cookie(self, request):
         cart_cookie = request.COOKIES.get('cart', '{}')
@@ -38,17 +42,26 @@ class CheckoutView(View):
         return self.data
 
     def get(self, request, *args, **kwargs):
-        # if "code" in request.GET:
-        #     discount_code = request.GET.get('discount_code')
-        #     discount_form = DiscountCodeForm(request.GET)
-        #     if discount_form.is_valid():
-        #         return self.apply_discount(request, discount_code)
+
         self.load_data_from_cookie(request)
+        cafe = get_object_or_404(Cafe)
         form = OrderForm()
         cuppon_form = self.discount_form
         item_quantity_dict = self.data
         total_price = self.calculate_total_price(item_quantity_dict)
         self.model_total_price=total_price
+        request.session['model_total_price'] = total_price
+
+        if "code" in request.GET:
+            discount_code = request.GET.get('code')
+            discount_form = DiscountCodeForm(request.GET)
+            discounted_number = self.apply_discount(request, discount_code)
+            # Update self.model_discount_code using the value stored in the session
+            self.model_discount_code = request.session.get('model_discount_code', None)
+            request.session['final_price'] = discounted_number
+
+            
+            
         cart_items = Item.objects.filter(id__in=self.data.keys())
         values=(self.data.values())
         prices=self.calculate_price(self.data)
@@ -57,9 +70,13 @@ class CheckoutView(View):
         if self.final_price == 0:
             final_price=total_price
         else:
-            final_price= self.final_price
+            final_price= discounted_number
+            self.final_price=final_price
+        
+
             
-        return render(request, self.template_name, {'form': form ,"combined_items":combined_items ,'total_price': total_price ,"total_quantity":total_quantity , "final_price":final_price,"discount":cuppon_form})
+        return render(request, self.template_name, {'form': form ,"combined_items":combined_items ,'total_price': total_price ,"total_quantity":total_quantity , "final_price":final_price,"discount":cuppon_form,"cafe":cafe})
+    
     
     def get_final_price(self, request, *args, **kwargs):
         item_quantity_dict = self.data
@@ -81,36 +98,42 @@ class CheckoutView(View):
             table_number =request.POST.get('table_number')
             customer_name= request.POST.get('customer_name')
             phone_number = request.POST.get('phone_number')
+            self.model_discount_code = request.session.get('model_discount_code', None)
+            self.model_total_price = request.session.get('model_total_price', None)
             if action == 'checkout':
-                print("checkout-----")
                 return self.process_checkout(request, form , describe , table_number , customer_name , phone_number)
-
+        self.model_discount_code = request.session.get('model_discount_code', None)
         return render(request, self.template_name, {'form': form})
 
     def apply_discount(self, request, discount_code):
-        form = self.discount_form
-        try:
-            discount =  Discount.objects.get(code=discount_code)
-        except Discount.DoesNotExist:
-            return render(request, self.template_name, {'form': form, 'error_message': 'Invalid discount code'})
+            form = self.discount_form
+            try:
+                discount = Discount.objects.get(code=discount_code)
+                print(discount)
+            except Discount.DoesNotExist:
+                messages.error(request, 'کد معتبر نمی باشد')
+                return render(request, self.template_name, {'form': form})
 
-        if discount.is_valid():
-            self.model_discount_code= discount_code
-            amount = self.total_price
-            discounted_amount = discount.apply_discount(amount)
-            self.total_price = discounted_amount
-            return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
-        else:
-            return render(request, self.template_name, {'form': form, 'error_message': 'Discount code has expired'})
+            if discount.is_valid():
+                request.session['model_discount_code'] = discount_code
+                self.model_discount_code = discount_code
+                amount = self.model_total_price
+                discounted_amount = discount.apply_discount(amount)
+                self.final_price = discounted_amount
+                messages.success(request, 'کد تخفیف اعمال شد')
+                return discounted_amount
+            else:
+                messages.error(request, 'کد تخفیف منقضی شده')
+                return render(request, self.template_name, {'form': form})
 
 
-    def process_checkout(self, request, form , describe , table_number , customer_name , phone_number):
+    def process_checkout(self, request, form, describe, table_number, customer_name, phone_number):
         self.load_data_from_cookie(request)
         session_data = request.session.get("order", {})
         order_dict = session_data.get("order", {})
         cart_items = Item.objects.filter(id__in=self.data.keys())
-        values=(self.data.values())
-        prices=self.calculate_price(self.data)
+        values = (self.data.values())
+        prices = self.calculate_price(self.data)
         if self.final_price == 0:
             self.final_price = self.calculate_total_price(self.data)
         combined_items = zip_longest(cart_items, values, prices, fillvalue=None)
@@ -120,14 +143,13 @@ class CheckoutView(View):
             if cart_item is not None:
                 item_name = cart_item.name
                 item_price = cart_item.price
-
-                food_item = {"name": item_name, "price": item_price, "quantity": quantity}
+                item_id = cart_item.id
+                food_item = {"name": item_name, "price": item_price, "quantity": quantity,"item_id":item_id}
 
                 food_items.append(food_item)
-        
 
-        total_items = sum([item["quantity"] for item in food_items])
-        total_price = sum([item["price"] * item["quantity"] for item in food_items])
+        total_items = sum([int(item["quantity"]) for item in food_items])
+        total_price = sum([int(item["price"]) * int(item["quantity"]) for item in food_items])
 
         details_item = {"total_item": total_items, "total_price": total_price}
 
@@ -135,22 +157,29 @@ class CheckoutView(View):
 
         order_detail = {"food_items": food_items, "details_items": details_items}
 
-        
+        # Calculate final price based on the discount
+        self.final_price = request.session.get('final_price', 0)
+        if self.final_price == 0:
+            self.final_price = self.calculate_total_price(self.data)
+        if self.model_discount_code:
+            final_price = self.final_price
+        else:
+            final_price = self.calculate_total_price(self.data)
 
         Order.objects.create(
             description=describe,
-            table_number=Order.objects.get(table_number=table_number),
+            table_number=Table.objects.get(table_number=table_number),
             order_detail=order_detail,
             customer_name=customer_name,
             phone_number=phone_number,
             discount_code=self.model_discount_code,
             order_id=order_dict.get("id", []),
-            final_price=self.get_final_price(request),
+            final_price=final_price,
         )
-        
+        messages.success(request,"سفارش شما با موفقیت ثبت شد","success")
         response = redirect('cafe:home')
         response.delete_cookie('cart')
-        request.session.delete('order')
+        request.session.flush()
         return response
     
     def calculate_price(self,item_quantity_dict):
@@ -183,8 +212,8 @@ class CheckoutView(View):
 
         return total_quantity
 
-
 class ViewCartView(View):
+    cafe = get_object_or_404(Cafe)
     template_name='orders/cart.html'
     data = {}
     def dispatch(self, request: HttpRequest, *args: any, **kwargs: any) -> HttpResponse:
@@ -222,7 +251,7 @@ class ViewCartView(View):
         res_list = [prices[i] // list_data[i] for i in range(len(list_data))]
         combined_items = zip_longest(list_items.values(), values, prices,cart_items,res_list, fillvalue=None)
 
-        return render(request, self.template_name, {'combined_items': combined_items,'cart_form':cart_form})
+        return render(request, self.template_name, {'combined_items': combined_items,'cart_form':cart_form,'cafe':self.cafe})
     
     def post(self, request, *args, **kwargs):
         self.load_data_from_cookie(request)

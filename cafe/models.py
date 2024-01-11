@@ -15,7 +15,7 @@ class Category(models.Model):
         verbose_name_plural = 'دسته بندی محصولات'
     
     def __str__(self) -> str:
-        return f"دسته بندی: {self.category_name}"
+        return f"{self.category_name}"
 
 class Item(TimeStampedModel):
     name = models.CharField(verbose_name="محصول", max_length=255)
@@ -66,6 +66,10 @@ class Cafe(models.Model):
     about_page_description = models.TextField(verbose_name="توضیحات")
     address = models.TextField(verbose_name="آدرس")
     phone_number = models.CharField(verbose_name="شماره تماس", max_length=11)
+    instagram_url = models.URLField(verbose_name="URL اینستاگرام", blank=True, null=True)
+    teleram_url = models.URLField(verbose_name="url تلگرام", blank=True, null=True)
+    whatsapp_url = models.URLField(verbose_name="url واتساپ", blank=True, null=True)
+
     
     class Meta:
         verbose_name_plural = 'کافه'

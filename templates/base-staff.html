@@ -37,7 +37,7 @@
     <header class="header-main-page">
       <div class="d-block">
         <div class="row align-items-center">
-          <div class="col-lg-3 col-md-3 col-xs-12 pull-right">
+          <div class="col-lg-2 col-md-2 col-xs-12 pull-right">
             <div class="header-right">
               <div class="logo">
                 <a href="{% url 'accounts:staff-profile' %}"
@@ -48,7 +48,7 @@
               </div>
             </div>
           </div>
-          <div class="col-lg-6 col-md-6 col-xs-12 pull-right">
+          <div class="col-lg-8 col-md-8 col-xs-12 pull-right">
             <div class="menu-box">
               <ul class="menu-uniq">
                 <li>
@@ -91,15 +91,32 @@
                     </li>
                   </ul>
                 </li>
+
+                <li>
+                  <a href="{% url 'accounts:staff-list-table' %}">میز ها</a>
+                </li>
+                <li>
+                  <a href="{% url 'accounts:staff-list-user' %}">کاربران</a>
+                  <ul class="submenu-uniq">
+                    <li>
+                      <a href="{% url 'accounts:staff-register' %}"
+                        >افزودن کاربر</a
+                      >
+                    </li>
+                  </ul>
+                </li>
                 <li>
                   <a href="{% url 'accounts:staff-reports-insights' %}"
                     >تحلیل عملکرد</a
                   >
                 </li>
+                <li>
+                  <a href="{% url 'accounts:staff-options' %}">تنظیمات سایت</a>
+                </li>
               </ul>
             </div>
           </div>
-          <div class="col-lg-3 col-md-3 col-xs-12 pull-left pb-3">
+          <div class="col-lg-2 col-md-2 col-xs-12 pull-left pb-3">
             <div class="header-left">
               <!-- Example single danger button -->
               <!-- responsive header-->
@@ -691,6 +708,20 @@
     {% block content %}{% endblock %}
     <script src="{% static 'staff/js/jquery-3.2.1.min.js' %}"></script>
     <script src="{% static 'staff/js/bootstrap.js' %}"></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"
+      integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <script>
+      document
+        .getElementById("buttondownloadinvoice")
+        .addEventListener("click", function () {
+          var element = document.getElementById("invoicebody");
+          html2pdf(element);
+        });
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
       var ctx = document.getElementById("salesgrossyearChart").getContext("2d");
@@ -701,7 +732,6 @@
         type: "line",
         data: {
           labels: [
-            "0",
             "1",
             "2",
             "3",
@@ -718,7 +748,7 @@
           datasets: [
             {
               label: "درآمد ناخالصی",
-              data: [30, 50, 20, 80, 40, 12, 23, 60, 30, 45, 70, 30],
+              data: {% block salesyear %}{% endblock %},
               borderColor: "#1ab1d4",
               backgroundColor: "#1ab1d4",
               borderWidth: 3,
@@ -756,7 +786,6 @@
         type: "line",
         data: {
           labels: [
-            "0",
             "1",
             "2",
             "3",
@@ -773,7 +802,7 @@
           datasets: [
             {
               label: "سفارشات",
-              data: [30, 50, 20, 80, 40, 12, 23, 60, 30, 45, 70, 30],
+              data: {% block orderyear %}{% endblock %},
               borderColor: "#1ab1d4",
               backgroundColor: "#1ab1d4",
               borderWidth: 3,
@@ -839,10 +868,7 @@
           datasets: [
             {
               label: "سفارشات روزانه",
-              data: [
-                30, 50, 20, 80, 40, 12, 23, 60, 30, 45, 70, 30, 60, 20, 45, 34,
-                55, 70, 85, 90, 100, 70, 40, 60,
-              ],
+              data: {% block orderdaily %}{% endblock %},
               borderColor: "#1ab1d4",
               backgroundColor: "#1ab1d4",
               borderWidth: 3,
@@ -880,7 +906,6 @@
         type: "line",
         data: {
           labels: [
-            "0",
             "1",
             "2",
             "3",
@@ -915,10 +940,7 @@
           datasets: [
             {
               label: "سفارشات",
-              data: [
-                30, 50, 20, 80, 40, 12, 23, 60, 30, 45, 70, 30, 60, 20, 45, 34,
-                55, 70, 85, 90, 100, 70, 40, 60, 45, 77, 88, 99, 150, 22, 45,
-              ],
+              data: {% block ordermonth %} {% endblock %},
               borderColor: "#1ab1d4",
               backgroundColor: "#1ab1d4",
               borderWidth: 3,
@@ -958,7 +980,6 @@
         type: "line",
         data: {
           labels: [
-            "0",
             "1",
             "2",
             "3",
@@ -993,10 +1014,7 @@
           datasets: [
             {
               label: "فروش ناخالص",
-              data: [
-                30, 50, 20, 80, 40, 12, 23, 60, 30, 45, 70, 30, 60, 20, 45, 34,
-                55, 70, 85, 90, 100, 70, 40, 60, 45, 77, 88, 99, 150, 22, 45,
-              ],
+              data: {% block salesmonth %}{% endblock %},
               borderColor: "#1ab1d4",
               backgroundColor: "#1ab1d4",
               borderWidth: 3,
@@ -1026,10 +1044,7 @@
       });
     </script>
     <script>
-      var grossSalesData = [
-        30, 50, 20, 80, 40, 12, 23, 60, 30, 45, 70, 30, 60, 20, 45, 34, 55, 70,
-        85, 90, 100, 70, 40, 60,
-      ];
+      var grossSalesData = {% block salesdaily %} {% endblock %};
 
       var labels = [
         "0",

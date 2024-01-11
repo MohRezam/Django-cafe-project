@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect , get_object_or_404
-from .forms import UserLoginForm,UserForm,UserChangeForm,CategoryForm,CategoryChangeForm,ItemForm,SortOrdersPhone,ChangeOrderForm,CreateOrderForm,TableForm
+from .forms import UserLoginForm,UserForm,UserChangeForm,CategoryForm,CategoryChangeForm,ItemForm,SortOrdersPhone,ChangeOrderForm,CreateOrderForm,TableForm,CafeForm
 from django.views import View
 from cafe.models import Item,Category,Table
 from accounts.models import User
@@ -14,8 +14,12 @@ import csv,json
 from collections import Counter
 from django.http import HttpResponse,JsonResponse
 import calendar
-from calendar import month_name
 from datetime import datetime, date,timedelta
+from django.views import View
+from django.http import JsonResponse
+from django.db.models import Sum, Count
+from django.db.models.functions import TruncHour
+from collections import Counter
 
 
 
@@ -83,8 +87,11 @@ class StffProfileView(LoginRequiredMixin, View):
         counter = Counter(product_id)
         most_common_3 = counter.most_common(3)
         list_product_popular = []
+        list_category_popular = []
         for pro_id in most_common_3:
             list_product_popular.append(Item.objects.filter(id=pro_id[0]))
+            list_category_popular.append(Item.objects.get(id=pro_id[0]).category)
+        top_selling_staff = Order.objects.values('staff_id').annotate(order_count=Count('staff_id'), total_sales=Sum('final_price')).order_by('-total_sales').first()
         today = date.today()
         today_salse = timezone.now().date()
         current_date = datetime.now()
@@ -102,7 +109,7 @@ class StffProfileView(LoginRequiredMixin, View):
         total_sales_amount_annual = total_sales_annual['total_sales'] if total_sales_annual['total_sales'] is not None else 0
         order_reports = [orders_today,unpaid_orders,paid_orders]
         salse_reports = [today_salse,total_sales_amount,total_sales_amount_annual]
-        return render(request, 'accounts/profile.html', {"orders": last_five_orders,"orders_tody":order_reports,"salse_report":salse_reports,"pupolar_product":list_product_popular})
+        return render(request, 'accounts/profile.html', {"orders": last_five_orders,"orders_tody":order_reports,"salse_report":salse_reports,"pupolar_product":list_product_popular,"list_category_popular":list_category_popular,"top_selling_staff":top_selling_staff})
      
 
 class StaffProfileInfoView(LoginRequiredMixin, View):
@@ -166,13 +173,16 @@ class StaffAddCategoryView(LoginRequiredMixin, View):
         
     def post(self, request):
         form = self.form_class(request.POST,request.FILES)
+
         
         if form.is_valid():
-            form.save()
-            messages.success(request, 'آپدیت اطلاعات شخصی با موفقیت انجام شد', 'success')
+            instance = form.save(commit=False)
+            # Do any additional processing if needed before saving
+            instance.save()
+            messages.success(request, 'عملیات با موفقیت انجام شد', 'success')
             return redirect('accounts:staff-categories')
         
-        return render(request, self.template_name, {'form': form})   
+        return render(request, self.template_name, {'form': form})
 class StaffProfileItemsView(LoginRequiredMixin,View):
     def get(self,request):
         items = Item.objects.all()
@@ -217,158 +227,67 @@ class StaffProfileAddItemView(LoginRequiredMixin,View):
         else:
             form = self.form_class()
             return render(request, self.template_name, {'form': form})  
+class StatisticsMixin:
+    @staticmethod
+    def fetch_data():
+        # Common data fetching logic used in both views
+        # You can modify this based on your actual data fetching requirements
+        end_date = timezone.now()
+        start_date = end_date - timedelta(days=365)
+        monthly_sales_amount = Order.objects.filter(order_status=True,order_date__range=(start_date, end_date)).values('order_date__month').annotate(sales_amount=Sum('final_price')).order_by('order_date__month')
+        time_of_day_sales = Order.objects.annotate(hour=TruncHour('order_date')).values('hour').annotate(total_orders=Count('id'), total_sales=Sum('final_price'))
+        employee_sales = Order.objects.values('staff_id').annotate(total_sales=Sum('final_price'))
+        # Ensure the keys are present in the result
 
-class StatisticsView(TemplateView):
-    template_name = 'statistics.html'
+        employee_sales = [{'staff_id': sale.get('staff_id', 'Unknown Employee'), 'total_sales': sale['total_sales']} for sale in employee_sales]
+
+        # Convert QuerySet to list for time_of_day_sales
+        time_of_day_sales = list(time_of_day_sales)
+
+        return {
+            "monthly_sales_amount":monthly_sales_amount,
+            "time_of_day_sales": time_of_day_sales,
+            "employee_sales": employee_sales,
+        }
+class DownloadCSVView(View, StatisticsMixin):
     model = Order
-    
+    template_name = "accounts/csv.html"
     def get(self, request, *args, **kwargs):
-        if request.user.is_staff:
-            response = HttpResponse(content_type='text/csv')
-            response['Content-Disposition'] = 'attachment; filename="statistics.csv"'
-            context = self.get_context_data(**kwargs)
+        data = self.fetch_data()
 
-            # Most ordered items and their quantities
-            context['most_ordered_items'] = Order.objects.values('order_detail__item__name').annotate(total_quantity=Sum('order_detail__quantity')).order_by('-total_quantity')[:20]
+        # Prepare CSV data
+        csv_data = self.prepare_csv_data(data)
 
-            # Most reserved tables
-            context['most_reserved_tables'] = Order.objects.values('table_number').annotate(total_reservations=Count('id')).order_by('-total_reservations')[:20]
+        # Create a CSV response
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename="sales_statistics.csv"'
 
-            # Peak business hours
-            context['peak_hours'] = Order.objects.filter(order_date__date=timezone.now().date()).values('order_date__hour').annotate(total_orders=Count('id')).order_by('-total_orders')[:20]
-
-            # Total sales
-            context['total_sales'] = Order.objects.aggregate(total_sales=Sum('order_detail__item__price'))
-
-            # Monthly sales
-            context['monthly_sales'] = Order.objects.filter(order_date__month=timezone.now().month).aggregate(total_sales=Sum('order_detail__item__price'))
-
-            # Yearly sales
-            context['yearly_sales'] = Order.objects.filter(order_date__year=timezone.now().year).aggregate(total_sales=Sum('order_detail__item__price'))
-
-            # Top-selling items (filtered by date)
-            context['top_selling_items'] = Order.objects.filter(order_date__date=timezone.now().date()).values('order_detail__item__name').annotate(total_quantity=Sum('order_detail__quantity')).order_by('-total_quantity')[:20]
-
-            # Sales by category
-            context['sales_by_category'] = Order.objects.values('order_detail__item__category').annotate(total_sales=Sum('order_detail__item__price')).order_by('-total_sales')
-
-            # Sales based on customer (phone)
-            context['sales_by_customer'] = Order.objects.values('phone_number').annotate(total_sales=Sum('order_detail__item__price')).order_by('-total_sales')
-
-            # Sales based on time... (add your logic) # Sales based on time of day
-            context['sales_by_time_of_day'] = Order.objects.values('order_date__hour').annotate(total_sales=Sum('order_detail__item__price')).order_by('order_date__hour')
-
-            # Order status report (daily)
-            context['order_status_report'] = Order.objects.filter(order_date__date=timezone.now().date()).values('status').annotate(total_orders=Count('id')).order_by('status')
-
-            # Daily sales
-            context['daily_sales'] = Order.objects.filter(order_date__date=timezone.now().date()).aggregate(total_sales=Sum('order_detail__item__price'))
-
-            # Sales by employee report
-            context['sales_by_employee_report'] = Order.objects.values('staff_id__username').annotate(total_sales=Sum('order_detail__item__price')).order_by('-total_sales')
-
-            # Customer order history report
-            context['customer_order_history_report'] = Order.objects.filter(phone_number=self.request.user.phone_number).order_by('-order_date')
-
-            self.write_to_csv(response, context)
-
-            return response
-        else:
-            return HttpResponse("You are not authorized to download the statistics.", status=403)
-
-    def write_to_csv(self, response, context):
         writer = csv.writer(response)
 
-        writer.writerow(['Item Name', 'Total Quantity'])
-        for item in context['most_ordered_items']:
-            writer.writerow([item['order_detail__item__name'], item['total_quantity']])
+        # Write CSV data
+        writer.writerows(csv_data)
 
-        writer.writerow([])  # Add an empty row for separation
-        writer.writerow(['Table Number', 'Total Reservations'])
-        for table in context['most_reserved_tables']:
-            writer.writerow([table['table_number'], table['total_reservations']])
-        
-        # Peak business hours
-        writer.writerow([])  
-        writer.writerow(['Order Hour', 'Total Orders'])
-        for hour in context['peak_hours']:
-            writer.writerow([hour['order_date__hour'], hour['total_orders']])
+        return response
 
-        # Total_sales
-        writer.writerow([])  
-        writer.writerow(['Total Sales'])
-        writer.writerow([context['total_sales']['total_sales']])
+    def prepare_csv_data(self, data):
+        csv_data = []
+        csv_data.extend([['month', 'Total Orders']])
+        csv_data.extend([[sale['order_date__month'], sale['sales_amount']] for sale in data['monthly_sales_amount']])
+        csv_data.append([]) 
 
-        # Monthly_sales
-        writer.writerow([])
-        writer.writerow(['Monthly Sales'])
-        writer.writerow(['Month', 'Total Sales'])
-        for month in context['monthly_sales']:
-            writer.writerow([calendar.month_name[month['month']], month['total_sales']])
 
-        # Yearly_sales
-        writer.writerow([])  
-        writer.writerow(['Yearly Sales'])
-        writer.writerow(['Year', 'Total Sales'])
-        for year in context['yearly_sales']:
-            writer.writerow([year['year'], year['total_sales']])
+        # Write CSV headers for time of day sales
+        csv_data.extend([['Hour', 'Total Orders', 'Total Sales']])
+        csv_data.extend([[sale['hour'], sale['total_orders'], sale['total_sales']] for sale in data['time_of_day_sales']])
+        csv_data.append([])  # Add an empty row for better readability
 
-        # top_selling_items
-        writer.writerow([])  
-        writer.writerow(['Top Selling Items'])
-        writer.writerow(['Item Name', 'Total Quantity'])
-        for item in context['top_selling_items']:
-            writer.writerow([item['item__name'], item['total_quantity']])
+        # Write CSV headers for employee sales
+        csv_data.extend([['Staff ID', 'Total Sales']])
+        csv_data.extend([[sale['staff_id'], sale['total_sales']] for sale in data['employee_sales']])
 
-        # Sales_by_category
-        writer.writerow([]) 
-        writer.writerow(['Sales by Category'])
-        writer.writerow(['Category', 'Total Sales'])
-        for category in context['sales_by_category']:
-            writer.writerow([category['item__category__name'], category['total_sales']])
+        return csv_data
 
-        # Sales report based on customer
-        writer.writerow([]) 
-        writer.writerow(['Sales by Customer'])
-        writer.writerow(['Customer', 'Total Sales'])
-        for customer in context['sales_by_customer']:
-            writer.writerow([customer['customer__name'], customer['total_sales']])
 
-        # Sales_by_time_of_day
-        writer.writerow([])  
-        writer.writerow(['Sales by Time of Day'])
-        writer.writerow(['Hour', 'Total Sales'])
-        for hour in context['sales_by_time_of_day']:
-            writer.writerow([hour['hour'], hour['total_sales']])
-
-        # Order_status_report
-        writer.writerow([])  
-        writer.writerow(['Order Status Report'])
-        writer.writerow(['Status', 'Total Orders'])
-        for status in context['order_status_report']:
-            writer.writerow([status['status'], status['total_orders']])
-
-        # Daily sales report
-        writer.writerow([])  
-        writer.writerow(['Daily Sales'])
-        writer.writerow(['Date', 'Total Sales'])
-        for day in context['daily_sales']:
-            writer.writerow([day['date'], day['total_sales']])
-
-        # Sales_by_employee_report
-        writer.writerow([])
-        writer.writerow(['Sales by Employee Report'])
-        writer.writerow(['Employee', 'Total Sales'])
-        for employee in context['sales_by_employee_report']:
-            writer.writerow([employee['employee__name'], employee['total_sales']])
-        
-        # Customer_order_history_report
-        writer.writerow([])
-        writer.writerow(['Customer Order History Report'])
-        writer.writerow(['Customer', 'Total Orders'])
-        for customer in context['customer_order_history_report']:
-            writer.writerow([customer['customer__name'], customer['total_orders']])
-            return response
 class StaffProfileOrdersView(LoginRequiredMixin, View):
     form_class = SortOrdersPhone
     template_name = 'accounts/orders.html'
@@ -403,7 +322,45 @@ class StaffProfileOrderDetailView(LoginRequiredMixin,View):
         return render(request,'accounts/profile-order-details.html',{"order":order})
 class StaffReportsInsightsView(LoginRequiredMixin, View):
     def get(self, request):
-        return render(request, 'accounts/profile-reports-insight.html')
+        end_date = timezone.now()
+        start_date = end_date - timedelta(days=365)
+
+        monthly_orders_count = Order.objects.filter(order_status=True,order_date__range=(start_date, end_date)).values('order_date__month').annotate(order_count=Count('id')).order_by('order_date__month')
+        labels_month_order = [0]*12
+        for item in monthly_orders_count:
+            labels_month_order[item['order_date__month']-1] = item['order_count']
+        monthly_sales_amount = Order.objects.filter(order_status=True,order_date__range=(start_date, end_date)).values('order_date__month').annotate(sales_amount=Sum('final_price')).order_by('order_date__month')
+        labels_month_amount = [0]*12
+        for entry in monthly_sales_amount:
+            labels_month_amount[entry['order_date__month']-1] = entry['sales_amount']
+
+        start_date = timezone.now().replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+        end_date = timezone.now()
+
+        daily_orders_count = Order.objects.filter(order_status=True,
+                                                  order_date__range=(start_date, end_date)).values('order_date__day').annotate(order_count=Count('id')).order_by('order_date__day')
+        label_daily_order = [0]*30
+        for order in daily_orders_count:
+            label_daily_order[order['order_date__day']-1] = order['order_count']
+        
+        daily_orders_amount = Order.objects.filter(order_status=True,
+                                                  order_date__range=(start_date, end_date)).values('order_date__day').annotate(sales_amount=Sum('final_price')).order_by('order_date__day')
+        label_daily_amount = [0]*30
+        for order in daily_orders_amount:
+            label_daily_amount[order['order_date__day']-1] = order['sales_amount']
+        
+        start_date = timezone.now().replace(hour=0, minute=0, second=0, microsecond=0)
+        end_date = timezone.now()
+
+        hourly_orders_count = Order.objects.filter(order_status=True,order_date__range=(start_date, end_date)).values('order_date__hour').annotate(order_count=Count('id')).order_by('order_date__hour')
+        label_hour_orders_count = [0]*24
+        for entry in hourly_orders_count:
+            label_hour_orders_count[entry['order_date__hour']] = entry['order_count']
+        hourly_orders_count = Order.objects.filter(order_status=True,order_date__range=(start_date, end_date)).values('order_date__hour').annotate(sales_amount=Sum('final_price')).order_by('order_date__hour')
+        label_hour_orders_amount = [0]*24
+        for entry in hourly_orders_count:
+            label_hour_orders_amount[entry['order_date__hour']] = entry['sales_amount']
+        return render(request, 'accounts/profile-reports-insight.html',{'labels_month_order':labels_month_order,'labels_month_amount':labels_month_amount,'label_daily_order':label_daily_order,'label_daily_amount':label_daily_amount,'label_hour_orders_count':label_hour_orders_count,'label_hour_orders_amount':label_hour_orders_amount })
 class StaffChangeOrderView(LoginRequiredMixin, View):
     form_class = ChangeOrderForm
     template_name = "accounts/profile-update-order.html"
@@ -464,12 +421,12 @@ class StaffUserDeleteView(LoginRequiredMixin,View):
         redirect("accounts:staff-profile")
 class StaffTablesView(LoginRequiredMixin,View):
       def get(self,request):
-          tables = Order.objects.all()
+          tables = Table.objects.all()
           return render(request,"accounts/profile-list-table.html",{"tables":tables})
 class StaffDeleteTableView(LoginRequiredMixin,View):
     def get(self,request,id_table):
         if request.user.is_admin:
-            table = get_object_or_404(Order,id=id_table)
+            table = Table.objects.get(id=id_table)
             table.delete()
             messages.success(request,"حذف میز با موفقیت انجام شد","success")
             return redirect("accounts:staff-list-table")
@@ -478,15 +435,27 @@ class StaffDeleteTableView(LoginRequiredMixin,View):
 
 class StaffTableFormView(LoginRequiredMixin,View):
     def get(self, request,id_table):
-        table = get_object_or_404(Order,id=id_table)
+        table = get_object_or_404(Table,id=id_table)
         form = TableForm(instance=table)
         return render(request, 'accounts/prfile-edite-table.html', {'form': form})
 
     def post(self, request,id_table):
-        
-        table = get_object_or_404(Order,id=id_table)
+        table = get_object_or_404(Table,id=id_table)
         form = TableForm(request.POST,instance=table)
         if form.is_valid():
             table.save()
             return redirect("accounts:staff-list-table")
         return render(request, 'accounts/prfile-edite-table.html', {'form': form})  
+class StaffOptionsView(LoginRequiredMixin,View):
+    form_class = CafeForm
+    tempalte_name = "accounts/profile-options.html"
+    def get(self,request):
+        form = self.form_class
+        return render(request,self.tempalte_name,{'form':form})
+    def post(self,request):
+        form = self.form_class(request.POST,request.FILES)
+        if form.is_valid():
+            form.save()
+            messages.success(request,"تنظیمات با موفقیت ذخیره شود")
+            redirect("accounts:staff-profile")
+        return render(request,self.tempalte_name,{'form':form})

@@ -1,5 +1,10 @@
-{% extends "base-staff.html" %} {% load static %} {% block title %} پنل
-کارکنان{% endblock title %} {% block content %}
+{% extends "base-staff.html" %} {% load static %} {% block orderyear %}
+{{labels_month_order}} {% endblock %} {% block salesyear %}
+{{labels_month_amount}} {% endblock %} {% block ordermonth %}
+{{label_daily_order}} {% endblock %} {% block salesmonth %}
+{{label_daily_amount}} {% endblock %} {% block orderdaily %}
+{{label_hour_orders_count}} {% endblock %} {% block salesdaily %}
+{{label_hour_orders_amount}} {% endblock %} {% block title %} تحلیل عملکرد{% endblock title %} {% block content %}
 <main class="contentM">
   <div class="container d-flex align-items-center justify-content-center">
     <div class="col-lg-12 col-md-10 col-xs-12 pull-right">
@@ -22,7 +27,7 @@
               </button>
             </div>
           </div>
-          <a href="#" class="dow-csv">
+          <a href="{% url 'accounts:download_csv' %}" class="dow-csv">
             <i class="fa-solid fa-file-csv"></i>
             دریافت اکسل
           </a>
