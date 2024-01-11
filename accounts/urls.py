@@ -32,6 +32,6 @@ urlpatterns = [
     path('profile-list-table/',views.StaffTablesView.as_view(),name="staff-list-table"),
     path('profile-table-delete/<int:id_table>/',views.StaffDeleteTableView.as_view(),name="staff-delete-table"),
     path('profile-edite-table/<int:id_table>',views.StaffTableFormView.as_view(),name="staff-edite-table"),
-    path('csv-statics/',views.StatisticsView.as_view(),name="staff-csv-file")
+    path('statistics/',views.StatisticsView.as_view(),name="statistics")
 
 ]
